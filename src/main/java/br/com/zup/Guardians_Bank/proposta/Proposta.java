@@ -1,6 +1,7 @@
 package br.com.zup.Guardians_Bank.proposta;
 
 import br.com.zup.Guardians_Bank.cliente.Cliente;
+import br.com.zup.Guardians_Bank.enums.StatusProposta;
 import br.com.zup.Guardians_Bank.infoPagamento.InfoPagamento;
 import lombok.Data;
 import org.hibernate.annotations.GenericGenerator;
