@@ -6,23 +6,21 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.support.ReloadableResourceBundleMessageSource;
 import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
 
-@Configuration
 public class MensagemDeErro {
 
-    @Bean
-    public MessageSource mapearMensagens(){
-        ReloadableResourceBundleMessageSource messageSource = new ReloadableResourceBundleMessageSource();
+  private String mensagemDeErro;
 
-        messageSource.setBasename("classpath:mensagens");
-        messageSource.setDefaultEncoding("UTF-8");
-        return messageSource;
-    }
+  public MensagemDeErro(String mensagemDeErro) {
+    this.mensagemDeErro = mensagemDeErro;
+  }
 
-    @Bean
-    public LocalValidatorFactoryBean getValidator(){
-        LocalValidatorFactoryBean bean = new LocalValidatorFactoryBean();
-        bean.setValidationMessageSource(mapearMensagens());
-        return bean;
-    }
+  public String getMensagemDeErro() {
+    return mensagemDeErro;
+  }
+
+  public void setMensagemDeErro(String mensagemDeErro) {
+    this.mensagemDeErro = mensagemDeErro;
+  }
 
 }
+
