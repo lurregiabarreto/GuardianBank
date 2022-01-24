@@ -7,10 +7,7 @@ import br.com.zup.Guardians_Bank.infoPagamento.InfoPagamento;
 import lombok.Data;
 import org.hibernate.annotations.GenericGenerator;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.time.LocalDate;
 
 @Entity
@@ -25,8 +22,8 @@ public class Proposta {
   private LocalDate dataProposta;
   private ProdutoFinanceiro produtoFinanceiro;
   private double valorProposta;
+  @OneToOne
   private Cliente cliente;
   private StatusProposta statusProposta;
-  private InfoPagamento infoPagamento;
 
 }

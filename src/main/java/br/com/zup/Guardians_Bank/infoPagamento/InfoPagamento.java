@@ -6,10 +6,7 @@ import br.com.zup.Guardians_Bank.proposta.Proposta;
 import lombok.Data;
 import org.hibernate.annotations.GenericGenerator;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
@@ -22,11 +19,11 @@ public class InfoPagamento {
   @GeneratedValue(generator = "system-uuid")
   @GenericGenerator(name = "system-uuid", strategy = "uuid")
   private String idPagamento;
+  @OneToOne
   private Proposta proposta;
   private double valorParcela;
   private int qtdadeDeParcelas;
   private LocalDate dataPagamento;
-  private Cliente cliente;
   private ProdutoFinanceiro produtoFinanceiro;
   private double imposto;
   private LocalDateTime dataLiberacao;
