@@ -1,5 +1,6 @@
 package br.com.zup.Guardians_Bank.config;
 
+import br.com.zup.Guardians_Bank.exceptions.DataInvalidaException;
 import br.com.zup.Guardians_Bank.exceptions.EmAnaliseException;
 import br.com.zup.Guardians_Bank.exceptions.PropostaRecusadaException;
 import org.springframework.http.HttpStatus;
@@ -43,6 +44,12 @@ public class ControllerAdvice {
   @ResponseStatus(HttpStatus.BAD_REQUEST)
   public MensagemDeErro propostaRecusadaException (PropostaRecusadaException excecao) {
     return new MensagemDeErro (excecao.getLocalizedMessage());
+  }
+
+  @ExceptionHandler(DataInvalidaException.class)
+  @ResponseStatus(HttpStatus.BAD_REQUEST)
+  public MensagemDeErro manipularDataPosterior(DataInvalidaException exception) {
+    return new MensagemDeErro(exception.getMessage());
   }
 
 }
