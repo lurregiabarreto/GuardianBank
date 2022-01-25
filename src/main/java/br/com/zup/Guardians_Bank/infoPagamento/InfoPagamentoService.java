@@ -11,15 +11,15 @@ public class InfoPagamentoService {
   @Autowired
   private InfoPagamentoRepository infoPagamentoRepository;
 
-   public void calcularJuros(Proposta proposta, InfoPagamento infoPagamento){
+   public void calcularJuros(InfoPagamento infoPagamento){
      double taxa = 0;
-     double principal = proposta.getValorProposta();
+     double principal = infoPagamento.getProposta().getValorProposta();
      int meses = infoPagamento.getQtdadeDeParcelas();
 
-     if (proposta.getProdutoFinanceiro().equals(ProdutoFinanceiro.PESSOAL)){
-       taxa = proposta.getProdutoFinanceiro().getTaxaDeJuros();
-     }if (proposta.getProdutoFinanceiro().equals(ProdutoFinanceiro.CONSIGNADO)){
-       taxa = proposta.getProdutoFinanceiro().getTaxaDeJuros();
+     if (infoPagamento.getProposta().getProdutoFinanceiro().equals(ProdutoFinanceiro.PESSOAL)){
+       taxa = infoPagamento.getProposta().getProdutoFinanceiro().getTaxaDeJuros();
+     }if (infoPagamento.getProposta().getProdutoFinanceiro().equals(ProdutoFinanceiro.CONSIGNADO)){
+       taxa = infoPagamento.getProposta().getProdutoFinanceiro().getTaxaDeJuros();
      }
      double montante = principal * Math.pow((1 + taxa), meses);
      double juros = montante - principal;
