@@ -49,7 +49,7 @@ public class ControllerAdvice {
 
   @ExceptionHandler(DataInvalidaException.class)
   @ResponseStatus(HttpStatus.BAD_REQUEST)
-  public MensagemDeErro manipularDataPosterior(DataInvalidaException exception) {
+  public MensagemDeErro manipularDataPosteriorException(DataInvalidaException exception) {
     return new MensagemDeErro(exception.getMessage());
   }
 
@@ -59,4 +59,9 @@ public class ControllerAdvice {
     return new MensagemDeErro(excecao.getLocalizedMessage());
   }
 
+  @ExceptionHandler(HttpMessageNotReadableException.class)
+  @ResponseStatus(HttpStatus.BAD_REQUEST)
+  public MensagemDeErro limiteExcedidoException(HttpMessageNotReadableException excecao) {
+    return new MensagemDeErro(excecao.getLocalizedMessage());
+  }
 }
