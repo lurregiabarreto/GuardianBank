@@ -5,8 +5,7 @@ import br.com.zup.Guardians_Bank.exceptions.LimiteExcedidoException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
+
 
 @Service
 public class InfoPagamentoService {
@@ -14,20 +13,21 @@ public class InfoPagamentoService {
     @Autowired
     private InfoPagamentoRepository infoPagamentoRepository;
 
-    public void calcularJuros(InfoPagamento infoPagamento) {
-        double taxa = 0;
-        double principal = infoPagamento.getProposta().getValorProposta();
-        int meses = infoPagamento.getQtdadeDeParcelas();
+
+    public void calcularValorDaParcela(InfoPagamento infoPagamento) {
+        double juros = 0;
+        double valorFinanciado = infoPagamento.getProposta().getValorProposta();
+        int parcelas = infoPagamento.getQtdadeDeParcelas();
 
         if (infoPagamento.getProposta().getProdutoFinanceiro().equals(ProdutoFinanceiro.PESSOAL)) {
-            taxa = infoPagamento.getProposta().getProdutoFinanceiro().getTaxaDeJuros();
+            juros = infoPagamento.getProposta().getProdutoFinanceiro().getTaxaDeJuros();
         }
         if (infoPagamento.getProposta().getProdutoFinanceiro().equals(ProdutoFinanceiro.CONSIGNADO)) {
-            taxa = infoPagamento.getProposta().getProdutoFinanceiro().getTaxaDeJuros();
+            juros = infoPagamento.getProposta().getProdutoFinanceiro().getTaxaDeJuros();
         }
-        double montante = principal * Math.pow((1 + taxa), meses);
-        double juros = montante - principal;
+        double coeficienteFinanciamento = juros / (1 - (1 / ((Math.pow((1 + juros), parcelas)))));
 
+        infoPagamento.setValorParcela(coeficienteFinanciamento * valorFinanciado);
     }
 
     public void calcularImpostoSobreParcela(InfoPagamento infoPagamento) {
