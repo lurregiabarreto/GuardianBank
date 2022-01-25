@@ -21,11 +21,11 @@ public class InfoPagamento {
   private String idPagamento;
   @OneToOne
   private Proposta proposta;
-  private double valorParcela;
+  private double valorParcela; //100
   private int qtdadeDeParcelas;
   private LocalDate dataPagamento;
   private ProdutoFinanceiro produtoFinanceiro;
-  private double imposto;
+  private double imposto = 1.05;
   private LocalDateTime dataLiberacao;
 
 }
