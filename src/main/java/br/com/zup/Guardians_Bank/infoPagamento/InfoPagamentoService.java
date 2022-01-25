@@ -1,6 +1,7 @@
 package br.com.zup.Guardians_Bank.infoPagamento;
 
 import br.com.zup.Guardians_Bank.enums.ProdutoFinanceiro;
+import br.com.zup.Guardians_Bank.exceptions.LimiteExcedidoException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -40,7 +41,7 @@ public class InfoPagamentoService {
         double limite = salario * 0.4;
 
         if (infoPagamento.getValorParcela() > limite) {
-            throw new RuntimeException();
+            throw new LimiteExcedidoException("O valor da parcela excede limite permitido");
         }
         return infoPagamento;
     }
