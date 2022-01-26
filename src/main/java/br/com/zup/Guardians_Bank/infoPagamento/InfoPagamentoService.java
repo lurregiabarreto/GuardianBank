@@ -4,6 +4,7 @@ import br.com.zup.Guardians_Bank.enums.ProdutoFinanceiro;
 import br.com.zup.Guardians_Bank.enums.StatusProposta;
 import br.com.zup.Guardians_Bank.exceptions.LimiteExcedidoException;
 import br.com.zup.Guardians_Bank.infoPagamento.dto.RetornoPropostaDto;
+import br.com.zup.Guardians_Bank.proposta.PropostaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -18,7 +19,13 @@ public class InfoPagamentoService {
 
     @Autowired
     private InfoPagamentoRepository infoPagamentoRepository;
+    @Autowired
+    private PropostaRepository propostaRepository;
 
+    public InfoPagamento salvarInfoPagamento (InfoPagamento infoPagamento, int qtdadeDeParcelas) {
+        salvarOpcaoPagamento(infoPagamento, qtdadeDeParcelas);
+        return infoPagamentoRepository.save(infoPagamento);
+    }
 
     public void calcularValorDaParcela(InfoPagamento infoPagamento) {
         double juros = 0;
@@ -73,16 +80,16 @@ public class InfoPagamentoService {
 
     }
 
-    public InfoPagamento salvarOpcãoPagamento(InfoPagamento infoPagoOriginal, int qtidadeParcela){
+    public InfoPagamento salvarOpcaoPagamento(InfoPagamento infoPagoOriginal, int qtdadeParcela){
         InfoPagamento infoPagamentoSalvo = infoPagoOriginal;
         infoPagamentoSalvo.getProposta().setStatusProposta(StatusProposta.LIBERADO);
-        infoPagamentoSalvo.setQtdadeDeParcelas(qtidadeParcela);
+        infoPagamentoSalvo.setQtdadeDeParcelas(qtdadeParcela);
         calcularValorDaParcela(infoPagamentoSalvo);
         calcularImpostoSobreParcela(infoPagamentoSalvo);
         infoPagamentoSalvo.setDataLiberacao(LocalDateTime.now());
         LocalDate dataAtual = LocalDate.now();
         LocalDate dataPagamentoProx = dataAtual.plusDays(30);
         infoPagamentoSalvo.setDataPagamento(dataPagamentoProx);
-        return infoPagamentoRepository.save(infoPagamentoSalvo);
+        return infoPagamentoSalvo;
     }
 }
