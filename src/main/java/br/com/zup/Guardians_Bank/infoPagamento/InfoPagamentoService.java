@@ -22,8 +22,7 @@ public class InfoPagamentoService {
     @Autowired
     private PropostaRepository propostaRepository;
 
-    public InfoPagamento salvarInfoPagamento (InfoPagamento infoPagamento, int qtdadeDeParcelas, String numeroProposta) {
-        propostaRepository.existsByNumeroProposta(numeroProposta);
+    public InfoPagamento salvarInfoPagamento(InfoPagamento infoPagamento, int qtdadeDeParcelas) {
         salvarOpcaoPagamento(infoPagamento, qtdadeDeParcelas);
         return infoPagamentoRepository.save(infoPagamento);
     }
@@ -81,10 +80,10 @@ public class InfoPagamentoService {
 
     }
 
-    public InfoPagamento salvarOpcaoPagamento(InfoPagamento infoPagoOriginal, int qtdadeParcela){
+    public InfoPagamento salvarOpcaoPagamento(InfoPagamento infoPagoOriginal, int qtdadeParcelas) {
         InfoPagamento infoPagamentoSalvo = infoPagoOriginal;
         infoPagamentoSalvo.getProposta().setStatusProposta(StatusProposta.LIBERADO);
-        infoPagamentoSalvo.setQtdadeDeParcelas(qtdadeParcela);
+        infoPagamentoSalvo.setQtdadeDeParcelas(qtdadeParcelas);
         calcularValorDaParcela(infoPagamentoSalvo);
         calcularImpostoSobreParcela(infoPagamentoSalvo);
         infoPagamentoSalvo.setDataLiberacao(LocalDateTime.now());
@@ -94,3 +93,4 @@ public class InfoPagamentoService {
         return infoPagamentoSalvo;
     }
 }
+

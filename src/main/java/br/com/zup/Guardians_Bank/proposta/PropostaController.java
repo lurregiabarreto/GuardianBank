@@ -11,6 +11,4 @@ public class PropostaController {
   @Autowired
   private PropostaService propostaService;
 
-  @
-
 }

@@ -6,7 +6,7 @@ import lombok.Data;
 @Data
 public class EntradaInfoDTO {
 
-  private EntradaPropostaDTO entradaPropostaDTO;
-  private int qtdadeDeParcelas;
+  private String numeroProposta;
+  private Integer qtdadeParcelas;
 
 }

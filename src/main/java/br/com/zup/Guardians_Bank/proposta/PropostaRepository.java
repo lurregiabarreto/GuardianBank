@@ -2,8 +2,8 @@ package br.com.zup.Guardians_Bank.proposta;
 
 import org.springframework.data.repository.CrudRepository;
 
-public interface PropostaRepository extends CrudRepository <Proposta, String> {
+import java.util.Optional;
 
-  boolean existsByNumeroProposta (String numeroProposta);
+public interface PropostaRepository extends CrudRepository <Proposta, String> {
 
 }

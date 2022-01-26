@@ -9,12 +9,18 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.util.Optional;
 
 @Service
 public class PropostaService {
 
   @Autowired
   private PropostaRepository propostaRepository;
+
+  public Proposta buscarProposta(String numeroProposta) {
+    Optional<Proposta> propostaOptional = propostaRepository.findById(numeroProposta);
+    return propostaOptional.get();
+  }
 
   public Proposta validarStatusProposta(Proposta proposta) {
     if (proposta.getStatusProposta() == StatusProposta.EM_ANALISE) {
@@ -26,13 +32,14 @@ public class PropostaService {
     return proposta;
   }
 
-  public void validarDataContratacao(Proposta proposta) {
+  public Proposta validarDataContratacao(Proposta proposta) {
     LocalDate dataAtual = LocalDate.now();
 
     LocalDate dataLimite = dataAtual.minusDays(90);
     if (proposta.getDataProposta().isBefore(dataLimite)) {
       throw new DataInvalidaException("Infelizmente a data deve ser inferior a 3 meses");
     }
+    return proposta;
 
   }
 
