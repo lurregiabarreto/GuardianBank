@@ -2,6 +2,7 @@ package br.com.zup.Guardians_Bank.infoPagamento;
 
 import br.com.zup.Guardians_Bank.enums.ProdutoFinanceiro;
 import br.com.zup.Guardians_Bank.exceptions.LimiteExcedidoException;
+import br.com.zup.Guardians_Bank.infoPagamento.dto.RetornoPropostaDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
