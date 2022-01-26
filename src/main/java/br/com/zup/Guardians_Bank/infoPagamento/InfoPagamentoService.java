@@ -1,11 +1,14 @@
 package br.com.zup.Guardians_Bank.infoPagamento;
 
 import br.com.zup.Guardians_Bank.enums.ProdutoFinanceiro;
+import br.com.zup.Guardians_Bank.enums.StatusProposta;
 import br.com.zup.Guardians_Bank.exceptions.LimiteExcedidoException;
 import br.com.zup.Guardians_Bank.infoPagamento.dto.RetornoPropostaDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -68,7 +71,18 @@ public class InfoPagamentoService {
 
         return opcoesParcelaDTO;
 
-
     }
 
+    public InfoPagamento salvarOpcãoPagamento(InfoPagamento infoPagoOriginal, int qtidadeParcela){
+        InfoPagamento infoPagamentoSalvo = infoPagoOriginal;
+        infoPagamentoSalvo.getProposta().setStatusProposta(StatusProposta.LIBERADO);
+        infoPagamentoSalvo.setQtdadeDeParcelas(qtidadeParcela);
+        calcularValorDaParcela(infoPagamentoSalvo);
+        calcularImpostoSobreParcela(infoPagamentoSalvo);
+        infoPagamentoSalvo.setDataLiberacao(LocalDateTime.now());
+        LocalDate dataAtual = LocalDate.now();
+        LocalDate dataPagamentoProx = dataAtual.plusDays(30);
+        infoPagamentoSalvo.setDataPagamento(dataPagamentoProx);
+        return infoPagamentoRepository.save(infoPagamentoSalvo);
+    }
 }
