@@ -43,6 +43,10 @@ public class PropostaService {
 
   }
 
+//  public Proposta validarPropostaExiste(String numeroProposta){
+//
+//  }
+
 }
 
 
