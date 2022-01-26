@@ -3,7 +3,8 @@ package br.com.zup.Guardians_Bank.infoPagamento;
 import br.com.zup.Guardians_Bank.enums.ProdutoFinanceiro;
 import br.com.zup.Guardians_Bank.enums.StatusProposta;
 import br.com.zup.Guardians_Bank.exceptions.LimiteExcedidoException;
-import br.com.zup.Guardians_Bank.infoPagamento.dto.RetornoPropostaDto;
+import br.com.zup.Guardians_Bank.infoPagamento.dto.RetornoInfoDto;
+import br.com.zup.Guardians_Bank.proposta.PropostaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -18,7 +19,13 @@ public class InfoPagamentoService {
 
     @Autowired
     private InfoPagamentoRepository infoPagamentoRepository;
+    @Autowired
+    private PropostaRepository propostaRepository;
 
+    public InfoPagamento salvarInfoPagamento(InfoPagamento infoPagamento, int qtdadeDeParcelas) {
+        salvarOpcaoPagamento(infoPagamento, qtdadeDeParcelas);
+        return infoPagamentoRepository.save(infoPagamento);
+    }
 
     public void calcularValorDaParcela(InfoPagamento infoPagamento) {
         double juros = 0;
@@ -52,8 +59,8 @@ public class InfoPagamentoService {
         return infoPagamento;
     }
 
-    public List<RetornoPropostaDto> opcoesParcelamento(InfoPagamento infoPagoOriginal) {
-        List<RetornoPropostaDto> opcoesParcelaDTO = new ArrayList<RetornoPropostaDto>();
+    public List<RetornoInfoDto> opcoesParcelamento(InfoPagamento infoPagoOriginal) {
+        List<RetornoInfoDto> opcoesParcelaDTO = new ArrayList<RetornoInfoDto>();
         int parcela = 4;
 
         while (parcela <= 12) {
@@ -61,7 +68,7 @@ public class InfoPagamentoService {
             infoPagamentoatual.setQtdadeDeParcelas(parcela);
             calcularValorDaParcela(infoPagamentoatual);
             calcularImpostoSobreParcela(infoPagamentoatual);
-            RetornoPropostaDto exibirParcelaDTO = new RetornoPropostaDto();
+            RetornoInfoDto exibirParcelaDTO = new RetornoInfoDto();
             exibirParcelaDTO.setQtidadeParcelas(parcela);
             exibirParcelaDTO.setValorParcela(infoPagamentoatual.getValorParcela());
             opcoesParcelaDTO.add(exibirParcelaDTO);
@@ -73,16 +80,17 @@ public class InfoPagamentoService {
 
     }
 
-    public InfoPagamento salvarOpcãoPagamento(InfoPagamento infoPagoOriginal, int qtidadeParcela){
+    public InfoPagamento salvarOpcaoPagamento(InfoPagamento infoPagoOriginal, int qtdadeParcelas) {
         InfoPagamento infoPagamentoSalvo = infoPagoOriginal;
         infoPagamentoSalvo.getProposta().setStatusProposta(StatusProposta.LIBERADO);
-        infoPagamentoSalvo.setQtdadeDeParcelas(qtidadeParcela);
+        infoPagamentoSalvo.setQtdadeDeParcelas(qtdadeParcelas);
         calcularValorDaParcela(infoPagamentoSalvo);
         calcularImpostoSobreParcela(infoPagamentoSalvo);
         infoPagamentoSalvo.setDataLiberacao(LocalDateTime.now());
         LocalDate dataAtual = LocalDate.now();
         LocalDate dataPagamentoProx = dataAtual.plusDays(30);
         infoPagamentoSalvo.setDataPagamento(dataPagamentoProx);
-        return infoPagamentoRepository.save(infoPagamentoSalvo);
+        return infoPagamentoSalvo;
     }
 }
+

@@ -19,10 +19,10 @@ public class InfoPagamento {
   @GeneratedValue(generator = "system-uuid")
   @GenericGenerator(name = "system-uuid", strategy = "uuid")
   private String idPagamento;
-  @OneToOne
+  @OneToOne(cascade = CascadeType.ALL)
   private Proposta proposta;
   private double valorParcela;
-  private int qtdadeDeParcelas;
+  private Integer qtdadeDeParcelas;
   private LocalDate dataPagamento;
   private double imposto = 1.05;
   private LocalDateTime dataLiberacao;
