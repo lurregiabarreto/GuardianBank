@@ -60,7 +60,12 @@ public class PropostaService {
         return proposta;
     }
 
+    public InfoPagamento trazerInfoPorNumProposta(String id) {
+        InfoPagamento infoPagamento = new InfoPagamento();
 
-
+        Proposta proposta = buscarProposta(id);
+        infoPagamento.setProposta(proposta);
+        return infoPagamento;
+    }
 
 }
