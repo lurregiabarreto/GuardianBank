@@ -97,7 +97,7 @@ public class InfoPagamentoService {
         infoPagamentoSalvo.setDataPagamento(dataPagamentoProx);
         return infoPagamentoSalvo;
     }
-    public InfoPagamento autalizarInfo(String id){
+    public InfoPagamento atualizarInfo(String id){
         InfoPagamento infoPagamento = buscarInfoPagamento(id);
         infoPagamento.getProposta().setStatusProposta(StatusProposta.LIBERADO);
         infoPagamento.setDataLiberacao(LocalDateTime.now());
@@ -106,4 +106,3 @@ public class InfoPagamentoService {
     }
 
 }
-
