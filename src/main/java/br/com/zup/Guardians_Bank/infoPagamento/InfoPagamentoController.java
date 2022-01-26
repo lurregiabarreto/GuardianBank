@@ -26,6 +26,7 @@ public class InfoPagamentoController {
   public SaidaInfoDTO cadastrarInfoPagamento (@RequestBody EntradaInfoDTO entradaInfoDTO) {
     InfoPagamento infoPagamento = modelMapper.map(entradaInfoDTO, InfoPagamento.class);
     Proposta proposta = propostaService.buscarProposta(entradaInfoDTO.getNumeroProposta());
+    infoPagamento.setProposta(proposta);
     propostaService.validarStatusProposta(proposta);
     propostaService.validarDataContratacao(proposta);
     return modelMapper.map(infoPagamentoService.salvarInfoPagamento(infoPagamento, entradaInfoDTO.getQtdadeParcelas()),
