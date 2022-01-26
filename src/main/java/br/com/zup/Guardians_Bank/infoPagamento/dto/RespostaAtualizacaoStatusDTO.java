@@ -4,7 +4,7 @@ import br.com.zup.Guardians_Bank.enums.StatusProposta;
 import lombok.Data;
 
 @Data
-public class AtualizarStatusDTO {
+public class RespostaAtualizacaoStatusDTO {
 
     private StatusProposta statusProposta;
 
