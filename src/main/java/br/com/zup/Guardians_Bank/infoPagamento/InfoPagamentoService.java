@@ -3,7 +3,7 @@ package br.com.zup.Guardians_Bank.infoPagamento;
 import br.com.zup.Guardians_Bank.enums.ProdutoFinanceiro;
 import br.com.zup.Guardians_Bank.enums.StatusProposta;
 import br.com.zup.Guardians_Bank.exceptions.LimiteExcedidoException;
-import br.com.zup.Guardians_Bank.infoPagamento.dto.RetornoInfoDto;
+import br.com.zup.Guardians_Bank.infoPagamento.dto.RetornoInfoDTO;
 import br.com.zup.Guardians_Bank.proposta.PropostaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -59,8 +59,8 @@ public class InfoPagamentoService {
         return infoPagamento;
     }
 
-    public List<RetornoInfoDto> opcoesParcelamento(InfoPagamento infoPagoOriginal) {
-        List<RetornoInfoDto> opcoesParcelaDTO = new ArrayList<RetornoInfoDto>();
+    public List<RetornoInfoDTO> opcoesParcelamento(InfoPagamento infoPagoOriginal) {
+        List<RetornoInfoDTO> opcoesParcelaDTO = new ArrayList<RetornoInfoDTO>();
         int parcela = 4;
 
         while (parcela <= 12) {
@@ -68,7 +68,7 @@ public class InfoPagamentoService {
             infoPagamentoatual.setQtdadeDeParcelas(parcela);
             calcularValorDaParcela(infoPagamentoatual);
             calcularImpostoSobreParcela(infoPagamentoatual);
-            RetornoInfoDto exibirParcelaDTO = new RetornoInfoDto();
+            RetornoInfoDTO exibirParcelaDTO = new RetornoInfoDTO();
             exibirParcelaDTO.setQtidadeParcelas(parcela);
             exibirParcelaDTO.setValorParcela(infoPagamentoatual.getValorParcela());
             opcoesParcelaDTO.add(exibirParcelaDTO);
