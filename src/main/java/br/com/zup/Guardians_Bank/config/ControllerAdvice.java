@@ -1,9 +1,6 @@
 package br.com.zup.Guardians_Bank.config;
 
-import br.com.zup.Guardians_Bank.exceptions.DataInvalidaException;
-import br.com.zup.Guardians_Bank.exceptions.EmAnaliseException;
-import br.com.zup.Guardians_Bank.exceptions.LimiteExcedidoException;
-import br.com.zup.Guardians_Bank.exceptions.PropostaRecusadaException;
+import br.com.zup.Guardians_Bank.exceptions.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.validation.FieldError;
@@ -65,4 +62,11 @@ public class ControllerAdvice {
   public MensagemDeErro limiteExcedidoException(LimiteExcedidoException excecao) {
     return new MensagemDeErro(excecao.getLocalizedMessage());
   }
+
+  @ExceptionHandler(PropostaNaoLiberadaException.class)
+  @ResponseStatus(HttpStatus.BAD_REQUEST)
+  public MensagemDeErro propostaNaoLiberadaException(PropostaNaoLiberadaException excecao) {
+    return new MensagemDeErro(excecao.getLocalizedMessage());
+  }
+
 }
