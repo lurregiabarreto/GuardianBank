@@ -1,10 +1,12 @@
 package br.com.zup.Guardians_Bank.infoPagamento.dto;
 
-public class RetornoPropostaDto {
+public class RetornoInfoDto {
+
     int QtidadeParcelas;
     double valorParcela;
 
-    public RetornoPropostaDto() {
+    public RetornoInfoDto() {
+
     }
 
     public int getQtidadeParcelas() {

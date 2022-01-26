@@ -3,7 +3,7 @@ package br.com.zup.Guardians_Bank.infoPagamento;
 import br.com.zup.Guardians_Bank.enums.ProdutoFinanceiro;
 import br.com.zup.Guardians_Bank.enums.StatusProposta;
 import br.com.zup.Guardians_Bank.exceptions.LimiteExcedidoException;
-import br.com.zup.Guardians_Bank.infoPagamento.dto.RetornoPropostaDto;
+import br.com.zup.Guardians_Bank.infoPagamento.dto.RetornoInfoDto;
 import br.com.zup.Guardians_Bank.proposta.PropostaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -22,7 +22,8 @@ public class InfoPagamentoService {
     @Autowired
     private PropostaRepository propostaRepository;
 
-    public InfoPagamento salvarInfoPagamento (InfoPagamento infoPagamento, int qtdadeDeParcelas) {
+    public InfoPagamento salvarInfoPagamento (InfoPagamento infoPagamento, int qtdadeDeParcelas, String numeroProposta) {
+        propostaRepository.existsByNumeroProposta(numeroProposta);
         salvarOpcaoPagamento(infoPagamento, qtdadeDeParcelas);
         return infoPagamentoRepository.save(infoPagamento);
     }
@@ -59,8 +60,8 @@ public class InfoPagamentoService {
         return infoPagamento;
     }
 
-    public List<RetornoPropostaDto> opcoesParcelamento(InfoPagamento infoPagoOriginal) {
-        List<RetornoPropostaDto> opcoesParcelaDTO = new ArrayList<RetornoPropostaDto>();
+    public List<RetornoInfoDto> opcoesParcelamento(InfoPagamento infoPagoOriginal) {
+        List<RetornoInfoDto> opcoesParcelaDTO = new ArrayList<RetornoInfoDto>();
         int parcela = 4;
 
         while (parcela <= 12) {
@@ -68,7 +69,7 @@ public class InfoPagamentoService {
             infoPagamentoatual.setQtdadeDeParcelas(parcela);
             calcularValorDaParcela(infoPagamentoatual);
             calcularImpostoSobreParcela(infoPagamentoatual);
-            RetornoPropostaDto exibirParcelaDTO = new RetornoPropostaDto();
+            RetornoInfoDto exibirParcelaDTO = new RetornoInfoDto();
             exibirParcelaDTO.setQtidadeParcelas(parcela);
             exibirParcelaDTO.setValorParcela(infoPagamentoatual.getValorParcela());
             opcoesParcelaDTO.add(exibirParcelaDTO);
