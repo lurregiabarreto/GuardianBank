@@ -26,7 +26,9 @@ public class PropostaController {
 
     @GetMapping("/{id}")
     public OpcoesPagamentoDTO exibirOpcoesPagamento(@PathVariable String id) {
-        propostaService.validarPropostaExiste(id);
+        Proposta proposta = propostaService.validarPropostaExiste(id);
+        propostaService.validarStatusProposta(proposta);
+        propostaService.validarDataContratacao(proposta);
         InfoPagamento infoPagamento = propostaService.trazerInfoPorNumProposta(id);
         OpcoesPagamentoDTO opcoesPagamentoDTO = new OpcoesPagamentoDTO();
         opcoesPagamentoDTO.setOpcoes(infoPagamentoService.opcoesParcelamento(infoPagamento));
