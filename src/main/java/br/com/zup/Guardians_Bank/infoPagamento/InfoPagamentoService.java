@@ -18,91 +18,97 @@ import java.util.Optional;
 @Service
 public class InfoPagamentoService {
 
-    @Autowired
-    private InfoPagamentoRepository infoPagamentoRepository;
-    @Autowired
-    private PropostaRepository propostaRepository;
+  @Autowired
+  private InfoPagamentoRepository infoPagamentoRepository;
+  @Autowired
+  private PropostaRepository propostaRepository;
 
-    public InfoPagamento buscarInfoPagamento(String idPagamento) {
-        Optional<InfoPagamento> infoPagamentoOptional = infoPagamentoRepository.findById(idPagamento);
-        return infoPagamentoOptional.get();
+  public InfoPagamento buscarInfoPagamento(String idPagamento) {
+    Optional<InfoPagamento> infoPagamentoOptional = infoPagamentoRepository.findById(idPagamento);
+    return infoPagamentoOptional.get();
+  }
+
+  public InfoPagamento salvarInfoPagamento(InfoPagamento infoPagamento, int qtdadeDeParcelas) {
+    salvarOpcaoPagamento(infoPagamento, qtdadeDeParcelas);
+    return infoPagamentoRepository.save(infoPagamento);
+  }
+
+  public void calcularValorDaParcela(InfoPagamento infoPagamento) {
+    double juros = 0;
+    double valorFinanciado = infoPagamento.getProposta().getValorProposta();
+    int parcelas = infoPagamento.getQtdadeDeParcelas();
+
+    if (infoPagamento.getProposta().getProdutoFinanceiro().equals(ProdutoFinanceiro.PESSOAL)) {
+      juros = infoPagamento.getProposta().getProdutoFinanceiro().getTaxaDeJuros();
     }
-
-    public InfoPagamento salvarInfoPagamento(InfoPagamento infoPagamento, int qtdadeDeParcelas) {
-        salvarOpcaoPagamento(infoPagamento, qtdadeDeParcelas);
-        return infoPagamentoRepository.save(infoPagamento);
+    if (infoPagamento.getProposta().getProdutoFinanceiro().equals(ProdutoFinanceiro.CONSIGNADO)) {
+      juros = infoPagamento.getProposta().getProdutoFinanceiro().getTaxaDeJuros();
     }
+    double coeficienteFinanciamento = juros / (1 - (1 / ((Math.pow((1 + juros), parcelas)))));
 
-    public void calcularValorDaParcela(InfoPagamento infoPagamento) {
-        double juros = 0;
-        double valorFinanciado = infoPagamento.getProposta().getValorProposta();
-        int parcelas = infoPagamento.getQtdadeDeParcelas();
+    infoPagamento.setValorParcela(coeficienteFinanciamento * valorFinanciado);
+  }
 
-        if (infoPagamento.getProposta().getProdutoFinanceiro().equals(ProdutoFinanceiro.PESSOAL)) {
-            juros = infoPagamento.getProposta().getProdutoFinanceiro().getTaxaDeJuros();
-        }
-        if (infoPagamento.getProposta().getProdutoFinanceiro().equals(ProdutoFinanceiro.CONSIGNADO)) {
-            juros = infoPagamento.getProposta().getProdutoFinanceiro().getTaxaDeJuros();
-        }
-        double coeficienteFinanciamento = juros / (1 - (1 / ((Math.pow((1 + juros), parcelas)))));
+  public void calcularImpostoSobreParcela(InfoPagamento infoPagamento) {
+    double valorTotal = 0;
+    valorTotal = infoPagamento.getValorParcela() * infoPagamento.getImposto();
+    infoPagamento.setValorParcela(valorTotal);
+  }
 
-        infoPagamento.setValorParcela(coeficienteFinanciamento * valorFinanciado);
+  public InfoPagamento validarLimiteValorParcelas(InfoPagamento infoPagamento) {
+    double salario = infoPagamento.getProposta().getCliente().getSalario();
+    double limite = salario * 0.4;
+
+    if (infoPagamento.getValorParcela() > limite) {
+      throw new LimiteExcedidoException("O valor da parcela excede limite permitido");
     }
+    return infoPagamento;
+  }
 
-    public void calcularImpostoSobreParcela(InfoPagamento infoPagamento) {
-        double valorTotal = 0;
-        valorTotal = infoPagamento.getValorParcela() * infoPagamento.getImposto();
-        infoPagamento.setValorParcela(valorTotal);
-    }
+  public List<RetornoInfoDTO> opcoesParcelamento(InfoPagamento infoPagoOriginal) {
+    List<RetornoInfoDTO> opcoesParcelaDTO = new ArrayList<RetornoInfoDTO>();
+    int parcela = 4;
 
-    public InfoPagamento validarLimiteValorParcelas(InfoPagamento infoPagamento) {
-        double salario = infoPagamento.getProposta().getCliente().getSalario();
-        double limite = salario * 0.4;
-
-        if (infoPagamento.getValorParcela() > limite) {
-            throw new LimiteExcedidoException("O valor da parcela excede limite permitido");
-        }
-        return infoPagamento;
-    }
-
-    public List<RetornoInfoDTO> opcoesParcelamento(InfoPagamento infoPagoOriginal) {
-        List<RetornoInfoDTO> opcoesParcelaDTO = new ArrayList<RetornoInfoDTO>();
-        int parcela = 4;
-
-        while (parcela <= 12) {
-            InfoPagamento infoPagamentoatual = infoPagoOriginal;
-            infoPagamentoatual.setQtdadeDeParcelas(parcela);
-            calcularValorDaParcela(infoPagamentoatual);
-            calcularImpostoSobreParcela(infoPagamentoatual);
-            RetornoInfoDTO exibirParcelaDTO = new RetornoInfoDTO();
-            exibirParcelaDTO.setQtidadeParcelas(parcela);
-            exibirParcelaDTO.setValorParcela(infoPagamentoatual.getValorParcela());
-            opcoesParcelaDTO.add(exibirParcelaDTO);
-            parcela = parcela + 4;
-
-        }
-
-        return opcoesParcelaDTO;
+    while (parcela <= 12) {
+      InfoPagamento infoPagamentoatual = infoPagoOriginal;
+      infoPagamentoatual.setQtdadeDeParcelas(parcela);
+      calcularValorDaParcela(infoPagamentoatual);
+      calcularImpostoSobreParcela(infoPagamentoatual);
+      RetornoInfoDTO exibirParcelaDTO = new RetornoInfoDTO();
+      exibirParcelaDTO.setQtidadeParcelas(parcela);
+      exibirParcelaDTO.setValorParcela(infoPagamentoatual.getValorParcela());
+      opcoesParcelaDTO.add(exibirParcelaDTO);
+      parcela = parcela + 4;
 
     }
 
-    public InfoPagamento salvarOpcaoPagamento(InfoPagamento infoPagoOriginal, int qtdadeParcelas) {
-        InfoPagamento infoPagamentoSalvo = infoPagoOriginal;
-        infoPagamentoSalvo.setQtdadeDeParcelas(qtdadeParcelas);
-        calcularValorDaParcela(infoPagamentoSalvo);
-        calcularImpostoSobreParcela(infoPagamentoSalvo);
-        infoPagamentoSalvo.setDataLiberacao(LocalDateTime.now());
-        LocalDate dataAtual = LocalDate.now();
-        LocalDate dataPagamentoProx = dataAtual.plusDays(30);
-        infoPagamentoSalvo.setDataPagamento(dataPagamentoProx);
-        return infoPagamentoSalvo;
-    }
-    public InfoPagamento atualizarInfo(String id){
-        InfoPagamento infoPagamento = buscarInfoPagamento(id);
-        infoPagamento.getProposta().setStatusProposta(StatusProposta.LIBERADO);
-        infoPagamento.setDataLiberacao(LocalDateTime.now());
-        infoPagamentoRepository.save(infoPagamento);
-        return infoPagamento;
-    }
+    return opcoesParcelaDTO;
+
+  }
+
+  public InfoPagamento salvarOpcaoPagamento(InfoPagamento infoPagoOriginal, int qtdadeParcelas) {
+    InfoPagamento infoPagamentoSalvo = infoPagoOriginal;
+    infoPagamentoSalvo.setQtdadeDeParcelas(qtdadeParcelas);
+    calcularValorDaParcela(infoPagamentoSalvo);
+    calcularImpostoSobreParcela(infoPagamentoSalvo);
+    infoPagamentoSalvo.setDataLiberacao(LocalDateTime.now());
+    LocalDate dataAtual = LocalDate.now();
+    LocalDate dataPagamentoProx = dataAtual.plusDays(30);
+    infoPagamentoSalvo.setDataPagamento(dataPagamentoProx);
+    return infoPagamentoSalvo;
+  }
+
+  public InfoPagamento atualizarInfo(String id) {
+    InfoPagamento infoPagamento = buscarInfoPagamento(id);
+    infoPagamento.getProposta().setStatusProposta(StatusProposta.LIBERADO);
+    infoPagamento.setDataLiberacao(LocalDateTime.now());
+    infoPagamentoRepository.save(infoPagamento);
+    return infoPagamento;
+  }
+
+  public List<InfoPagamento> exibirInfos() {
+    List<InfoPagamento> infos = (List<InfoPagamento>) infoPagamentoRepository.findAll();
+    return infos;
+  }
 
 }
