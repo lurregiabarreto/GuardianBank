@@ -2,7 +2,7 @@ package br.com.zup.Guardians_Bank.proposta;
 
 import br.com.zup.Guardians_Bank.infoPagamento.InfoPagamento;
 import br.com.zup.Guardians_Bank.infoPagamento.InfoPagamentoService;
-import br.com.zup.Guardians_Bank.infoPagamento.dto.RetornoInfoDto;
+
 import br.com.zup.Guardians_Bank.proposta.dtos.OpcoesPagamentoDTO;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
