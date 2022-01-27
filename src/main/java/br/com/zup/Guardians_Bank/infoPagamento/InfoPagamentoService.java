@@ -113,7 +113,7 @@ public class InfoPagamentoService {
 
   public List<InfoPagamento> aplicarFiltros(Integer qtdadeDeParcelas) {
     if (qtdadeDeParcelas != null) {
-      infoPagamentoRepository.findAllByQtdadeDeParcelas(qtdadeDeParcelas);
+      return infoPagamentoRepository.findAllByQtdadeDeParcelas(qtdadeDeParcelas);
     }
     return exibirInfos();
   }
