@@ -3,6 +3,7 @@ package br.com.zup.Guardians_Bank.infoPagamento;
 import br.com.zup.Guardians_Bank.enums.ProdutoFinanceiro;
 import br.com.zup.Guardians_Bank.enums.StatusProposta;
 import br.com.zup.Guardians_Bank.exceptions.LimiteExcedidoException;
+import br.com.zup.Guardians_Bank.exceptions.PropostaJaCadastradaException;
 import br.com.zup.Guardians_Bank.infoPagamento.dto.RetornoInfoDTO;
 import br.com.zup.Guardians_Bank.proposta.PropostaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,7 +29,15 @@ public class InfoPagamentoService {
     return infoPagamentoOptional.get();
   }
 
-  public InfoPagamento salvarInfoPagamento(InfoPagamento infoPagamento, int qtdadeDeParcelas) {
+  public boolean buscarInfoPorNumeroProposta (String numeroProposta) {
+    if (infoPagamentoRepository.existsByPropostaNumeroProposta(numeroProposta)){
+      throw new PropostaJaCadastradaException("Proposta já cadastrada");
+    }
+    return false;
+  }
+
+  public InfoPagamento salvarInfoPagamento(InfoPagamento infoPagamento, int qtdadeDeParcelas, String numeroProposta) {
+    buscarInfoPorNumeroProposta(numeroProposta);
     salvarOpcaoPagamento(infoPagamento, qtdadeDeParcelas);
     return infoPagamentoRepository.save(infoPagamento);
   }

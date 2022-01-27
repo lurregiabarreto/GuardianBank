@@ -8,4 +8,6 @@ public interface InfoPagamentoRepository extends CrudRepository<InfoPagamento, S
 
   List<InfoPagamento> findAllByQtdadeDeParcelas(Integer qtdadeDeParcelas);
 
+  boolean existsByPropostaNumeroProposta(String numeroProposta);
+
 }
