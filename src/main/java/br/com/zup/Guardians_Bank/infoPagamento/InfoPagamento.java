@@ -24,8 +24,6 @@ public class InfoPagamento {
   @OneToOne(cascade = CascadeType.ALL)
   private Proposta proposta;
   @Column(nullable = false)
-  @DecimalMin(value = "0.00", inclusive = false)
-  @Digits(integer = 10, fraction = 2)
   private double valorParcela;
   @Column(nullable = false)
   private Integer qtdadeDeParcelas;
