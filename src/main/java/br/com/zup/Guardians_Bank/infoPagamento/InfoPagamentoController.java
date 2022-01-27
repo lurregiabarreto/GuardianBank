@@ -33,13 +33,14 @@ public class InfoPagamentoController {
     infoPagamento.setProposta(proposta);
     propostaService.validarStatusProposta(proposta);
     propostaService.validarDataContratacao(proposta);
-    return modelMapper.map(infoPagamentoService.salvarInfoPagamento(infoPagamento, entradaInfoDTO.getQtdadeParcelas()),
-        SaidaInfoDTO.class);
+    return modelMapper.map(infoPagamentoService.salvarInfoPagamento(infoPagamento, entradaInfoDTO.getQtdadeParcelas(),
+            entradaInfoDTO.getNumeroProposta()), SaidaInfoDTO.class);
   }
 
   @PutMapping("/{id}")
   @ResponseStatus(HttpStatus.OK)
-  public RespostaAtualizacaoStatusDTO atualizarStatus(@PathVariable String id, @RequestBody AtualizarStatusDTO atualizarStatusDTO) {
+  public RespostaAtualizacaoStatusDTO atualizarStatus(@PathVariable String id,
+                                                      @RequestBody AtualizarStatusDTO atualizarStatusDTO) {
 
     if (atualizarStatusDTO.getStatusProposta() != StatusProposta.APROVADO) {
       throw new PropostaNaoLiberadaException("Proposta não liberada");
