@@ -9,3 +9,4 @@ INSERT INTO propostas (numero_proposta, data_proposta, produto_financeiro, statu
 INSERT INTO propostas (numero_proposta, data_proposta, produto_financeiro, status_proposta, valor_proposta, cliente_codcli) VALUES ('4','2021-01-07', '0', '2', 900, '1');
 INSERT INTO propostas (numero_proposta, data_proposta, produto_financeiro, status_proposta, valor_proposta, cliente_codcli) VALUES ('5','2022-01-21', '2', '2', 5000, '2');
 INSERT INTO propostas (numero_proposta, data_proposta, produto_financeiro, status_proposta, valor_proposta, cliente_codcli) VALUES ('6','2022-01-27', '1', '2', 6000, '3');
+INSERT INTO propostas (numero_proposta, data_proposta, produto_financeiro, status_proposta, valor_proposta, cliente_codcli) VALUES ('7','2022-01-27', '1', '4', 1000, '1');

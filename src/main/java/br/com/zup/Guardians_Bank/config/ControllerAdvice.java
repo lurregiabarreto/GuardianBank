@@ -3,6 +3,7 @@ package br.com.zup.Guardians_Bank.config;
 
 import br.com.zup.Guardians_Bank.exceptions.*;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -65,13 +66,13 @@ public class ControllerAdvice {
   }
 
   @ExceptionHandler(PropostaNaoLiberadaException.class)
-  @ResponseStatus(HttpStatus.BAD_REQUEST)
+  @ResponseStatus(HttpStatus.UNPROCESSABLE_ENTITY)
   public MensagemDeErro propostaNaoLiberadaException(PropostaNaoLiberadaException excecao) {
     return new MensagemDeErro(excecao.getLocalizedMessage());
   }
 
   @ExceptionHandler(PropostaNaoEncontradaException.class)
-  @ResponseStatus(HttpStatus.BAD_REQUEST)
+  @ResponseStatus(HttpStatus.NOT_FOUND)
   public MensagemDeErro propostaNaoCadastrada(PropostaNaoEncontradaException excecao) {
     return new MensagemDeErro(excecao.getLocalizedMessage());
 
@@ -81,6 +82,17 @@ public class ControllerAdvice {
   @ResponseStatus(HttpStatus.BAD_REQUEST)
   public MensagemDeErro propostaJaCadastrada(PropostaJaCadastradaException excecao) {
     return new MensagemDeErro(excecao.getLocalizedMessage());
+
+  }
+  @ExceptionHandler(ArrayIndexOutOfBoundsException.class)
+  public ResponseEntity enumInvalidoException(ArrayIndexOutOfBoundsException exception) {
+    if (exception.getLocalizedMessage().contains("br.com.zup.Guardians_Bank.enums.ProductoFinanceiro")) {
+      return ResponseEntity.status(422).build();
+    }
+    if (exception.getLocalizedMessage().contains("br.com.zup.Guardians_Bank.enums.StatusProposta")){
+      return ResponseEntity.status(422).build();
+    }
+    return ResponseEntity.status(400).build();
 
   }
 
