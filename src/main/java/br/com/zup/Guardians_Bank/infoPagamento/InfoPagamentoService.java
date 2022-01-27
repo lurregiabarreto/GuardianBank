@@ -49,11 +49,14 @@ public class InfoPagamentoService {
     infoPagamento.setValorParcela(coeficienteFinanciamento * valorFinanciado);
   }
 
-  public void calcularImpostoSobreParcela(InfoPagamento infoPagamento) {
-    double valorTotal = 0;
-    valorTotal = infoPagamento.getValorParcela() * infoPagamento.getImposto();
-    infoPagamento.setValorParcela(valorTotal);
-  }
+    public void calcularImpostoSobreParcela(InfoPagamento infoPagamento) {
+        double imposto = 0.05;
+        double valorImposto = infoPagamento.getValorParcela() * imposto;
+        infoPagamento.setImposto(valorImposto);
+        double valorParcelaComImposto = valorImposto + infoPagamento.getValorParcela();
+        infoPagamento.setValorParcela(valorParcelaComImposto);
+    }
+
 
   public InfoPagamento validarLimiteValorParcelas(InfoPagamento infoPagamento) {
     double salario = infoPagamento.getProposta().getCliente().getSalario();

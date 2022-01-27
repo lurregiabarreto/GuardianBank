@@ -24,7 +24,7 @@ public class InfoPagamento {
   private double valorParcela;
   private Integer qtdadeDeParcelas;
   private LocalDate dataPagamento;
-  private double imposto = 1.05;
+  private double imposto;
   private LocalDateTime dataLiberacao;
 
 }

@@ -13,7 +13,7 @@ public class SaidaInfoDTO {
   private double valorParcela;
   private int qtdadeDeParcelas;
   private LocalDate dataPagamento;
-  private double imposto = 1.05;
+  private double imposto;
   private LocalDateTime dataLiberacao;
 
 }
