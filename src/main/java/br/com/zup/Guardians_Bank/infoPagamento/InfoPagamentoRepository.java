@@ -2,6 +2,10 @@ package br.com.zup.Guardians_Bank.infoPagamento;
 
 import org.springframework.data.repository.CrudRepository;
 
-public interface InfoPagamentoRepository extends CrudRepository <InfoPagamento, String> {
+import java.util.List;
+
+public interface InfoPagamentoRepository extends CrudRepository<InfoPagamento, String> {
+
+  List<InfoPagamento> findAllByQtdadeDeParcelas(Integer qtdadeDeParcelas);
 
 }
