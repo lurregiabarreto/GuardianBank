@@ -65,7 +65,7 @@ public class InfoPagamentoService {
         return infoPagamento;
     }
 
-    public List<RetornoInfoDto> opcoesParcelamento(InfoPagamento infoPagoOriginal) {
+    public List<RetornoInfoDTO> opcoesParcelamento(InfoPagamento infoPagoOriginal) {
         List<RetornoInfoDTO> opcoesParcelaDTO = new ArrayList<RetornoInfoDTO>();
         int parcela = 4;
 
