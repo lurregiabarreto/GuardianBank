@@ -11,23 +11,25 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 @RestControllerAdvice
 public class ControllerAdvice {
 
   @ExceptionHandler(MethodArgumentNotValidException.class)
   @ResponseStatus(HttpStatus.UNPROCESSABLE_ENTITY)
-  public HashMap<String, HashMap<String, String>> manipulandoValidacao(MethodArgumentNotValidException exception) {
-    HashMap<String, HashMap<String, String>> resposta = new HashMap<>();
+  public List<MensagemDeErro> tratarErrosDeValidacao(MethodArgumentNotValidException excecao) {
+    List<MensagemDeErro> errosValidacao = new ArrayList<>();
 
-    for (FieldError error : exception.getFieldErrors()) {
-      HashMap<String, String> mensagem = construirResposta(error.getDefaultMessage());
-      resposta.put(error.getField(), mensagem);
+    for (FieldError referencia : excecao.getFieldErrors()) {
+      MensagemDeErro mensagemDeErro = new MensagemDeErro(referencia.getDefaultMessage());
+      errosValidacao.add(mensagemDeErro);
     }
-    return resposta;
-  }
 
+    return errosValidacao;
+  }
 
   private HashMap<String, String> construirResposta(String mensagem) {
     HashMap<String, String> resposta = new HashMap<>();
@@ -84,12 +86,13 @@ public class ControllerAdvice {
     return new MensagemDeErro(excecao.getLocalizedMessage());
 
   }
+
   @ExceptionHandler(ArrayIndexOutOfBoundsException.class)
   public ResponseEntity enumInvalidoException(ArrayIndexOutOfBoundsException exception) {
     if (exception.getLocalizedMessage().contains("br.com.zup.Guardians_Bank.enums.ProductoFinanceiro")) {
       return ResponseEntity.status(422).build();
     }
-    if (exception.getLocalizedMessage().contains("br.com.zup.Guardians_Bank.enums.StatusProposta")){
+    if (exception.getLocalizedMessage().contains("br.com.zup.Guardians_Bank.enums.StatusProposta")) {
       return ResponseEntity.status(422).build();
     }
     return ResponseEntity.status(400).build();
@@ -97,3 +100,4 @@ public class ControllerAdvice {
   }
 
 }
+

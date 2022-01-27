@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.IllegalFormatCodePointException;
 import java.util.List;
@@ -27,7 +28,7 @@ public class InfoPagamentoController {
 
   @PostMapping
   @ResponseStatus(HttpStatus.CREATED)
-  public SaidaInfoDTO cadastrarInfoPagamento(@RequestBody EntradaInfoDTO entradaInfoDTO) {
+  public SaidaInfoDTO cadastrarInfoPagamento(@Valid @RequestBody EntradaInfoDTO entradaInfoDTO) {
     InfoPagamento infoPagamento = modelMapper.map(entradaInfoDTO, InfoPagamento.class);
     Proposta proposta = propostaService.buscarProposta(entradaInfoDTO.getNumeroProposta());
     infoPagamento.setProposta(proposta);
