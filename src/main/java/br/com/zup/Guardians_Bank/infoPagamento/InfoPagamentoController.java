@@ -5,6 +5,8 @@ import br.com.zup.Guardians_Bank.exceptions.PropostaNaoLiberadaException;
 import br.com.zup.Guardians_Bank.infoPagamento.dto.*;
 import br.com.zup.Guardians_Bank.proposta.Proposta;
 import br.com.zup.Guardians_Bank.proposta.PropostaService;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -17,6 +19,8 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/infos")
+@Api(value = "Compra de Credito")
+@CrossOrigin(origins = "*")
 public class InfoPagamentoController {
 
   @Autowired
@@ -27,6 +31,7 @@ public class InfoPagamentoController {
   private ModelMapper modelMapper;
 
   @PostMapping
+  @ApiOperation(value = "Método Cadastrar informacao de pagamento")
   @ResponseStatus(HttpStatus.CREATED)
   public SaidaInfoDTO cadastrarInfoPagamento(@Valid @RequestBody EntradaInfoDTO entradaInfoDTO) {
     InfoPagamento infoPagamento = modelMapper.map(entradaInfoDTO, InfoPagamento.class);
@@ -39,6 +44,7 @@ public class InfoPagamentoController {
   }
 
   @PutMapping("/{id}")
+  @ApiOperation(value = "Método Atualizar Informacao de Pagamento")
   @ResponseStatus(HttpStatus.OK)
   public RespostaAtualizacaoStatusDTO atualizarStatus(@PathVariable String id,
                                                       @RequestBody AtualizarStatusDTO atualizarStatusDTO) {
@@ -51,6 +57,7 @@ public class InfoPagamentoController {
   }
 
   @GetMapping
+  @ApiOperation(value = "Método Exibir informacoes de pagamento por parcelamento")
   List<ResumoInfoDTO> exibirContas(@RequestParam(required = false) Integer qtdadeDeParcelas) {
     List<ResumoInfoDTO> listaDeInfos = new ArrayList<>();
     for (InfoPagamento info : infoPagamentoService.aplicarFiltros(qtdadeDeParcelas)) {

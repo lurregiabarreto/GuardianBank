@@ -1,8 +1,10 @@
 package br.com.zup.Guardians_Bank.config;
 
+import br.com.zup.Guardians_Bank.GuardiansBankApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RestController;
 import springfox.documentation.builders.PathSelectors;
 import springfox.documentation.builders.RequestHandlerSelectors;
 import springfox.documentation.builders.ResponseMessageBuilder;
@@ -22,7 +24,7 @@ public class SpringFoxConfig {
     public Docket api() {
         return new Docket(DocumentationType.SWAGGER_2)
                 .select()
-                .apis(RequestHandlerSelectors.any())
+                .apis(RequestHandlerSelectors.withClassAnnotation(RestController.class))
                 .paths(PathSelectors.any())
                 .build()
                 .useDefaultResponseMessages(false)
@@ -33,7 +35,7 @@ public class SpringFoxConfig {
         return new ArrayList<>() {{
             add(new ResponseMessageBuilder()
                     .code(500)
-                    .message("Erro ao se comunicar com o servidor")
+                    .message("500 message")
                     .responseModel(new ModelRef("Foi gerada uma exceção"))
                     .build());
             add(new ResponseMessageBuilder()
