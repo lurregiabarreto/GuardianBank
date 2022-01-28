@@ -1,6 +1,7 @@
-package br.com.zup.Guardians_Bank.config.JWT.exception;
+package br.com.zup.Guardians_Bank.config.JWT;
 
 import br.com.zup.Guardians_Bank.config.JWT.JWTComponent;
+import br.com.zup.Guardians_Bank.config.JWT.exception.TokenInvalidoException;
 import io.jsonwebtoken.Claims;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;

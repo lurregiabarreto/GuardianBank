@@ -2,7 +2,7 @@ package br.com.zup.Guardians_Bank.config.Security;
 
 import br.com.zup.Guardians_Bank.config.JWT.FiltroDeAutenticacaoJWT;
 import br.com.zup.Guardians_Bank.config.JWT.JWTComponent;
-import br.com.zup.Guardians_Bank.config.JWT.exception.FiltroDeAutorizacaoJWT;
+import br.com.zup.Guardians_Bank.config.JWT.FiltroDeAutorizacaoJWT;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
