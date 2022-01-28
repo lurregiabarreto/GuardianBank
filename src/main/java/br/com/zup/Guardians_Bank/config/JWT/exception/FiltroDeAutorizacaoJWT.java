@@ -2,6 +2,7 @@ package br.com.zup.Guardians_Bank.config.JWT.exception;
 
 import br.com.zup.Guardians_Bank.config.JWT.JWTComponent;
 import io.jsonwebtoken.Claims;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -26,8 +27,8 @@ public class FiltroDeAutorizacaoJWT extends BasicAuthenticationFilter {
         this.userDetailsService = userDetailsService;
     }
 
-    public UsernamePasswordAuthenticationToken pegarAutenticacao(String token){
-        if(!jwtComponent.tokenValido(token)){
+    public UsernamePasswordAuthenticationToken pegarAutenticacao(String token) {
+        if (!jwtComponent.tokenValido(token)) {
             throw new TokenInvalidoException();
         }
 
@@ -48,7 +49,7 @@ public class FiltroDeAutorizacaoJWT extends BasicAuthenticationFilter {
                 UsernamePasswordAuthenticationToken auth = pegarAutenticacao(token.substring(6));
                 SecurityContextHolder.getContext().setAuthentication(auth);
             } catch (TokenInvalidoException exception) {
-                System.out.println();
+                response.setStatus(HttpStatus.FORBIDDEN.value());
             }
         }
 
