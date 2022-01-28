@@ -1,12 +1,10 @@
 package br.com.zup.Guardians_Bank.infoPagamento;
 
 import br.com.zup.Guardians_Bank.components.Conversor;
-import br.com.zup.Guardians_Bank.infoPagamento.dto.AtualizarStatusDTO;
-import br.com.zup.Guardians_Bank.infoPagamento.dto.EntradaInfoDTO;
-import br.com.zup.Guardians_Bank.infoPagamento.dto.RespostaAtualizacaoStatusDTO;
-import br.com.zup.Guardians_Bank.infoPagamento.dto.SaidaInfoDTO;
+import br.com.zup.Guardians_Bank.infoPagamento.dto.*;
 import br.com.zup.Guardians_Bank.proposta.Proposta;
 import br.com.zup.Guardians_Bank.proposta.PropostaService;
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -19,6 +17,9 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
+
+import java.util.Arrays;
+import java.util.List;
 
 @WebMvcTest({InfoPagamentoController.class, Conversor.class})
 public class InfoPagamentoControllerTest {
@@ -37,6 +38,7 @@ public class InfoPagamentoControllerTest {
   private SaidaInfoDTO saidaInfoDTO;
   private AtualizarStatusDTO atualizarStatusDTO;
   private RespostaAtualizacaoStatusDTO respostaAtualizacaoStatusDTO;
+  private ResumoInfoDTO resumoInfoDTO;
   private Proposta proposta;
 
 
@@ -59,6 +61,7 @@ public class InfoPagamentoControllerTest {
     saidaInfoDTO = new SaidaInfoDTO();
     atualizarStatusDTO = new AtualizarStatusDTO();
     respostaAtualizacaoStatusDTO = new RespostaAtualizacaoStatusDTO();
+    resumoInfoDTO = new ResumoInfoDTO();
 
   }
 
@@ -161,6 +164,21 @@ public class InfoPagamentoControllerTest {
     String jsonResposta = resultado.andReturn().getResponse().getContentAsString();
     RespostaAtualizacaoStatusDTO respostaAtualizada = objectMapper.readValue(jsonResposta,
         RespostaAtualizacaoStatusDTO.class);
+  }
+
+  @Test
+  public void testarExibicaoInfos() throws Exception {
+    Mockito.when(infoPagamentoService.exibirInfos()).thenReturn(Arrays.asList(infoPagamento));
+
+    ResultActions resultado = mockMvc.perform(MockMvcRequestBuilders.get("/infos")
+            .contentType(MediaType.APPLICATION_JSON))
+        .andExpect(MockMvcResultMatchers.status().is(200))
+        .andExpect(MockMvcResultMatchers.jsonPath("$").isArray());
+
+    String jsonResposta = resultado.andReturn().getResponse().getContentAsString();
+    List<ResumoInfoDTO> usuarios = objectMapper.readValue(jsonResposta,
+        new TypeReference<List<ResumoInfoDTO>>() {
+        });
   }
 
 }
