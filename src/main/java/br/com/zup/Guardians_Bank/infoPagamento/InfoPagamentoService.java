@@ -4,11 +4,15 @@ import br.com.zup.Guardians_Bank.enums.ProdutoFinanceiro;
 import br.com.zup.Guardians_Bank.enums.StatusProposta;
 import br.com.zup.Guardians_Bank.exceptions.LimiteExcedidoException;
 import br.com.zup.Guardians_Bank.exceptions.PropostaJaCadastradaException;
+import br.com.zup.Guardians_Bank.exceptions.PropostaNaoLiberadaException;
 import br.com.zup.Guardians_Bank.infoPagamento.dto.RetornoInfoDTO;
+import br.com.zup.Guardians_Bank.proposta.Proposta;
 import br.com.zup.Guardians_Bank.proposta.PropostaRepository;
+import br.com.zup.Guardians_Bank.proposta.PropostaService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.sound.sampled.Port;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.LocalDate;
@@ -25,6 +29,18 @@ public class InfoPagamentoService {
   private InfoPagamentoRepository infoPagamentoRepository;
   @Autowired
   private PropostaRepository propostaRepository;
+  @Autowired
+  private PropostaService propostaService;
+
+  public InfoPagamento salvarInfoPagamento(InfoPagamento infoPagamento, String numeroProposta, int qtdadeDeParcelas) {
+    Proposta proposta = propostaService.buscarProposta(numeroProposta);
+    buscarInfoPorNumeroProposta(proposta.getNumeroProposta());
+    propostaService.validarStatusProposta(proposta);
+    propostaService.validarDataContratacao(proposta);
+    infoPagamento.setProposta(proposta);
+    salvarOpcaoPagamento(infoPagamento, qtdadeDeParcelas);
+    return infoPagamentoRepository.save(infoPagamento);
+  }
 
   public InfoPagamento buscarInfoPagamento(String idPagamento) {
     Optional<InfoPagamento> infoPagamentoOptional = infoPagamentoRepository.findById(idPagamento);
@@ -36,12 +52,6 @@ public class InfoPagamentoService {
       throw new PropostaJaCadastradaException("Proposta já cadastrada");
     }
     return false;
-  }
-
-  public InfoPagamento salvarInfoPagamento(InfoPagamento infoPagamento, int qtdadeDeParcelas, String numeroProposta) {
-    buscarInfoPorNumeroProposta(numeroProposta);
-    salvarOpcaoPagamento(infoPagamento, qtdadeDeParcelas);
-    return infoPagamentoRepository.save(infoPagamento);
   }
 
   public void calcularValorDaParcela(InfoPagamento infoPagamento) {
@@ -96,7 +106,6 @@ public class InfoPagamentoService {
       parcela = parcela + 4;
 
     }
-
     return opcoesParcelaDTO;
 
   }
@@ -115,6 +124,10 @@ public class InfoPagamentoService {
 
   public InfoPagamento atualizarInfo(String id) {
     InfoPagamento infoPagamento = buscarInfoPagamento(id);
+    if (infoPagamento.getProposta().getStatusProposta() != StatusProposta.APROVADO) {
+      throw new PropostaNaoLiberadaException("Proposta não liberada");
+    }
+
     infoPagamento.getProposta().setStatusProposta(StatusProposta.LIBERADO);
     infoPagamento.setDataLiberacao(LocalDateTime.now());
     infoPagamentoRepository.save(infoPagamento);
