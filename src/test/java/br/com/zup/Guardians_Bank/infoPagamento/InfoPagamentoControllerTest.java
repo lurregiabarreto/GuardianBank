@@ -84,7 +84,7 @@ public class InfoPagamentoControllerTest {
   }
 
   @Test
-  public void testarValidacaoQtdadeParcelasNotNull() throws Exception {
+  public void testarValidacaoQtdadeParcelasNull() throws Exception {
     entradaInfoDTO.setQtdadeParcelas(null);
     Mockito.when((infoPagamentoService.salvarInfoPagamento(Mockito.any(InfoPagamento.class), Mockito.anyString(),
         Mockito.anyInt()))).thenReturn(infoPagamento);
@@ -96,7 +96,19 @@ public class InfoPagamentoControllerTest {
   }
 
   @Test
-  public void testarValidacaoQtdadeParcelasNumeroPositivo() throws Exception {
+  public void testarValidacaoQtdadeParcelasNotNull() throws Exception {
+    entradaInfoDTO.setQtdadeParcelas(4);
+    Mockito.when((infoPagamentoService.salvarInfoPagamento(Mockito.any(InfoPagamento.class), Mockito.anyString(),
+        Mockito.anyInt()))).thenReturn(infoPagamento);
+    String json = objectMapper.writeValueAsString(entradaInfoDTO);
+
+    ResultActions resultado = mockMvc.perform(MockMvcRequestBuilders.post("/infos")
+            .content(json).contentType(MediaType.APPLICATION_JSON))
+        .andExpect(MockMvcResultMatchers.status().is(201));
+  }
+
+  @Test
+  public void testarValidacaoQtdadeParcelasNumeroNegativo() throws Exception {
     entradaInfoDTO.setQtdadeParcelas(-2);
     Mockito.when((infoPagamentoService.salvarInfoPagamento(Mockito.any(InfoPagamento.class), Mockito.anyString(),
         Mockito.anyInt()))).thenReturn(infoPagamento);
