@@ -76,6 +76,7 @@ public class InfoPagamentoService {
     infoPagamento.setValorParcela(bigDecimal2.doubleValue());
   }
 
+//ONDE ESTÁ SENDO USADO?
   public InfoPagamento validarLimiteValorParcelas(InfoPagamento infoPagamento) {
     double salario = infoPagamento.getProposta().getCliente().getSalario();
     double limite = salario * 0.4;
@@ -96,7 +97,7 @@ public class InfoPagamentoService {
       calcularValorDaParcela(infoPagamentoatual);
       calcularImpostoSobreParcela(infoPagamentoatual);
       RetornoInfoDTO exibirParcelaDTO = new RetornoInfoDTO();
-      exibirParcelaDTO.setQtidadeParcelas(parcela);
+      exibirParcelaDTO.setQtdadeParcelas(parcela);
       exibirParcelaDTO.setValorParcela(infoPagamentoatual.getValorParcela());
       opcoesParcelaDTO.add(exibirParcelaDTO);
       parcela = parcela + 4;
