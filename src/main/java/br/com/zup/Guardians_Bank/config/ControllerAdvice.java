@@ -19,7 +19,7 @@ import java.util.List;
 public class ControllerAdvice {
 
   @ExceptionHandler(MethodArgumentNotValidException.class)
-  @ResponseStatus(HttpStatus.UNPROCESSABLE_ENTITY)
+  @ResponseStatus(HttpStatus.UNPROCESSABLE_ENTITY) // ok
   public List<MensagemDeErro> tratarErrosDeValidacao(MethodArgumentNotValidException excecao) {
     List<MensagemDeErro> errosValidacao = new ArrayList<>();
 
@@ -31,38 +31,32 @@ public class ControllerAdvice {
     return errosValidacao;
   }
 
-  private HashMap<String, String> construirResposta(String mensagem) {
-    HashMap<String, String> resposta = new HashMap<>();
-    resposta.put("mensagem", mensagem);
-    return resposta;
-  }
-
   @ExceptionHandler(EmAnaliseException.class)
-  @ResponseStatus(HttpStatus.BAD_REQUEST)
+  @ResponseStatus(HttpStatus.UNPROCESSABLE_ENTITY)
   public MensagemDeErro emAnaliseException(EmAnaliseException excecao) {
     return new MensagemDeErro(excecao.getLocalizedMessage());
   }
 
   @ExceptionHandler(PropostaRecusadaException.class)
-  @ResponseStatus(HttpStatus.BAD_REQUEST)
+  @ResponseStatus(HttpStatus.UNPROCESSABLE_ENTITY)
   public MensagemDeErro propostaRecusadaException(PropostaRecusadaException excecao) {
     return new MensagemDeErro(excecao.getLocalizedMessage());
   }
 
   @ExceptionHandler(DataInvalidaException.class)
-  @ResponseStatus(HttpStatus.BAD_REQUEST)
+  @ResponseStatus(HttpStatus.UNPROCESSABLE_ENTITY) //ok
   public MensagemDeErro manipularDataPosteriorException(DataInvalidaException exception) {
     return new MensagemDeErro(exception.getMessage());
   }
 
   @ExceptionHandler(HttpMessageNotReadableException.class)
-  @ResponseStatus(HttpStatus.BAD_REQUEST)
+  @ResponseStatus(HttpStatus.UNPROCESSABLE_ENTITY) //ok
   public MensagemDeErro enumInvalidoException(HttpMessageNotReadableException excecao) {
     return new MensagemDeErro(excecao.getLocalizedMessage());
   }
 
   @ExceptionHandler(LimiteExcedidoException.class)
-  @ResponseStatus(HttpStatus.BAD_REQUEST)
+  @ResponseStatus(HttpStatus.UNPROCESSABLE_ENTITY)
   public MensagemDeErro limiteExcedidoException(LimiteExcedidoException excecao) {
     return new MensagemDeErro(excecao.getLocalizedMessage());
   }
@@ -74,20 +68,21 @@ public class ControllerAdvice {
   }
 
   @ExceptionHandler(PropostaNaoEncontradaException.class)
-  @ResponseStatus(HttpStatus.NOT_FOUND)
-  public MensagemDeErro propostaNaoCadastrada(PropostaNaoEncontradaException excecao) {
+  @ResponseStatus(HttpStatus.NOT_FOUND) // ok
+  public MensagemDeErro propostaNaoEncontrada(PropostaNaoEncontradaException excecao) {
     return new MensagemDeErro(excecao.getLocalizedMessage());
 
   }
 
   @ExceptionHandler(PropostaJaCadastradaException.class)
-  @ResponseStatus(HttpStatus.BAD_REQUEST)
+  @ResponseStatus(HttpStatus.UNPROCESSABLE_ENTITY) //ok
   public MensagemDeErro propostaJaCadastrada(PropostaJaCadastradaException excecao) {
     return new MensagemDeErro(excecao.getLocalizedMessage());
 
   }
 
   @ExceptionHandler(ArrayIndexOutOfBoundsException.class)
+  @ResponseStatus(HttpStatus.UNPROCESSABLE_ENTITY) //ok
   public ResponseEntity enumInvalidoException(ArrayIndexOutOfBoundsException exception) {
     if (exception.getLocalizedMessage().contains("br.com.zup.Guardians_Bank.enums.ProductoFinanceiro")) {
       return ResponseEntity.status(422).build();
