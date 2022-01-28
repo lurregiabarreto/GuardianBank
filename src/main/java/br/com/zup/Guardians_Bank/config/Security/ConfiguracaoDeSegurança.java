@@ -51,11 +51,14 @@ public class ConfiguracaoDeSegurança extends WebSecurityConfigurerAdapter {
         auth.userDetailsService(detailsService).passwordEncoder(bCryptPasswordEncoder());
     }
 
-
     @Bean
     CorsConfigurationSource configurarCORS() {
         UrlBasedCorsConfigurationSource cors = new UrlBasedCorsConfigurationSource();
-        cors.registerCorsConfiguration("/**", new CorsConfiguration().applyPermitDefaultValues());
+        CorsConfiguration config = new CorsConfiguration();
+        config.addAllowedMethod("*");
+        config.addAllowedOrigin("*");
+        config.addAllowedHeader("*");
+        cors.registerCorsConfiguration("/**", config);
         return cors;
     }
 
