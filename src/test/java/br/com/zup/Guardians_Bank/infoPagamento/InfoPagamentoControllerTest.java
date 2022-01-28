@@ -72,7 +72,7 @@ public class InfoPagamentoControllerTest {
   }
 
   @Test
-  public void testarValidacaoNumeroProposta() throws Exception {
+  public void testarValidacaoNumeroPropostaBlank() throws Exception {
     entradaInfoDTO.setNumeroProposta("    ");
     Mockito.when((infoPagamentoService.salvarInfoPagamento(Mockito.any(InfoPagamento.class), Mockito.anyString(),
         Mockito.anyInt()))).thenReturn(infoPagamento);
@@ -81,6 +81,18 @@ public class InfoPagamentoControllerTest {
     ResultActions resultado = mockMvc.perform(MockMvcRequestBuilders.post("/infos")
             .content(json).contentType(MediaType.APPLICATION_JSON))
         .andExpect(MockMvcResultMatchers.status().is(422));
+  }
+
+  @Test
+  public void testarValidacaoNumeroPropostaNotBlank() throws Exception {
+    entradaInfoDTO.setNumeroProposta("1");
+    Mockito.when((infoPagamentoService.salvarInfoPagamento(Mockito.any(InfoPagamento.class), Mockito.anyString(),
+        Mockito.anyInt()))).thenReturn(infoPagamento);
+    String json = objectMapper.writeValueAsString(entradaInfoDTO);
+
+    ResultActions resultado = mockMvc.perform(MockMvcRequestBuilders.post("/infos")
+            .content(json).contentType(MediaType.APPLICATION_JSON))
+        .andExpect(MockMvcResultMatchers.status().is(201));
   }
 
   @Test
