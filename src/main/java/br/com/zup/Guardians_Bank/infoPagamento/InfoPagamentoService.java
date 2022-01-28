@@ -12,7 +12,6 @@ import br.com.zup.Guardians_Bank.proposta.PropostaService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import javax.sound.sampled.Port;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.LocalDate;
@@ -33,7 +32,7 @@ public class InfoPagamentoService {
   private PropostaService propostaService;
 
   public InfoPagamento salvarInfoPagamento(InfoPagamento infoPagamento, String numeroProposta, int qtdadeDeParcelas) {
-    Proposta proposta = propostaService.buscarProposta(numeroProposta);
+    Proposta proposta = propostaService.validarPropostaExiste(numeroProposta);
     buscarInfoPorNumeroProposta(proposta.getNumeroProposta());
     propostaService.validarStatusProposta(proposta);
     propostaService.validarDataContratacao(proposta);
