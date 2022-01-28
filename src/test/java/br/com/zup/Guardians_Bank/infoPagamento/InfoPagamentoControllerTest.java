@@ -150,7 +150,7 @@ public class InfoPagamentoControllerTest {
   }
 
   @Test
-  public void testarAtualizarInfoPagamento() throws Exception {
+  public void testarAtualizarStatusProposta() throws Exception {
     Mockito.when(infoPagamentoService.atualizarInfo(Mockito.anyString())).thenReturn(infoPagamento);
     String json = objectMapper.writeValueAsString(atualizarStatusDTO);
 
