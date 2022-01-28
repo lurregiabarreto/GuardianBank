@@ -119,4 +119,16 @@ public class InfoPagamentoControllerTest {
         .andExpect(MockMvcResultMatchers.status().is(422));
   }
 
+  @Test
+  public void testarValidacaoQtdadeParcelasNumeroPositivo() throws Exception {
+    entradaInfoDTO.setQtdadeParcelas(4);
+    Mockito.when((infoPagamentoService.salvarInfoPagamento(Mockito.any(InfoPagamento.class), Mockito.anyString(),
+        Mockito.anyInt()))).thenReturn(infoPagamento);
+    String json = objectMapper.writeValueAsString(entradaInfoDTO);
+
+    ResultActions resultado = mockMvc.perform(MockMvcRequestBuilders.post("/infos")
+            .content(json).contentType(MediaType.APPLICATION_JSON))
+        .andExpect(MockMvcResultMatchers.status().is(201));
+  }
+
 }
