@@ -32,12 +32,7 @@ public class PropostaController {
     @GetMapping("/{id}")
     @ApiOperation(value = "Método Exibir opcoes de Parcelamento da Proposta atual")
     public OpcoesPagamentoDTO exibirOpcoesPagamento(@PathVariable String id) {
-        Proposta proposta = propostaService.validarPropostaExiste(id);
-        propostaService.validarStatusProposta(proposta);
-        propostaService.validarDataContratacao(proposta);
-        InfoPagamento infoPagamento = propostaService.trazerInfoPorNumProposta(id);
-        OpcoesPagamentoDTO opcoesPagamentoDTO = new OpcoesPagamentoDTO();
-        opcoesPagamentoDTO.setOpcoes(infoPagamentoService.opcoesParcelamento(infoPagamento));
+        OpcoesPagamentoDTO opcoesPagamentoDTO = propostaService.exibirOpcoesValidadas(id);
         return opcoesPagamentoDTO;
     }
 

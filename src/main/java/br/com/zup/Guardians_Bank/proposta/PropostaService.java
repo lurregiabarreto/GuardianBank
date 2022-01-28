@@ -1,6 +1,5 @@
 package br.com.zup.Guardians_Bank.proposta;
 
-import br.com.zup.Guardians_Bank.cliente.Cliente;
 import br.com.zup.Guardians_Bank.enums.StatusProposta;
 import br.com.zup.Guardians_Bank.exceptions.DataInvalidaException;
 import br.com.zup.Guardians_Bank.exceptions.EmAnaliseException;
@@ -8,12 +7,11 @@ import br.com.zup.Guardians_Bank.exceptions.PropostaNaoEncontradaException;
 import br.com.zup.Guardians_Bank.exceptions.PropostaRecusadaException;
 import br.com.zup.Guardians_Bank.infoPagamento.InfoPagamento;
 import br.com.zup.Guardians_Bank.infoPagamento.InfoPagamentoService;
+import br.com.zup.Guardians_Bank.proposta.dtos.OpcoesPagamentoDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -23,11 +21,6 @@ public class PropostaService {
     private PropostaRepository propostaRepository;
     @Autowired
     private InfoPagamentoService infoPagamentoService;
-
-    public Proposta buscarProposta(String numeroProposta) {
-        Optional<Proposta> propostaOptional = propostaRepository.findById(numeroProposta);
-        return propostaOptional.get();
-    }
 
     public Proposta validarStatusProposta(Proposta proposta) {
         if (proposta.getStatusProposta() == StatusProposta.EM_ANALISE) {
@@ -61,10 +54,18 @@ public class PropostaService {
 
     public InfoPagamento trazerInfoPorNumProposta(String id) {
         InfoPagamento infoPagamento = new InfoPagamento();
-
-        Proposta proposta = buscarProposta(id);
+        Proposta proposta = validarPropostaExiste(id);
+        validarStatusProposta(proposta);
+        validarDataContratacao(proposta);
         infoPagamento.setProposta(proposta);
         return infoPagamento;
+    }
+
+    public OpcoesPagamentoDTO exibirOpcoesValidadas(String id) {
+        InfoPagamento infoPagamento = trazerInfoPorNumProposta(id);
+        OpcoesPagamentoDTO opcoesPagamentoDTO = new OpcoesPagamentoDTO();
+        opcoesPagamentoDTO.setOpcoes(infoPagamentoService.opcoesParcelamento(infoPagamento));
+        return opcoesPagamentoDTO;
     }
 
 }
