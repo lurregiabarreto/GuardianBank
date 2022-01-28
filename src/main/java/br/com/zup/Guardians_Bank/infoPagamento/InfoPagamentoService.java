@@ -9,6 +9,8 @@ import br.com.zup.Guardians_Bank.proposta.PropostaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -29,8 +31,8 @@ public class InfoPagamentoService {
     return infoPagamentoOptional.get();
   }
 
-  public boolean buscarInfoPorNumeroProposta (String numeroProposta) {
-    if (infoPagamentoRepository.existsByPropostaNumeroProposta(numeroProposta)){
+  public boolean buscarInfoPorNumeroProposta(String numeroProposta) {
+    if (infoPagamentoRepository.existsByPropostaNumeroProposta(numeroProposta)) {
       throw new PropostaJaCadastradaException("Proposta já cadastrada");
     }
     return false;
@@ -58,21 +60,22 @@ public class InfoPagamentoService {
     infoPagamento.setValorParcela(coeficienteFinanciamento * valorFinanciado);
   }
 
-    public void calcularImpostoSobreParcela(InfoPagamento infoPagamento) {
-        double imposto = 0.05;
-        double valorImposto = infoPagamento.getValorParcela() * imposto;
-        infoPagamento.setImposto(valorImposto);
-        double valorParcelaComImposto = valorImposto + infoPagamento.getValorParcela();
-        infoPagamento.setValorParcela(valorParcelaComImposto);
-    }
-
+  public void calcularImpostoSobreParcela(InfoPagamento infoPagamento) {
+    double imposto = 0.05;
+    double valorImposto = infoPagamento.getValorParcela() * imposto;
+    BigDecimal bigDecimal = new BigDecimal(valorImposto).setScale(2, RoundingMode.HALF_DOWN);
+    infoPagamento.setImposto(bigDecimal.doubleValue());
+    double valorParcelaComImposto = valorImposto + infoPagamento.getValorParcela();
+    BigDecimal bigDecimal2 = new BigDecimal(valorParcelaComImposto).setScale(2, RoundingMode.HALF_DOWN);
+    infoPagamento.setValorParcela(bigDecimal2.doubleValue());
+  }
 
   public InfoPagamento validarLimiteValorParcelas(InfoPagamento infoPagamento) {
     double salario = infoPagamento.getProposta().getCliente().getSalario();
     double limite = salario * 0.4;
 
     if (infoPagamento.getValorParcela() > limite) {
-      throw new LimiteExcedidoException("O valor da parcela excede limite permitido");
+      throw new LimiteExcedidoException("Valor limite da parcela excedido");
     }
     return infoPagamento;
   }

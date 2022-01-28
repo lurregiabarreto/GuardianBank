@@ -7,6 +7,8 @@ import lombok.Data;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
+import javax.validation.constraints.DecimalMin;
+import javax.validation.constraints.Digits;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
@@ -21,10 +23,15 @@ public class InfoPagamento {
   private String idPagamento;
   @OneToOne(cascade = CascadeType.ALL)
   private Proposta proposta;
+  @Column(nullable = false)
   private double valorParcela;
+  @Column(nullable = false)
   private Integer qtdadeDeParcelas;
+  @Column(nullable = false)
   private LocalDate dataPagamento;
+  @Column(nullable = false)
   private double imposto;
+  @Column(nullable = false)
   private LocalDateTime dataLiberacao;
 
 }

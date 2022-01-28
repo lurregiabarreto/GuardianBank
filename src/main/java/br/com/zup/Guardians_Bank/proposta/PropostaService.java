@@ -44,7 +44,7 @@ public class PropostaService {
 
         LocalDate dataLimite = dataAtual.minusDays(90);
         if (proposta.getDataProposta().isBefore(dataLimite)) {
-            throw new DataInvalidaException("Infelizmente a data deve ser inferior a 3 meses");
+            throw new DataInvalidaException("Data limite excedida");
         }
         return proposta;
 
@@ -53,7 +53,7 @@ public class PropostaService {
     public Proposta validarPropostaExiste(String numeroProposta) {
         Optional<Proposta> propostaOptional = propostaRepository.findById(numeroProposta);
         if (propostaOptional.isEmpty()) {
-            throw new PropostaNaoEncontradaException("Está proposta não foi encontrada");
+            throw new PropostaNaoEncontradaException("Proposta não encontrada");
         }
         Proposta proposta = propostaOptional.get();
         return proposta;
