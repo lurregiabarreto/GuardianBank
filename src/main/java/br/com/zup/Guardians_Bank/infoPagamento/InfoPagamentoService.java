@@ -75,7 +75,7 @@ public class InfoPagamentoService {
     double limite = salario * 0.4;
 
     if (infoPagamento.getValorParcela() > limite) {
-      throw new LimiteExcedidoException("O valor da parcela excede limite permitido");
+      throw new LimiteExcedidoException("Valor limite da parcela excedido");
     }
     return infoPagamento;
   }
