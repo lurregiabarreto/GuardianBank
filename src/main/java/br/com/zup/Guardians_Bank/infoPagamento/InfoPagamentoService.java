@@ -4,6 +4,7 @@ import br.com.zup.Guardians_Bank.enums.ProdutoFinanceiro;
 import br.com.zup.Guardians_Bank.enums.StatusProposta;
 import br.com.zup.Guardians_Bank.exceptions.LimiteExcedidoException;
 import br.com.zup.Guardians_Bank.exceptions.PropostaJaCadastradaException;
+import br.com.zup.Guardians_Bank.exceptions.PropostaNaoLiberadaException;
 import br.com.zup.Guardians_Bank.infoPagamento.dto.RetornoInfoDTO;
 import br.com.zup.Guardians_Bank.proposta.Proposta;
 import br.com.zup.Guardians_Bank.proposta.PropostaRepository;
@@ -123,6 +124,10 @@ public class InfoPagamentoService {
 
   public InfoPagamento atualizarInfo(String id) {
     InfoPagamento infoPagamento = buscarInfoPagamento(id);
+    if (infoPagamento.getProposta().getStatusProposta() != StatusProposta.APROVADO) {
+      throw new PropostaNaoLiberadaException("Proposta não liberada");
+    }
+
     infoPagamento.getProposta().setStatusProposta(StatusProposta.LIBERADO);
     infoPagamento.setDataLiberacao(LocalDateTime.now());
     infoPagamentoRepository.save(infoPagamento);

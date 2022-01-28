@@ -38,11 +38,7 @@ public class InfoPagamentoController {
   @ResponseStatus(HttpStatus.OK)
   public RespostaAtualizacaoStatusDTO atualizarStatus(@PathVariable String id,
                                                       @RequestBody AtualizarStatusDTO atualizarStatusDTO) {
-
-    if (atualizarStatusDTO.getStatusProposta() != StatusProposta.APROVADO) {
-      throw new PropostaNaoLiberadaException("Proposta não liberada");
-
-    }
+    InfoPagamento infoPagamento = modelMapper.map(atualizarStatusDTO, InfoPagamento.class);
     return modelMapper.map(infoPagamentoService.atualizarInfo(id), RespostaAtualizacaoStatusDTO.class);
   }
 
