@@ -1,7 +1,9 @@
 package br.com.zup.Guardians_Bank.infoPagamento;
 
 import br.com.zup.Guardians_Bank.components.Conversor;
+import br.com.zup.Guardians_Bank.infoPagamento.dto.AtualizarStatusDTO;
 import br.com.zup.Guardians_Bank.infoPagamento.dto.EntradaInfoDTO;
+import br.com.zup.Guardians_Bank.infoPagamento.dto.RespostaAtualizacaoStatusDTO;
 import br.com.zup.Guardians_Bank.infoPagamento.dto.SaidaInfoDTO;
 import br.com.zup.Guardians_Bank.proposta.Proposta;
 import br.com.zup.Guardians_Bank.proposta.PropostaService;
@@ -33,6 +35,8 @@ public class InfoPagamentoControllerTest {
   private InfoPagamento infoPagamento;
   private EntradaInfoDTO entradaInfoDTO;
   private SaidaInfoDTO saidaInfoDTO;
+  private AtualizarStatusDTO atualizarStatusDTO;
+  private RespostaAtualizacaoStatusDTO respostaAtualizacaoStatusDTO;
   private Proposta proposta;
 
 
@@ -53,6 +57,8 @@ public class InfoPagamentoControllerTest {
     entradaInfoDTO.setQtdadeParcelas(8);
 
     saidaInfoDTO = new SaidaInfoDTO();
+    atualizarStatusDTO = new AtualizarStatusDTO();
+    respostaAtualizacaoStatusDTO = new RespostaAtualizacaoStatusDTO();
 
   }
 
@@ -141,6 +147,20 @@ public class InfoPagamentoControllerTest {
     ResultActions resultado = mockMvc.perform(MockMvcRequestBuilders.post("/infos")
             .content(json).contentType(MediaType.APPLICATION_JSON))
         .andExpect(MockMvcResultMatchers.status().is(201));
+  }
+
+  @Test
+  public void testarAtualizarInfoPagamento() throws Exception {
+    Mockito.when(infoPagamentoService.atualizarInfo(Mockito.anyString())).thenReturn(infoPagamento);
+    String json = objectMapper.writeValueAsString(atualizarStatusDTO);
+
+    ResultActions resultado = mockMvc.perform(MockMvcRequestBuilders.put("/infos/1")
+            .content(json).contentType(MediaType.APPLICATION_JSON))
+        .andExpect(MockMvcResultMatchers.status().is(200));
+
+    String jsonResposta = resultado.andReturn().getResponse().getContentAsString();
+    RespostaAtualizacaoStatusDTO respostaAtualizada = objectMapper.readValue(jsonResposta,
+        RespostaAtualizacaoStatusDTO.class);
   }
 
 }
