@@ -6,6 +6,7 @@ import br.com.zup.Guardians_Bank.proposta.Proposta;
 import br.com.zup.Guardians_Bank.proposta.PropostaService;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import io.swagger.models.auth.In;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -180,5 +181,22 @@ public class InfoPagamentoControllerTest {
         new TypeReference<List<ResumoInfoDTO>>() {
         });
   }
+
+  @Test
+  public void testarExibirInfosPorParam() throws Exception {
+    Mockito.when(infoPagamentoService.exibirInfos()).thenReturn(Arrays.asList(infoPagamento));
+
+    ResultActions resultado = mockMvc.perform(MockMvcRequestBuilders.get("/infos?qtdadeDeParcelas=4")
+            .contentType(MediaType.APPLICATION_JSON))
+        .andExpect(MockMvcResultMatchers.status().is(200))
+        .andExpect(MockMvcResultMatchers.jsonPath("$").isArray());
+
+    String jsonResposta = resultado.andReturn().getResponse().getContentAsString();
+    List<ResumoInfoDTO> usuarios = objectMapper.readValue(jsonResposta,
+        new TypeReference<List<ResumoInfoDTO>>() {
+        });
+
+  }
+
 
 }
