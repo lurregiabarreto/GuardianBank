@@ -19,42 +19,46 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 public class FiltroDeAutenticacaoJWT extends UsernamePasswordAuthenticationFilter {
-    private JWTComponent jwtComponent;
-    private AuthenticationManager authenticationManager;
 
-    public FiltroDeAutenticacaoJWT(JWTComponent jwtComponent, AuthenticationManager authenticationManager) {
-        this.jwtComponent = jwtComponent;
-        this.authenticationManager = authenticationManager;
+  private JWTComponent jwtComponent;
+  private AuthenticationManager authenticationManager;
+
+  public FiltroDeAutenticacaoJWT(JWTComponent jwtComponent, AuthenticationManager authenticationManager) {
+    this.jwtComponent = jwtComponent;
+    this.authenticationManager = authenticationManager;
+  }
+
+  @Override
+  public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response)
+      throws AuthenticationException {
+    ObjectMapper objectMapper = new ObjectMapper();
+
+    try {
+      LoginDTO login = objectMapper.readValue(request.getInputStream(), LoginDTO.class);
+
+      UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
+          login.getEmail(), login.getSenha(), new ArrayList<>()
+      );
+
+      Authentication autenticacao = authenticationManager.authenticate(authToken);
+      return autenticacao;
+    } catch (IOException e) {
+      throw new AcessoNegadoException();
     }
+  }
 
-    @Override
-    public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException {
-        ObjectMapper objectMapper = new ObjectMapper();
+  @Override
+  protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response,
+                                          FilterChain chain, Authentication authResult)
+      throws IOException, ServletException {
+    UsuarioLogado usuarioLogado = (UsuarioLogado) authResult.getPrincipal();
+    String username = usuarioLogado.getUsername();
+    String id = usuarioLogado.getId();
 
-        try{
-            LoginDTO login =  objectMapper.readValue(request.getInputStream(), LoginDTO.class);
+    String token = jwtComponent.gerarToken(username, id);
 
-            UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
-                    login.getEmail(), login.getSenha(), new ArrayList<>()
-            );
-
-            Authentication autenticacao = authenticationManager.authenticate(authToken);
-            return autenticacao;
-        }catch (IOException e){
-            throw new AcessoNegadoException();
-        }
-    }
-
-    @Override
-    protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain, Authentication authResult) throws IOException, ServletException {
-        UsuarioLogado usuarioLogado = (UsuarioLogado) authResult.getPrincipal();
-        String username = usuarioLogado.getUsername();
-        String id = usuarioLogado.getId();
-
-        String token = jwtComponent.gerarToken(username, id);
-
-        response.setHeader("Access-Control-Expose-Headers","Authorization");
-        response.addHeader("Authorization", "Token "+token);
-    }
+    response.setHeader("Access-Control-Expose-Headers", "Authorization");
+    response.addHeader("Authorization", "Token " + token);
+  }
 
 }

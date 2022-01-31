@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/usuario")
 public class UsuarioController {
+
     @Autowired
     private UsuarioService usuarioService;
 
@@ -22,6 +23,7 @@ public class UsuarioController {
 
         usuarioService.salvarUsuario(usuario);
     }
+
     @PutMapping()
     public void atualizarUsuario(@RequestBody CadastroUsuarioDTO cadastroUsuarioDTO, Authentication authentication){
         UsuarioLogado usuarioLogado = (UsuarioLogado) authentication.getPrincipal();
@@ -32,4 +34,5 @@ public class UsuarioController {
 
         usuarioService.atualizarUsuario(usuario, usuarioLogado.getId());
     }
+
 }

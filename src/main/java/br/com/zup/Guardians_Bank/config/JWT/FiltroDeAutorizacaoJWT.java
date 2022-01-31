@@ -18,6 +18,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 public class FiltroDeAutorizacaoJWT extends BasicAuthenticationFilter {
+
     private JWTComponent jwtComponent;
     private UserDetailsService userDetailsService;
 
@@ -53,7 +54,8 @@ public class FiltroDeAutorizacaoJWT extends BasicAuthenticationFilter {
                 response.setStatus(HttpStatus.FORBIDDEN.value());
             }
         }
-
         chain.doFilter(request, response);
+
     }
+
 }

@@ -12,6 +12,7 @@ import java.util.Optional;
 
 @Service
 public class UsuarioLoginService implements UserDetailsService {
+
     @Autowired
     private UsuarioRepository usuarioRepository;
 
@@ -24,4 +25,5 @@ public class UsuarioLoginService implements UserDetailsService {
 
         return new UsuarioLogado(usuario.getId(), usuario.getEmail(), usuario.getSenha());
     }
+
 }
