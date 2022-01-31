@@ -103,19 +103,6 @@ public class PropostaControllerTest {
   }
 
   @Test
-  public void testarPropostaRecusadaException() throws Exception {
-    Mockito.doThrow(PropostaRecusadaException.class).when(propostaService).exibirOpcoesValidadas
-        (Mockito.anyString());
-
-    String json = objectMapper.writeValueAsString(opcoesPagamentoDTO);
-
-    ResultActions resultado = mockMvc.perform(MockMvcRequestBuilders
-            .get("/propostas/4")
-            .contentType(MediaType.APPLICATION_JSON))
-        .andExpect(MockMvcResultMatchers.status().is(422));
-  }
-
-  @Test
   public void testarPropostaNaoEncontradaException() throws Exception {
     Mockito.doThrow(PropostaNaoEncontradaException.class).when(propostaService).exibirOpcoesValidadas
         (Mockito.anyString());
@@ -126,6 +113,19 @@ public class PropostaControllerTest {
             .get("/propostas/4")
             .contentType(MediaType.APPLICATION_JSON))
         .andExpect(MockMvcResultMatchers.status().is(404));
+  }
+
+  @Test
+  public void testarPropostaRecusadaException() throws Exception {
+    Mockito.doThrow(PropostaRecusadaException.class).when(propostaService).exibirOpcoesValidadas
+        (Mockito.anyString());
+
+    String json = objectMapper.writeValueAsString(opcoesPagamentoDTO);
+
+    ResultActions resultado = mockMvc.perform(MockMvcRequestBuilders
+            .get("/propostas/4")
+            .contentType(MediaType.APPLICATION_JSON))
+        .andExpect(MockMvcResultMatchers.status().is(422));
   }
 
 }
