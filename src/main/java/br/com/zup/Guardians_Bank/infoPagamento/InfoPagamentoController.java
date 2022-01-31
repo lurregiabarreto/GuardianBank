@@ -31,7 +31,7 @@ public class InfoPagamentoController {
   private ModelMapper modelMapper;
 
   @PostMapping
-  @ApiOperation(value = "Método Cadastrar informacao de pagamento")
+  @ApiOperation(value = "Método responsável por cadastrar informações de pagamento")
   @ResponseStatus(HttpStatus.CREATED)
   public SaidaInfoDTO cadastrarInfoPagamento(@Valid @RequestBody EntradaInfoDTO entradaInfoDTO) {
     InfoPagamento infoPagamento = modelMapper.map(entradaInfoDTO, InfoPagamento.class);
@@ -40,7 +40,7 @@ public class InfoPagamentoController {
   }
 
   @PutMapping("/{id}")
-  @ApiOperation(value = "Método Atualizar Informacao de Pagamento")
+  @ApiOperation(value = "Método responsável por atualizar informações de pagamento")
   @ResponseStatus(HttpStatus.OK)
   public RespostaAtualizacaoStatusDTO atualizarStatus(@PathVariable String id,
                                                       @RequestBody AtualizarStatusDTO atualizarStatusDTO) {
@@ -49,7 +49,7 @@ public class InfoPagamentoController {
   }
 
   @GetMapping
-  @ApiOperation(value = "Método Exibir informacoes de pagamento por parcelamento")
+  @ApiOperation(value = "Método responsável por exibir informações de pagamento por parâmetro ou não")
   List<ResumoInfoDTO> exibirContas(@RequestParam(required = false) Integer qtdadeDeParcelas) {
     List<ResumoInfoDTO> listaDeInfos = new ArrayList<>();
     for (InfoPagamento info : infoPagamentoService.aplicarFiltros(qtdadeDeParcelas)) {

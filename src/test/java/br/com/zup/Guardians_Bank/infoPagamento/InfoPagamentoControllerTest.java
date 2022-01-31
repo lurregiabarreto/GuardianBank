@@ -226,7 +226,7 @@ public class InfoPagamentoControllerTest {
   }
 
   @Test
-  public void testarPropostaNaoLinerada() throws Exception {
+  public void testarPropostaNaoLiberada() throws Exception {
     Mockito.doThrow(PropostaNaoLiberadaException.class).when(infoPagamentoService).atualizarInfo(
         Mockito.anyString());
 
