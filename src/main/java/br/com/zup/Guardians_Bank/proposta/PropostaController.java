@@ -30,7 +30,7 @@ public class PropostaController {
 
 
     @GetMapping("/{id}")
-    @ApiOperation(value = "Método Exibir opcoes de Parcelamento da Proposta atual")
+    @ApiOperation(value = "Método responsável por exibir as opções de parcelamento")
     public OpcoesPagamentoDTO exibirOpcoesPagamento(@PathVariable String id) {
         OpcoesPagamentoDTO opcoesPagamentoDTO = propostaService.exibirOpcoesValidadas(id);
         return opcoesPagamentoDTO;

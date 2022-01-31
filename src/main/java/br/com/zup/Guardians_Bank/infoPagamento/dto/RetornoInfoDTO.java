@@ -5,7 +5,7 @@ import lombok.Data;
 @Data
 public class RetornoInfoDTO {
 
-  private int QtidadeParcelas;
+  private int qtdadeParcelas;
   private double valorParcela;
 
 }

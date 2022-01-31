@@ -19,7 +19,7 @@ import java.util.List;
 public class ControllerAdvice {
 
   @ExceptionHandler(MethodArgumentNotValidException.class)
-  @ResponseStatus(HttpStatus.UNPROCESSABLE_ENTITY) // ok
+  @ResponseStatus(HttpStatus.UNPROCESSABLE_ENTITY)
   public List<MensagemDeErro> tratarErrosDeValidacao(MethodArgumentNotValidException excecao) {
     List<MensagemDeErro> errosValidacao = new ArrayList<>();
 
@@ -44,13 +44,13 @@ public class ControllerAdvice {
   }
 
   @ExceptionHandler(DataInvalidaException.class)
-  @ResponseStatus(HttpStatus.UNPROCESSABLE_ENTITY) //ok
+  @ResponseStatus(HttpStatus.UNPROCESSABLE_ENTITY)
   public MensagemDeErro manipularDataPosteriorException(DataInvalidaException exception) {
     return new MensagemDeErro(exception.getMessage());
   }
 
   @ExceptionHandler(HttpMessageNotReadableException.class)
-  @ResponseStatus(HttpStatus.UNPROCESSABLE_ENTITY) //ok
+  @ResponseStatus(HttpStatus.UNPROCESSABLE_ENTITY)
   public MensagemDeErro enumInvalidoException(HttpMessageNotReadableException excecao) {
     return new MensagemDeErro(excecao.getLocalizedMessage());
   }
@@ -68,7 +68,7 @@ public class ControllerAdvice {
   }
 
   @ExceptionHandler(PropostaNaoEncontradaException.class)
-  @ResponseStatus(HttpStatus.NOT_FOUND) // ok
+  @ResponseStatus(HttpStatus.NOT_FOUND)
   public MensagemDeErro propostaNaoEncontrada(PropostaNaoEncontradaException excecao) {
     return new MensagemDeErro(excecao.getLocalizedMessage());
 

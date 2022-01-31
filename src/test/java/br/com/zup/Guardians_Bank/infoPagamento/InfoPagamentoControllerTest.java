@@ -1,12 +1,13 @@
 package br.com.zup.Guardians_Bank.infoPagamento;
 
 import br.com.zup.Guardians_Bank.components.Conversor;
-import br.com.zup.Guardians_Bank.infoPagamento.dto.AtualizarStatusDTO;
-import br.com.zup.Guardians_Bank.infoPagamento.dto.EntradaInfoDTO;
-import br.com.zup.Guardians_Bank.infoPagamento.dto.RespostaAtualizacaoStatusDTO;
-import br.com.zup.Guardians_Bank.infoPagamento.dto.SaidaInfoDTO;
+import br.com.zup.Guardians_Bank.exceptions.LimiteExcedidoException;
+import br.com.zup.Guardians_Bank.exceptions.PropostaJaCadastradaException;
+import br.com.zup.Guardians_Bank.exceptions.PropostaNaoLiberadaException;
+import br.com.zup.Guardians_Bank.infoPagamento.dto.*;
 import br.com.zup.Guardians_Bank.proposta.Proposta;
 import br.com.zup.Guardians_Bank.proposta.PropostaService;
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -19,6 +20,9 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
+
+import java.util.Arrays;
+import java.util.List;
 
 @WebMvcTest({InfoPagamentoController.class, Conversor.class})
 public class InfoPagamentoControllerTest {
@@ -37,6 +41,7 @@ public class InfoPagamentoControllerTest {
   private SaidaInfoDTO saidaInfoDTO;
   private AtualizarStatusDTO atualizarStatusDTO;
   private RespostaAtualizacaoStatusDTO respostaAtualizacaoStatusDTO;
+  private ResumoInfoDTO resumoInfoDTO;
   private Proposta proposta;
 
 
@@ -59,6 +64,7 @@ public class InfoPagamentoControllerTest {
     saidaInfoDTO = new SaidaInfoDTO();
     atualizarStatusDTO = new AtualizarStatusDTO();
     respostaAtualizacaoStatusDTO = new RespostaAtualizacaoStatusDTO();
+    resumoInfoDTO = new ResumoInfoDTO();
 
   }
 
@@ -78,7 +84,7 @@ public class InfoPagamentoControllerTest {
   }
 
   @Test
-  public void testarValidacaoNumeroPropostaBlank() throws Exception {
+  public void testarCadastrarComValidacaoNumeroPropostaBlank() throws Exception {
     entradaInfoDTO.setNumeroProposta("    ");
     Mockito.when((infoPagamentoService.salvarInfoPagamento(Mockito.any(InfoPagamento.class), Mockito.anyString(),
         Mockito.anyInt()))).thenReturn(infoPagamento);
@@ -90,7 +96,7 @@ public class InfoPagamentoControllerTest {
   }
 
   @Test
-  public void testarValidacaoNumeroPropostaNotBlank() throws Exception {
+  public void testarCadastrarComValidacaoNumeroPropostaNotBlank() throws Exception {
     entradaInfoDTO.setNumeroProposta("1");
     Mockito.when((infoPagamentoService.salvarInfoPagamento(Mockito.any(InfoPagamento.class), Mockito.anyString(),
         Mockito.anyInt()))).thenReturn(infoPagamento);
@@ -102,7 +108,7 @@ public class InfoPagamentoControllerTest {
   }
 
   @Test
-  public void testarValidacaoQtdadeParcelasNull() throws Exception {
+  public void testarCadastrarComValidacaoQtdadeParcelasNull() throws Exception {
     entradaInfoDTO.setQtdadeParcelas(null);
     Mockito.when((infoPagamentoService.salvarInfoPagamento(Mockito.any(InfoPagamento.class), Mockito.anyString(),
         Mockito.anyInt()))).thenReturn(infoPagamento);
@@ -114,7 +120,7 @@ public class InfoPagamentoControllerTest {
   }
 
   @Test
-  public void testarValidacaoQtdadeParcelasNotNull() throws Exception {
+  public void testarCadastrarComValidacaoQtdadeParcelasNotNull() throws Exception {
     entradaInfoDTO.setQtdadeParcelas(4);
     Mockito.when((infoPagamentoService.salvarInfoPagamento(Mockito.any(InfoPagamento.class), Mockito.anyString(),
         Mockito.anyInt()))).thenReturn(infoPagamento);
@@ -126,7 +132,7 @@ public class InfoPagamentoControllerTest {
   }
 
   @Test
-  public void testarValidacaoQtdadeParcelasNumeroNegativo() throws Exception {
+  public void testarCadastrarComValidacaoQtdadeParcelasNumeroNegativo() throws Exception {
     entradaInfoDTO.setQtdadeParcelas(-2);
     Mockito.when((infoPagamentoService.salvarInfoPagamento(Mockito.any(InfoPagamento.class), Mockito.anyString(),
         Mockito.anyInt()))).thenReturn(infoPagamento);
@@ -138,7 +144,7 @@ public class InfoPagamentoControllerTest {
   }
 
   @Test
-  public void testarValidacaoQtdadeParcelasNumeroPositivo() throws Exception {
+  public void testarCadastrarComValidacaoQtdadeParcelasNumeroPositivo() throws Exception {
     entradaInfoDTO.setQtdadeParcelas(4);
     Mockito.when((infoPagamentoService.salvarInfoPagamento(Mockito.any(InfoPagamento.class), Mockito.anyString(),
         Mockito.anyInt()))).thenReturn(infoPagamento);
@@ -161,6 +167,75 @@ public class InfoPagamentoControllerTest {
     String jsonResposta = resultado.andReturn().getResponse().getContentAsString();
     RespostaAtualizacaoStatusDTO respostaAtualizada = objectMapper.readValue(jsonResposta,
         RespostaAtualizacaoStatusDTO.class);
+  }
+
+  @Test
+  public void testarExibirInfoPagamentos() throws Exception {
+    Mockito.when(infoPagamentoService.exibirInfos()).thenReturn(Arrays.asList(infoPagamento));
+
+    ResultActions resultado = mockMvc.perform(MockMvcRequestBuilders.get("/infos")
+            .contentType(MediaType.APPLICATION_JSON))
+        .andExpect(MockMvcResultMatchers.status().is(200))
+        .andExpect(MockMvcResultMatchers.jsonPath("$").isArray());
+
+    String jsonResposta = resultado.andReturn().getResponse().getContentAsString();
+    List<ResumoInfoDTO> usuarios = objectMapper.readValue(jsonResposta,
+        new TypeReference<List<ResumoInfoDTO>>() {
+        });
+  }
+
+  @Test
+  public void testarExibirInfosPagamentoComParam() throws Exception {
+    Mockito.when(infoPagamentoService.exibirInfos()).thenReturn(Arrays.asList(infoPagamento));
+
+    ResultActions resultado = mockMvc.perform(MockMvcRequestBuilders.get("/infos?qtdadeDeParcelas=4")
+            .contentType(MediaType.APPLICATION_JSON))
+        .andExpect(MockMvcResultMatchers.status().is(200))
+        .andExpect(MockMvcResultMatchers.jsonPath("$").isArray());
+
+    String jsonResposta = resultado.andReturn().getResponse().getContentAsString();
+    List<ResumoInfoDTO> usuarios = objectMapper.readValue(jsonResposta,
+        new TypeReference<List<ResumoInfoDTO>>() {
+        });
+  }
+
+  @Test
+  public void testarLimiteValorExcedidoException() throws Exception {
+    Mockito.doThrow(LimiteExcedidoException.class).when(infoPagamentoService).validarLimiteValorParcelas
+        (Mockito.any(InfoPagamento.class));
+
+    String json = objectMapper.writeValueAsString(entradaInfoDTO);
+
+    ResultActions resultado = mockMvc.perform(MockMvcRequestBuilders
+            .post("/infos")
+            .contentType(MediaType.APPLICATION_JSON))
+        .andExpect(MockMvcResultMatchers.status().is(422));
+  }
+
+  @Test
+  public void testarPropostaJaCadastradaException() throws Exception {
+    Mockito.doThrow(PropostaJaCadastradaException.class).when(infoPagamentoService).salvarInfoPagamento
+        (Mockito.any(InfoPagamento.class), Mockito.anyString(), Mockito.anyInt());
+
+    String json = objectMapper.writeValueAsString(entradaInfoDTO);
+
+    ResultActions resultado = mockMvc.perform(MockMvcRequestBuilders
+            .post("/infos")
+            .contentType(MediaType.APPLICATION_JSON))
+        .andExpect(MockMvcResultMatchers.status().is(422));
+  }
+
+  @Test
+  public void testarPropostaNaoLiberadaException() throws Exception {
+    Mockito.doThrow(PropostaNaoLiberadaException.class).when(infoPagamentoService).atualizarInfo(
+        Mockito.anyString());
+
+    String json = objectMapper.writeValueAsString(atualizarStatusDTO);
+
+    ResultActions resultado = mockMvc.perform(MockMvcRequestBuilders
+            .put("/infos/2")
+            .contentType(MediaType.APPLICATION_JSON))
+        .andExpect(MockMvcResultMatchers.status().is(422));
   }
 
 }
