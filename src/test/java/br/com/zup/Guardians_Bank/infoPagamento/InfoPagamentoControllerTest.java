@@ -225,4 +225,17 @@ public class InfoPagamentoControllerTest {
         .andExpect(MockMvcResultMatchers.status().is(422));
   }
 
+  @Test
+  public void testarPropostaNaoLinerada() throws Exception {
+    Mockito.doThrow(PropostaNaoLiberadaException.class).when(infoPagamentoService).atualizarInfo(
+        Mockito.anyString());
+
+    String json = objectMapper.writeValueAsString(atualizarStatusDTO);
+
+    ResultActions resultado = mockMvc.perform(MockMvcRequestBuilders
+            .put("/infos/2")
+            .contentType(MediaType.APPLICATION_JSON))
+        .andExpect(MockMvcResultMatchers.status().is(422));
+  }
+
 }
