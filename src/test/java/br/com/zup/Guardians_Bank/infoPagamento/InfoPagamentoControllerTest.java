@@ -3,6 +3,7 @@ package br.com.zup.Guardians_Bank.infoPagamento;
 import br.com.zup.Guardians_Bank.components.Conversor;
 import br.com.zup.Guardians_Bank.exceptions.LimiteExcedidoException;
 import br.com.zup.Guardians_Bank.exceptions.PropostaJaCadastradaException;
+import br.com.zup.Guardians_Bank.exceptions.PropostaNaoLiberadaException;
 import br.com.zup.Guardians_Bank.infoPagamento.dto.*;
 import br.com.zup.Guardians_Bank.proposta.Proposta;
 import br.com.zup.Guardians_Bank.proposta.PropostaService;
@@ -198,7 +199,7 @@ public class InfoPagamentoControllerTest {
         });
   }
 
-  /*@Test
+  @Test
   public void testarLimiteValorExcedido() throws Exception {
     Mockito.doThrow(LimiteExcedidoException.class).when(infoPagamentoService).validarLimiteValorParcelas
         (Mockito.any(InfoPagamento.class));
@@ -206,22 +207,9 @@ public class InfoPagamentoControllerTest {
     String json = objectMapper.writeValueAsString(entradaInfoDTO);
 
     ResultActions resultado = mockMvc.perform(MockMvcRequestBuilders
-            .get("/infos")
+            .post("/infos")
             .contentType(MediaType.APPLICATION_JSON))
         .andExpect(MockMvcResultMatchers.status().is(422));
-  }*/
-
-  /*@Test
-  public void testarPropostaJaCadastradaException() throws Exception {
-    Mockito.doThrow(PropostaJaCadastradaException.class).when(infoPagamentoService).salvarInfoPagamento
-        (Mockito.any(InfoPagamento.class), Mockito.anyString(), Mockito.anyInt());
-
-    String json = objectMapper.writeValueAsString(entradaInfoDTO);
-
-    ResultActions resultado = mockMvc.perform(MockMvcRequestBuilders
-            .get("/infos")
-            .contentType(MediaType.APPLICATION_JSON))
-        .andExpect(MockMvcResultMatchers.status().is(422));
-  }*/
+  }
 
 }
