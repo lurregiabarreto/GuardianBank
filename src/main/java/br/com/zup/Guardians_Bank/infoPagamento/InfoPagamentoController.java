@@ -50,7 +50,7 @@ public class InfoPagamentoController {
 
   @GetMapping
   @ApiOperation(value = "Método responsável por exibir informações de pagamento por parâmetro ou não")
-  List<ResumoInfoDTO> exibirContas(@RequestParam(required = false) Integer qtdadeDeParcelas) {
+  List<ResumoInfoDTO> exibirInfoPagamento(@RequestParam(required = false) Integer qtdadeDeParcelas) {
     List<ResumoInfoDTO> listaDeInfos = new ArrayList<>();
     for (InfoPagamento info : infoPagamentoService.aplicarFiltros(qtdadeDeParcelas)) {
       ResumoInfoDTO resumoInfos = modelMapper.map(info, ResumoInfoDTO.class);

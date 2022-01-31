@@ -84,7 +84,7 @@ public class InfoPagamentoControllerTest {
   }
 
   @Test
-  public void testarValidacaoNumeroPropostaBlank() throws Exception {
+  public void testarCadastrarComValidacaoNumeroPropostaBlank() throws Exception {
     entradaInfoDTO.setNumeroProposta("    ");
     Mockito.when((infoPagamentoService.salvarInfoPagamento(Mockito.any(InfoPagamento.class), Mockito.anyString(),
         Mockito.anyInt()))).thenReturn(infoPagamento);
@@ -96,7 +96,7 @@ public class InfoPagamentoControllerTest {
   }
 
   @Test
-  public void testarValidacaoNumeroPropostaNotBlank() throws Exception {
+  public void testarCadastrarComValidacaoNumeroPropostaNotBlank() throws Exception {
     entradaInfoDTO.setNumeroProposta("1");
     Mockito.when((infoPagamentoService.salvarInfoPagamento(Mockito.any(InfoPagamento.class), Mockito.anyString(),
         Mockito.anyInt()))).thenReturn(infoPagamento);
@@ -108,7 +108,7 @@ public class InfoPagamentoControllerTest {
   }
 
   @Test
-  public void testarValidacaoQtdadeParcelasNull() throws Exception {
+  public void testarCadastrarComValidacaoQtdadeParcelasNull() throws Exception {
     entradaInfoDTO.setQtdadeParcelas(null);
     Mockito.when((infoPagamentoService.salvarInfoPagamento(Mockito.any(InfoPagamento.class), Mockito.anyString(),
         Mockito.anyInt()))).thenReturn(infoPagamento);
@@ -120,7 +120,7 @@ public class InfoPagamentoControllerTest {
   }
 
   @Test
-  public void testarValidacaoQtdadeParcelasNotNull() throws Exception {
+  public void testarCadastrarComValidacaoQtdadeParcelasNotNull() throws Exception {
     entradaInfoDTO.setQtdadeParcelas(4);
     Mockito.when((infoPagamentoService.salvarInfoPagamento(Mockito.any(InfoPagamento.class), Mockito.anyString(),
         Mockito.anyInt()))).thenReturn(infoPagamento);
@@ -132,7 +132,7 @@ public class InfoPagamentoControllerTest {
   }
 
   @Test
-  public void testarValidacaoQtdadeParcelasNumeroNegativo() throws Exception {
+  public void testarCadastrarComValidacaoQtdadeParcelasNumeroNegativo() throws Exception {
     entradaInfoDTO.setQtdadeParcelas(-2);
     Mockito.when((infoPagamentoService.salvarInfoPagamento(Mockito.any(InfoPagamento.class), Mockito.anyString(),
         Mockito.anyInt()))).thenReturn(infoPagamento);
@@ -144,7 +144,7 @@ public class InfoPagamentoControllerTest {
   }
 
   @Test
-  public void testarValidacaoQtdadeParcelasNumeroPositivo() throws Exception {
+  public void testarCadastrarComValidacaoQtdadeParcelasNumeroPositivo() throws Exception {
     entradaInfoDTO.setQtdadeParcelas(4);
     Mockito.when((infoPagamentoService.salvarInfoPagamento(Mockito.any(InfoPagamento.class), Mockito.anyString(),
         Mockito.anyInt()))).thenReturn(infoPagamento);
@@ -170,7 +170,7 @@ public class InfoPagamentoControllerTest {
   }
 
   @Test
-  public void testarExibicaoInfos() throws Exception {
+  public void testarExibirInfoPagamentos() throws Exception {
     Mockito.when(infoPagamentoService.exibirInfos()).thenReturn(Arrays.asList(infoPagamento));
 
     ResultActions resultado = mockMvc.perform(MockMvcRequestBuilders.get("/infos")
@@ -185,7 +185,7 @@ public class InfoPagamentoControllerTest {
   }
 
   @Test
-  public void testarExibirInfosPorParam() throws Exception {
+  public void testarExibirInfosPagamentoComParam() throws Exception {
     Mockito.when(infoPagamentoService.exibirInfos()).thenReturn(Arrays.asList(infoPagamento));
 
     ResultActions resultado = mockMvc.perform(MockMvcRequestBuilders.get("/infos?qtdadeDeParcelas=4")
@@ -200,7 +200,7 @@ public class InfoPagamentoControllerTest {
   }
 
   @Test
-  public void testarLimiteValorExcedido() throws Exception {
+  public void testarLimiteValorExcedidoException() throws Exception {
     Mockito.doThrow(LimiteExcedidoException.class).when(infoPagamentoService).validarLimiteValorParcelas
         (Mockito.any(InfoPagamento.class));
 
@@ -226,7 +226,7 @@ public class InfoPagamentoControllerTest {
   }
 
   @Test
-  public void testarPropostaNaoLiberada() throws Exception {
+  public void testarPropostaNaoLiberadaException() throws Exception {
     Mockito.doThrow(PropostaNaoLiberadaException.class).when(infoPagamentoService).atualizarInfo(
         Mockito.anyString());
 
