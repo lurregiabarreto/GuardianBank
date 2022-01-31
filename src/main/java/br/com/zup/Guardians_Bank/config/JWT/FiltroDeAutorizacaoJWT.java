@@ -54,8 +54,8 @@ public class FiltroDeAutorizacaoJWT extends BasicAuthenticationFilter {
                 response.setStatus(HttpStatus.FORBIDDEN.value());
             }
         }
-
         chain.doFilter(request, response);
+
     }
 
 }

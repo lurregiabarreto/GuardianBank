@@ -15,13 +15,13 @@ public class JWTComponent {
   @Value("${jwt.segredo}")
   private String segredo;
   @Value("${jwt.milissegundos}")
-  private Long milissegundo;
+  private Long milissegundos;
 
   public String gerarToken(String username, String id) {
-    Date vencimento = new Date(System.currentTimeMillis() + milissegundo);
+    Date vencimento = new Date(System.currentTimeMillis() + milissegundos);
 
     String token = Jwts.builder().setSubject(username)
-        .claim("idUsuario", id).setExpiration(vencimento).claim("", "")
+        .claim("idUsuario", id).setExpiration(vencimento)
         .signWith(SignatureAlgorithm.HS512, segredo.getBytes()).compact();
 
     return token;
@@ -44,11 +44,7 @@ public class JWTComponent {
       String username = claims.getSubject();
       Date vencimentoToken = claims.getExpiration();
 
-      if (username != null && vencimentoToken != null && dataAtual.before(vencimentoToken)) {
-        return true;
-      } else {
-        return false;
-      }
+      return username != null && vencimentoToken != null && dataAtual.before(vencimentoToken);
     } catch (TokenInvalidoException e) {
       return false;
     }

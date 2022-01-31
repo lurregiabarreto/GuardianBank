@@ -21,14 +21,14 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 @Configuration
 @EnableWebSecurity
 public class ConfiguracaoDeSeguranca extends WebSecurityConfigurerAdapter {
+
   @Autowired
   private JWTComponent jwtComponent;
   @Autowired
   private UserDetailsService detailsService;
 
   private static final String[] ENDPOINT_POST_PUBLICO = {
-      "/propostas",
-      "/infos"
+      "/usuario"
   };
 
   @Override
@@ -54,11 +54,7 @@ public class ConfiguracaoDeSeguranca extends WebSecurityConfigurerAdapter {
   @Bean
   CorsConfigurationSource configurarCORS() {
     UrlBasedCorsConfigurationSource cors = new UrlBasedCorsConfigurationSource();
-    CorsConfiguration config = new CorsConfiguration();
-    config.addAllowedMethod("*");
-    config.addAllowedOrigin("*");
-    config.addAllowedHeader("*");
-    cors.registerCorsConfiguration("/**", config);
+    cors.registerCorsConfiguration("/**", new CorsConfiguration().applyPermitDefaultValues());
     return cors;
   }
 
