@@ -18,6 +18,7 @@ public class JWTComponent {
   private Long milissegundos;
 
   public String gerarToken(String username, String id) {
+    System.out.println(milissegundos);
     Date vencimento = new Date(System.currentTimeMillis() + milissegundos);
 
     String token = Jwts.builder().setSubject(username)
@@ -34,6 +35,7 @@ public class JWTComponent {
     } catch (Exception e) {
       throw new TokenInvalidoException();
     }
+
   }
 
   public boolean tokenValido(String token) {
@@ -44,7 +46,11 @@ public class JWTComponent {
       String username = claims.getSubject();
       Date vencimentoToken = claims.getExpiration();
 
-      return username != null && vencimentoToken != null && dataAtual.before(vencimentoToken);
+      if (username != null && vencimentoToken != null && dataAtual.before(vencimentoToken)) {
+        return true;
+      } else {
+        return false;
+      }
     } catch (TokenInvalidoException e) {
       return false;
     }

@@ -30,6 +30,7 @@ public class FiltroDeAutorizacaoJWT extends BasicAuthenticationFilter {
     }
 
     public UsernamePasswordAuthenticationToken pegarAutenticacao(String token) {
+        System.out.println(token);
         if (!jwtComponent.tokenValido(token)) {
             throw new TokenInvalidoException();
         }
