@@ -3,6 +3,8 @@ package br.com.zup.Guardians_Bank.proposta;
 import br.com.zup.Guardians_Bank.components.Conversor;
 import br.com.zup.Guardians_Bank.enums.ProdutoFinanceiro;
 import br.com.zup.Guardians_Bank.enums.StatusProposta;
+import br.com.zup.Guardians_Bank.exceptions.DataInvalidaException;
+import br.com.zup.Guardians_Bank.exceptions.PropostaNaoLiberadaException;
 import br.com.zup.Guardians_Bank.infoPagamento.InfoPagamentoController;
 import br.com.zup.Guardians_Bank.infoPagamento.InfoPagamentoService;
 import br.com.zup.Guardians_Bank.infoPagamento.dto.RespostaAtualizacaoStatusDTO;
@@ -73,6 +75,19 @@ public class PropostaControllerTest {
     String jsonResposta = resultado.andReturn().getResponse().getContentAsString();
     OpcoesPagamentoDTO respostaAtualizada = objectMapper.readValue(jsonResposta,
         OpcoesPagamentoDTO.class);
+  }
+
+  @Test
+  public void testarDataInvalidaException() throws Exception {
+    Mockito.doThrow(DataInvalidaException.class).when(propostaService).exibirOpcoesValidadas(
+        Mockito.anyString());
+
+    String json = objectMapper.writeValueAsString(opcoesPagamentoDTO);
+
+    ResultActions resultado = mockMvc.perform(MockMvcRequestBuilders
+            .get("/propostas/2")
+            .contentType(MediaType.APPLICATION_JSON))
+        .andExpect(MockMvcResultMatchers.status().is(422));
   }
 
 }
