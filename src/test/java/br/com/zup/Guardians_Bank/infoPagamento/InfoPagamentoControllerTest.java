@@ -212,4 +212,17 @@ public class InfoPagamentoControllerTest {
         .andExpect(MockMvcResultMatchers.status().is(422));
   }
 
+  @Test
+  public void testarPropostaJaCadastradaException() throws Exception {
+    Mockito.doThrow(PropostaJaCadastradaException.class).when(infoPagamentoService).salvarInfoPagamento
+        (Mockito.any(InfoPagamento.class), Mockito.anyString(), Mockito.anyInt());
+
+    String json = objectMapper.writeValueAsString(entradaInfoDTO);
+
+    ResultActions resultado = mockMvc.perform(MockMvcRequestBuilders
+            .post("/infos")
+            .contentType(MediaType.APPLICATION_JSON))
+        .andExpect(MockMvcResultMatchers.status().is(422));
+  }
+
 }
