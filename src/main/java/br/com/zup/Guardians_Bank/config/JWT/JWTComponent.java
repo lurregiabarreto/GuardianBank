@@ -18,7 +18,6 @@ public class JWTComponent {
   private Long milissegundos;
 
   public String gerarToken(String username, String id) {
-    System.out.println(milissegundos);
     Date vencimento = new Date(System.currentTimeMillis() + milissegundos);
 
     String token = Jwts.builder().setSubject(username)

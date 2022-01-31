@@ -19,44 +19,42 @@ import java.io.IOException;
 
 public class FiltroDeAutorizacaoJWT extends BasicAuthenticationFilter {
 
-    private JWTComponent jwtComponent;
-    private UserDetailsService userDetailsService;
+  private JWTComponent jwtComponent;
+  private UserDetailsService userDetailsService;
 
-    public FiltroDeAutorizacaoJWT(AuthenticationManager authenticationManager, JWTComponent jwtComponent,
-                                  UserDetailsService userDetailsService) {
-        super(authenticationManager);
-        this.jwtComponent = jwtComponent;
-        this.userDetailsService = userDetailsService;
+  public FiltroDeAutorizacaoJWT(AuthenticationManager authenticationManager, JWTComponent jwtComponent,
+                                UserDetailsService userDetailsService) {
+    super(authenticationManager);
+    this.jwtComponent = jwtComponent;
+    this.userDetailsService = userDetailsService;
+  }
+
+  public UsernamePasswordAuthenticationToken pegarAutenticacao(String token) {
+    if (!jwtComponent.tokenValido(token)) {
+      throw new TokenInvalidoException();
     }
 
-    public UsernamePasswordAuthenticationToken pegarAutenticacao(String token) {
-        System.out.println(token);
-        if (!jwtComponent.tokenValido(token)) {
-            throw new TokenInvalidoException();
-        }
+    Claims claims = jwtComponent.pegarClaims(token);
+    UserDetails usuarioLogado = userDetailsService.loadUserByUsername(claims.getSubject());
 
-        Claims claims = jwtComponent.pegarClaims(token);
-        UserDetails usuarioLogado = userDetailsService.loadUserByUsername(claims.getSubject());
+    return new UsernamePasswordAuthenticationToken(usuarioLogado, null, usuarioLogado.getAuthorities());
+  }
 
-        return new UsernamePasswordAuthenticationToken(usuarioLogado, null, usuarioLogado.getAuthorities());
+  @Override
+  protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain)
+      throws IOException, ServletException {
+
+    String token = request.getHeader("Authorization");
+
+    if (token != null && token.startsWith("Token ")) {
+      try {
+        UsernamePasswordAuthenticationToken auth = pegarAutenticacao(token.substring(6));
+        SecurityContextHolder.getContext().setAuthentication(auth);
+      } catch (TokenInvalidoException exception) {
+        response.setStatus(HttpStatus.FORBIDDEN.value());
+      }
     }
-
-    @Override
-    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain)
-            throws IOException, ServletException {
-
-        String token = request.getHeader("Authorization");
-
-        if (token != null && token.startsWith("Token ")) {
-            try {
-                UsernamePasswordAuthenticationToken auth = pegarAutenticacao(token.substring(6));
-                SecurityContextHolder.getContext().setAuthentication(auth);
-            } catch (TokenInvalidoException exception) {
-                response.setStatus(HttpStatus.FORBIDDEN.value());
-            }
-        }
-        chain.doFilter(request, response);
-
-    }
+    chain.doFilter(request, response);
+  }
 
 }
