@@ -3,6 +3,7 @@ package br.com.zup.Guardians_Bank.proposta;
 import br.com.zup.Guardians_Bank.cliente.Cliente;
 import br.com.zup.Guardians_Bank.enums.ProdutoFinanceiro;
 import br.com.zup.Guardians_Bank.enums.StatusProposta;
+import br.com.zup.Guardians_Bank.exceptions.DataInvalidaException;
 import br.com.zup.Guardians_Bank.exceptions.EmAnaliseException;
 import br.com.zup.Guardians_Bank.exceptions.PropostaRecusadaException;
 import br.com.zup.Guardians_Bank.infoPagamento.InfoPagamento;
@@ -16,6 +17,9 @@ import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 
 @SpringBootTest
 public class PropostaServiceTest {
@@ -74,4 +78,16 @@ public class PropostaServiceTest {
     });
   }
 
+  @Test
+  public void validarDataInvalidaException() {
+    String data = "2021/07/07";
+    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy/MM/dd");
+    LocalDate date = LocalDate.parse(data, formatter);
+    proposta.setDataProposta(date);
+
+    DataInvalidaException excecao = Assertions.assertThrows(DataInvalidaException.class, () -> {
+      propostaService.validarDataContratacao(proposta);
+    });
+
+  }
 }

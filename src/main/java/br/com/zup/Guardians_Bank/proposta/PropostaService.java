@@ -42,7 +42,6 @@ public class PropostaService {
             throw new DataInvalidaException("Data limite excedida");
         }
         return proposta;
-
     }
 
     public Proposta validarPropostaExiste(String numeroProposta) {
