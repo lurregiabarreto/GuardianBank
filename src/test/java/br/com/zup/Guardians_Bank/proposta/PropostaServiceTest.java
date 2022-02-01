@@ -113,4 +113,22 @@ public class PropostaServiceTest {
     });
   }
 
+  @Test
+  public void testarBuscarInfoPorNumProposta() {
+    Mockito.when(propostaRepository.findById(proposta.getNumeroProposta())).thenReturn(Optional.of(proposta));
+    infoPagamento = new InfoPagamento();
+    Proposta novaProposta = propostaService.validarPropostaExistente(proposta.getNumeroProposta());
+    propostaService.validarStatusProposta(proposta);
+    String data = "2022/01/31";
+    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy/MM/dd");
+    LocalDate date = LocalDate.parse(data, formatter);
+    proposta.setDataProposta(date);
+    propostaService.validarDataContratacao(proposta);
+    infoPagamento.setProposta(proposta);
+
+    Assertions.assertEquals(novaProposta, proposta);
+
+    Mockito.verify(propostaRepository, Mockito.times(1)).findById(proposta.getNumeroProposta());
+  }
+
 }
