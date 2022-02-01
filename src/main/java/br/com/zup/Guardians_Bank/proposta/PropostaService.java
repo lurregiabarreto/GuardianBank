@@ -12,6 +12,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -61,11 +63,11 @@ public class PropostaService {
         return infoPagamento;
     }
 
-    public OpcoesPagamentoDTO exibirOpcoesValidadas(String id) {
+    public List<InfoPagamento> exibirOpcoesValidadas(String id) {
         InfoPagamento infoPagamento = trazerInfoPorNumProposta(id);
-        OpcoesPagamentoDTO opcoesPagamentoDTO = new OpcoesPagamentoDTO();
-        opcoesPagamentoDTO.setOpcoes(infoPagamentoService.opcoesParcelamento(infoPagamento));
-        return opcoesPagamentoDTO;
+        List<InfoPagamento> infoPagamentoList = new ArrayList<>();
+        infoPagamentoList.addAll(infoPagamentoService.opcoesParcelamento(infoPagamento));
+        return infoPagamentoList;
     }
 
 }

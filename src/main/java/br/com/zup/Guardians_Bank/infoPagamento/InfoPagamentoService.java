@@ -84,8 +84,8 @@ public class InfoPagamentoService {
         return limite;
     }
 
-    public List<RetornoInfoDTO> opcoesParcelamento(InfoPagamento infoPagoOriginal) {
-        List<RetornoInfoDTO> opcoesParcelaDTO = new ArrayList<RetornoInfoDTO>();
+    public List<InfoPagamento> opcoesParcelamento(InfoPagamento infoPagoOriginal) {
+        List<InfoPagamento> opcoesInfo = new ArrayList<InfoPagamento>();
         int parcela = 4;
 
         while (parcela <= 12) {
@@ -95,17 +95,13 @@ public class InfoPagamentoService {
             calcularValorDaParcela(infoPagamentoatual);
             calcularImpostoSobreParcela(infoPagamentoatual);
 
-            RetornoInfoDTO exibirParcelaDTO = new RetornoInfoDTO();
-            exibirParcelaDTO.setQtdadeParcelas(parcela);
-            exibirParcelaDTO.setValorParcela(infoPagamentoatual.getValorParcela());
-
-            if (validarLimiteValorParcelas(infoPagamentoatual) > exibirParcelaDTO.getValorParcela()) {
-                opcoesParcelaDTO.add(exibirParcelaDTO);
+            if (validarLimiteValorParcelas(infoPagamentoatual) > infoPagamentoatual.getValorParcela()) {
+                opcoesInfo.add(infoPagamentoatual);
             }
             parcela = parcela + 4;
 
         }
-        return opcoesParcelaDTO;
+        return opcoesInfo;
 
     }
 
