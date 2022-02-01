@@ -21,6 +21,8 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @SpringBootTest
@@ -57,6 +59,9 @@ public class PropostaServiceTest {
 
     cliente = new Cliente();
     cliente.setCodcli("1");
+    cliente.setCpf("75622060079");
+    cliente.setNome("Dorayen");
+    cliente.setSalario(3000);
 
   }
 
@@ -80,6 +85,17 @@ public class PropostaServiceTest {
     });
   }
 
+  @Test //????
+  public void testarValidarStatusPropostaCaminhoPositivo() {
+    Mockito.when(infoPagamentoService.salvarInfoPagamento(Mockito.any(InfoPagamento.class), Mockito.anyString(),
+        Mockito.anyInt())).thenReturn(infoPagamento);
+
+    propostaService.validarStatusProposta(proposta);
+
+    Mockito.verify(infoPagamentoService, Mockito.times(0)).salvarInfoPagamento
+        (Mockito.any(InfoPagamento.class), Mockito.anyString(), Mockito.anyInt());
+  }
+
   @Test
   public void testarValidarDataInvalidaException() {
     String data = "2021/07/07";
@@ -90,6 +106,22 @@ public class PropostaServiceTest {
     DataInvalidaException excecao = Assertions.assertThrows(DataInvalidaException.class, () -> {
       propostaService.validarDataContratacao(proposta);
     });
+  }
+
+  @Test //???
+  public void testarValidarDataCaminhoPositivo() {
+    Mockito.when(infoPagamentoService.salvarInfoPagamento(Mockito.any(InfoPagamento.class), Mockito.anyString(),
+        Mockito.anyInt())).thenReturn(infoPagamento);
+
+    String data = "2022/01/31";
+    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy/MM/dd");
+    LocalDate date = LocalDate.parse(data, formatter);
+    proposta.setDataProposta(date);
+
+    propostaService.validarDataContratacao(proposta);
+
+    Mockito.verify(infoPagamentoService, Mockito.times(0)).salvarInfoPagamento
+        (Mockito.any(InfoPagamento.class), Mockito.anyString(), Mockito.anyInt());
   }
 
   @Test
@@ -113,25 +145,33 @@ public class PropostaServiceTest {
     });
   }
 
-  @Test
+  @Test //???
   public void testarBuscarInfoPorNumProposta() {
     Mockito.when(propostaRepository.findById(proposta.getNumeroProposta())).thenReturn(Optional.of(proposta));
 
     infoPagamento = new InfoPagamento();
 
-    Proposta novaProposta = propostaService.validarPropostaExistente(proposta.getNumeroProposta());
-    propostaService.validarStatusProposta(proposta);
-    String data = "2022/01/31";
-    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy/MM/dd");
-    LocalDate date = LocalDate.parse(data, formatter);
-    proposta.setDataProposta(date);
-    propostaService.validarDataContratacao(proposta);
+    testarValidarPropostaExistenteCaminhoPositivo();
+    testarValidarStatusPropostaCaminhoPositivo();
+    testarValidarDataCaminhoPositivo();
+
 
     infoPagamento.setProposta(proposta);
+    propostaService.buscarInfoPorNumProposta(proposta.getNumeroProposta());
 
-    Assertions.assertEquals(novaProposta, proposta);
+    Assertions.assertNotNull(infoPagamento);
 
-    Mockito.verify(propostaRepository, Mockito.times(1)).findById(proposta.getNumeroProposta());
+  }
+
+  @Test// ???
+  public void testarExibirOpcoesValidadas() {
+    testarBuscarInfoPorNumProposta();
+
+    List<InfoPagamento> infoPagamentoList = new ArrayList<>();
+    propostaService.exibirOpcoesValidadas(proposta.getNumeroProposta());
+
+    Assertions.assertNotNull(infoPagamentoList);
+
   }
 
 }
