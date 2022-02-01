@@ -1,5 +1,5 @@
 
-INSERT INTO clientes (codcli, nome, cpf, salario) VALUES (1, 'Dorayen Carrasquel', '64879797081', 2000);
+INSERT INTO clientes (codcli, nome, cpf, salario) VALUES (1, 'Dorayen Carrasquel', '64879797081', 4500);
 INSERT INTO clientes (codcli, nome, cpf, salario) VALUES (2, 'Barbara Queiroz Romero', '56161432005', 1800);
 INSERT INTO clientes (codcli, nome, cpf, salario) VALUES (3, 'Lurregia Barreto Adao', '10472639048', 1900);
 
