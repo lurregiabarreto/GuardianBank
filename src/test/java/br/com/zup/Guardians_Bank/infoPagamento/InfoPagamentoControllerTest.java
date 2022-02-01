@@ -1,6 +1,8 @@
 package br.com.zup.Guardians_Bank.infoPagamento;
 
 import br.com.zup.Guardians_Bank.components.Conversor;
+import br.com.zup.Guardians_Bank.config.JWT.JWTComponent;
+import br.com.zup.Guardians_Bank.config.Security.UsuarioLoginService;
 import br.com.zup.Guardians_Bank.exceptions.LimiteExcedidoException;
 import br.com.zup.Guardians_Bank.exceptions.PropostaJaCadastradaException;
 import br.com.zup.Guardians_Bank.exceptions.PropostaNaoLiberadaException;
@@ -16,6 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
@@ -24,13 +27,17 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import java.util.Arrays;
 import java.util.List;
 
-@WebMvcTest({InfoPagamentoController.class, Conversor.class})
+@WebMvcTest({InfoPagamentoController.class, Conversor.class, UsuarioLoginService.class, JWTComponent.class})
 public class InfoPagamentoControllerTest {
 
   @MockBean
   private InfoPagamentoService infoPagamentoService;
   @MockBean
   private PropostaService propostaService;
+  @MockBean
+  private UsuarioLoginService usuarioLoginService;
+  @MockBean
+  private JWTComponent jwtComponent;
 
   @Autowired
   private MockMvc mockMvc;
@@ -69,6 +76,7 @@ public class InfoPagamentoControllerTest {
   }
 
   @Test
+  @WithMockUser("user@user.com")
   public void testarCadastroInfoPagamento() throws Exception {
     Mockito.when(infoPagamentoService.salvarInfoPagamento(Mockito.any(InfoPagamento.class), Mockito.anyString(),
         Mockito.anyInt())).thenReturn(infoPagamento);
@@ -84,6 +92,7 @@ public class InfoPagamentoControllerTest {
   }
 
   @Test
+  @WithMockUser("user@user.com")
   public void testarCadastrarComValidacaoNumeroPropostaBlank() throws Exception {
     entradaInfoDTO.setNumeroProposta("    ");
     Mockito.when((infoPagamentoService.salvarInfoPagamento(Mockito.any(InfoPagamento.class), Mockito.anyString(),
@@ -96,6 +105,7 @@ public class InfoPagamentoControllerTest {
   }
 
   @Test
+  @WithMockUser("user@user.com")
   public void testarCadastrarComValidacaoNumeroPropostaNotBlank() throws Exception {
     entradaInfoDTO.setNumeroProposta("1");
     Mockito.when((infoPagamentoService.salvarInfoPagamento(Mockito.any(InfoPagamento.class), Mockito.anyString(),
@@ -108,6 +118,7 @@ public class InfoPagamentoControllerTest {
   }
 
   @Test
+  @WithMockUser("user@user.com")
   public void testarCadastrarComValidacaoQtdadeParcelasNull() throws Exception {
     entradaInfoDTO.setQtdadeParcelas(null);
     Mockito.when((infoPagamentoService.salvarInfoPagamento(Mockito.any(InfoPagamento.class), Mockito.anyString(),
@@ -120,6 +131,7 @@ public class InfoPagamentoControllerTest {
   }
 
   @Test
+  @WithMockUser("user@user.com")
   public void testarCadastrarComValidacaoQtdadeParcelasNotNull() throws Exception {
     entradaInfoDTO.setQtdadeParcelas(4);
     Mockito.when((infoPagamentoService.salvarInfoPagamento(Mockito.any(InfoPagamento.class), Mockito.anyString(),
@@ -132,6 +144,7 @@ public class InfoPagamentoControllerTest {
   }
 
   @Test
+  @WithMockUser("user@user.com")
   public void testarCadastrarComValidacaoQtdadeParcelasNumeroNegativo() throws Exception {
     entradaInfoDTO.setQtdadeParcelas(-2);
     Mockito.when((infoPagamentoService.salvarInfoPagamento(Mockito.any(InfoPagamento.class), Mockito.anyString(),
@@ -144,6 +157,7 @@ public class InfoPagamentoControllerTest {
   }
 
   @Test
+  @WithMockUser("user@user.com")
   public void testarCadastrarComValidacaoQtdadeParcelasNumeroPositivo() throws Exception {
     entradaInfoDTO.setQtdadeParcelas(4);
     Mockito.when((infoPagamentoService.salvarInfoPagamento(Mockito.any(InfoPagamento.class), Mockito.anyString(),
@@ -156,6 +170,7 @@ public class InfoPagamentoControllerTest {
   }
 
   @Test
+  @WithMockUser("user@user.com")
   public void testarAtualizarStatusProposta() throws Exception {
     Mockito.when(infoPagamentoService.atualizarInfo(Mockito.anyString())).thenReturn(infoPagamento);
     String json = objectMapper.writeValueAsString(atualizarStatusDTO);
@@ -170,6 +185,7 @@ public class InfoPagamentoControllerTest {
   }
 
   @Test
+  @WithMockUser("user@user.com")
   public void testarExibirInfoPagamentos() throws Exception {
     Mockito.when(infoPagamentoService.exibirInfos()).thenReturn(Arrays.asList(infoPagamento));
 
@@ -185,6 +201,7 @@ public class InfoPagamentoControllerTest {
   }
 
   @Test
+  @WithMockUser("user@user.com")
   public void testarExibirInfosPagamentoComParam() throws Exception {
     Mockito.when(infoPagamentoService.exibirInfos()).thenReturn(Arrays.asList(infoPagamento));
 
@@ -200,6 +217,7 @@ public class InfoPagamentoControllerTest {
   }
 
   @Test
+  @WithMockUser("user@user.com")
   public void testarLimiteValorExcedidoException() throws Exception {
     Mockito.doThrow(LimiteExcedidoException.class).when(infoPagamentoService).validarLimiteValorParcelas
         (Mockito.any(InfoPagamento.class));
@@ -213,6 +231,7 @@ public class InfoPagamentoControllerTest {
   }
 
   @Test
+  @WithMockUser("user@user.com")
   public void testarPropostaJaCadastradaException() throws Exception {
     Mockito.doThrow(PropostaJaCadastradaException.class).when(infoPagamentoService).salvarInfoPagamento
         (Mockito.any(InfoPagamento.class), Mockito.anyString(), Mockito.anyInt());
@@ -226,6 +245,7 @@ public class InfoPagamentoControllerTest {
   }
 
   @Test
+  @WithMockUser("user@user.com")
   public void testarPropostaNaoLiberadaException() throws Exception {
     Mockito.doThrow(PropostaNaoLiberadaException.class).when(infoPagamentoService).atualizarInfo(
         Mockito.anyString());
