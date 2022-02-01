@@ -5,6 +5,7 @@ import br.com.zup.Guardians_Bank.enums.ProdutoFinanceiro;
 import br.com.zup.Guardians_Bank.enums.StatusProposta;
 import br.com.zup.Guardians_Bank.exceptions.DataInvalidaException;
 import br.com.zup.Guardians_Bank.exceptions.EmAnaliseException;
+import br.com.zup.Guardians_Bank.exceptions.PropostaNaoEncontradaException;
 import br.com.zup.Guardians_Bank.exceptions.PropostaRecusadaException;
 import br.com.zup.Guardians_Bank.infoPagamento.InfoPagamento;
 import br.com.zup.Guardians_Bank.infoPagamento.InfoPagamentoService;
@@ -99,6 +100,17 @@ public class PropostaServiceTest {
     Assertions.assertEquals(propostaValidada, proposta);
 
     Mockito.verify(propostaRepository, Mockito.times(1)).findById(proposta.getNumeroProposta());
+  }
+
+  @Test
+  public void testarValidarPropostaExistenteCaminhoNegativo() {
+    Mockito.when(propostaRepository.findById(proposta.getNumeroProposta())).thenReturn(Optional.empty());
+
+    PropostaNaoEncontradaException excecao = Assertions.assertThrows(PropostaNaoEncontradaException.class, () -> {
+      propostaService.validarPropostaExistente(proposta.getNumeroProposta());
+
+      Mockito.verify(propostaRepository, Mockito.times(1)).findById(proposta.getNumeroProposta());
+    });
   }
 
 }
