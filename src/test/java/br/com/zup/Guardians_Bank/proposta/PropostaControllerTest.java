@@ -25,6 +25,7 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 @WebMvcTest({PropostaController.class, Conversor.class})
@@ -64,7 +65,7 @@ public class PropostaControllerTest {
 
   @Test
   public void testarExibirOpcoesPagamento() throws Exception {
-    Mockito.when(propostaService.exibirOpcoesValidadas(Mockito.anyString())).thenReturn(opcoesPagamentoDTO);
+    Mockito.when(propostaService.exibirOpcoesValidadas(Mockito.anyString())).thenReturn(Arrays.asList());
     String json = objectMapper.writeValueAsString(opcoesPagamentoDTO);
 
     ResultActions resultado = mockMvc.perform(MockMvcRequestBuilders.get("/propostas/1")
