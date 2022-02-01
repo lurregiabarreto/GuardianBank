@@ -4,6 +4,7 @@ import br.com.zup.Guardians_Bank.cliente.Cliente;
 import br.com.zup.Guardians_Bank.enums.ProdutoFinanceiro;
 import br.com.zup.Guardians_Bank.enums.StatusProposta;
 import br.com.zup.Guardians_Bank.exceptions.EmAnaliseException;
+import br.com.zup.Guardians_Bank.exceptions.PropostaRecusadaException;
 import br.com.zup.Guardians_Bank.infoPagamento.InfoPagamento;
 import br.com.zup.Guardians_Bank.infoPagamento.InfoPagamentoService;
 import br.com.zup.Guardians_Bank.proposta.dtos.OpcoesPagamentoDTO;
@@ -54,10 +55,20 @@ public class PropostaServiceTest {
   }
 
   @Test
-  public void validarStatusPropostaEmAnaliseNegativo() {
+  public void validarStatusPropostaEmAnaliseException() {
     proposta.setStatusProposta(StatusProposta.EM_ANALISE);
 
     EmAnaliseException excecao = Assertions.assertThrows(EmAnaliseException.class, () -> {
+      propostaService.validarStatusProposta(proposta);
+
+    });
+  }
+
+  @Test
+  public void validarStatusPropostaRecusadaException() {
+    proposta.setStatusProposta(StatusProposta.REPROVADO);
+
+    PropostaRecusadaException excecao = Assertions.assertThrows(PropostaRecusadaException.class, () -> {
       propostaService.validarStatusProposta(proposta);
 
     });
