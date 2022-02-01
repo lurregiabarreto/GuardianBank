@@ -32,7 +32,7 @@ public class InfoPagamentoService {
   private PropostaService propostaService;
 
   public InfoPagamento salvarInfoPagamento(InfoPagamento infoPagamento, String numeroProposta, int qtdadeDeParcelas) {
-    Proposta proposta = propostaService.validarPropostaExiste(numeroProposta);
+    Proposta proposta = propostaService.validarPropostaExistente(numeroProposta);
     buscarInfoPorNumeroProposta(proposta.getNumeroProposta());
     propostaService.validarStatusProposta(proposta);
     propostaService.validarDataContratacao(proposta);

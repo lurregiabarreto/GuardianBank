@@ -20,6 +20,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.Optional;
 
 @SpringBootTest
 public class PropostaServiceTest {
@@ -59,7 +60,7 @@ public class PropostaServiceTest {
   }
 
   @Test
-  public void validarStatusPropostaEmAnaliseException() {
+  public void testarValidarStatusPropostaEmAnaliseException() {
     proposta.setStatusProposta(StatusProposta.EM_ANALISE);
 
     EmAnaliseException excecao = Assertions.assertThrows(EmAnaliseException.class, () -> {
@@ -69,7 +70,7 @@ public class PropostaServiceTest {
   }
 
   @Test
-  public void validarStatusPropostaRecusadaException() {
+  public void testarValidarStatusPropostaRecusadaException() {
     proposta.setStatusProposta(StatusProposta.REPROVADO);
 
     PropostaRecusadaException excecao = Assertions.assertThrows(PropostaRecusadaException.class, () -> {
@@ -79,7 +80,7 @@ public class PropostaServiceTest {
   }
 
   @Test
-  public void validarDataInvalidaException() {
+  public void testarValidarDataInvalidaException() {
     String data = "2021/07/07";
     DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy/MM/dd");
     LocalDate date = LocalDate.parse(data, formatter);
@@ -88,6 +89,16 @@ public class PropostaServiceTest {
     DataInvalidaException excecao = Assertions.assertThrows(DataInvalidaException.class, () -> {
       propostaService.validarDataContratacao(proposta);
     });
-
   }
+
+  @Test
+  public void testarValidarPropostaExistenteCaminhoPositivo() {
+    Mockito.when(propostaRepository.findById(proposta.getNumeroProposta())).thenReturn(Optional.of(proposta));
+
+    Proposta propostaValidada = propostaService.validarPropostaExistente(proposta.getNumeroProposta());
+    Assertions.assertEquals(propostaValidada, proposta);
+
+    Mockito.verify(propostaRepository, Mockito.times(1)).findById(proposta.getNumeroProposta());
+  }
+
 }

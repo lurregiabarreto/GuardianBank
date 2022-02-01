@@ -44,7 +44,7 @@ public class PropostaService {
         return proposta;
     }
 
-    public Proposta validarPropostaExiste(String numeroProposta) {
+    public Proposta validarPropostaExistente(String numeroProposta) {
         Optional<Proposta> propostaOptional = propostaRepository.findById(numeroProposta);
         if (propostaOptional.isEmpty()) {
             throw new PropostaNaoEncontradaException("Proposta não encontrada");
@@ -55,7 +55,7 @@ public class PropostaService {
 
     public InfoPagamento trazerInfoPorNumProposta(String id) {
         InfoPagamento infoPagamento = new InfoPagamento();
-        Proposta proposta = validarPropostaExiste(id);
+        Proposta proposta = validarPropostaExistente(id);
         validarStatusProposta(proposta);
         validarDataContratacao(proposta);
         infoPagamento.setProposta(proposta);
