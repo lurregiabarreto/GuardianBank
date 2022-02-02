@@ -1,6 +1,8 @@
 package br.com.zup.Guardians_Bank.proposta;
 
 import br.com.zup.Guardians_Bank.components.Conversor;
+import br.com.zup.Guardians_Bank.config.JWT.JWTComponent;
+import br.com.zup.Guardians_Bank.config.Security.UsuarioLoginService;
 import br.com.zup.Guardians_Bank.enums.ProdutoFinanceiro;
 import br.com.zup.Guardians_Bank.enums.StatusProposta;
 import br.com.zup.Guardians_Bank.exceptions.*;
@@ -19,6 +21,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
@@ -28,20 +31,24 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-@WebMvcTest({PropostaController.class, Conversor.class})
+
+@WebMvcTest({PropostaController.class, Conversor.class, UsuarioLoginService.class, JWTComponent.class})
 public class PropostaControllerTest {
 
   @MockBean
   private PropostaService propostaService;
   @MockBean
   private InfoPagamentoService infoPagamentoService;
+  @MockBean
+  private UsuarioLoginService usuarioLoginService;
+  @MockBean
+  private JWTComponent jwtComponent;
 
   @Autowired
   private MockMvc mockMvc;
 
   private ObjectMapper objectMapper;
   private Proposta proposta;
-  private OpcoesPagamentoDTO opcoesPagamentoDTO;
   private RetornoInfoDTO retornoInfoDTO;
 
   @BeforeEach
@@ -54,35 +61,33 @@ public class PropostaControllerTest {
     proposta.setValorProposta(1200.00);
     proposta.setStatusProposta(StatusProposta.APROVADO);
 
-    opcoesPagamentoDTO = new OpcoesPagamentoDTO();
     retornoInfoDTO = new RetornoInfoDTO();
-    List<RetornoInfoDTO> list = new ArrayList<>();
-    opcoesPagamentoDTO.setOpcoes(list);
     retornoInfoDTO.setQtdadeParcelas(2);
     retornoInfoDTO.setValorParcela(800);
 
   }
 
   @Test
+  @WithMockUser("user@user.com")
   public void testarExibirOpcoesPagamento() throws Exception {
     Mockito.when(propostaService.exibirOpcoesValidadas(Mockito.anyString())).thenReturn(Arrays.asList());
-    String json = objectMapper.writeValueAsString(opcoesPagamentoDTO);
+    String json = objectMapper.writeValueAsString(retornoInfoDTO);
 
     ResultActions resultado = mockMvc.perform(MockMvcRequestBuilders.get("/propostas/1")
             .content(json).contentType(MediaType.APPLICATION_JSON))
         .andExpect(MockMvcResultMatchers.status().is(200));
 
     String jsonResposta = resultado.andReturn().getResponse().getContentAsString();
-    OpcoesPagamentoDTO respostaAtualizada = objectMapper.readValue(jsonResposta,
-        OpcoesPagamentoDTO.class);
+    List<RetornoInfoDTO> respostaAtualizada = objectMapper.readValue(jsonResposta, ArrayList.class);
   }
 
   @Test
+  @WithMockUser("user@user.com")
   public void testarDataInvalidaException() throws Exception {
     Mockito.doThrow(DataInvalidaException.class).when(propostaService).exibirOpcoesValidadas(
         Mockito.anyString());
 
-    String json = objectMapper.writeValueAsString(opcoesPagamentoDTO);
+    String json = objectMapper.writeValueAsString(retornoInfoDTO);
 
     ResultActions resultado = mockMvc.perform(MockMvcRequestBuilders
             .get("/propostas/2")
@@ -91,11 +96,12 @@ public class PropostaControllerTest {
   }
 
   @Test
+  @WithMockUser("user@user.com")
   public void testarEmAnaliseException() throws Exception {
     Mockito.doThrow(EmAnaliseException.class).when(propostaService).exibirOpcoesValidadas
         (Mockito.anyString());
 
-    String json = objectMapper.writeValueAsString(opcoesPagamentoDTO);
+    String json = objectMapper.writeValueAsString(retornoInfoDTO);
 
     ResultActions resultado = mockMvc.perform(MockMvcRequestBuilders
             .get("/propostas/3")
@@ -104,11 +110,12 @@ public class PropostaControllerTest {
   }
 
   @Test
+  @WithMockUser("user@user.com")
   public void testarPropostaNaoEncontradaException() throws Exception {
     Mockito.doThrow(PropostaNaoEncontradaException.class).when(propostaService).exibirOpcoesValidadas
         (Mockito.anyString());
 
-    String json = objectMapper.writeValueAsString(opcoesPagamentoDTO);
+    String json = objectMapper.writeValueAsString(retornoInfoDTO);
 
     ResultActions resultado = mockMvc.perform(MockMvcRequestBuilders
             .get("/propostas/4")
@@ -117,16 +124,18 @@ public class PropostaControllerTest {
   }
 
   @Test
+  @WithMockUser("user@user.com")
   public void testarPropostaRecusadaException() throws Exception {
     Mockito.doThrow(PropostaRecusadaException.class).when(propostaService).exibirOpcoesValidadas
         (Mockito.anyString());
 
-    String json = objectMapper.writeValueAsString(opcoesPagamentoDTO);
+    String json = objectMapper.writeValueAsString(retornoInfoDTO);
 
     ResultActions resultado = mockMvc.perform(MockMvcRequestBuilders
             .get("/propostas/4")
             .contentType(MediaType.APPLICATION_JSON))
         .andExpect(MockMvcResultMatchers.status().is(422));
   }
+
 
 }
