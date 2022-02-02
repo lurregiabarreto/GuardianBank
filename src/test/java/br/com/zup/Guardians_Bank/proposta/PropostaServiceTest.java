@@ -37,10 +37,8 @@ public class PropostaServiceTest {
   private PropostaService propostaService;
 
   private Proposta proposta;
-  private Usuario usuario;
   private InfoPagamento infoPagamento;
   private Cliente cliente;
-  private OpcoesPagamentoDTO opcoesPagamentoDTO;
 
   @BeforeEach
   public void setup() {
@@ -149,17 +147,13 @@ public class PropostaServiceTest {
   public void testarBuscarInfoPorNumProposta() {
     Mockito.when(propostaRepository.findById(proposta.getNumeroProposta())).thenReturn(Optional.of(proposta));
 
-    infoPagamento = new InfoPagamento();
-
     testarValidarPropostaExistenteCaminhoPositivo();
     testarValidarStatusPropostaCaminhoPositivo();
     testarValidarDataCaminhoPositivo();
 
+    InfoPagamento infoPagamento1 = propostaService.buscarInfoPorNumProposta(proposta.getNumeroProposta());
 
-    infoPagamento.setProposta(proposta);
-    propostaService.buscarInfoPorNumProposta(proposta.getNumeroProposta());
-
-    Assertions.assertNotNull(infoPagamento);
+    Assertions.assertNotNull(infoPagamento1.getProposta());
 
   }
 
@@ -167,11 +161,9 @@ public class PropostaServiceTest {
   public void testarExibirOpcoesValidadas() {
     testarBuscarInfoPorNumProposta();
 
-    List<InfoPagamento> infoPagamentoList = new ArrayList<>();
-    propostaService.exibirOpcoesValidadas(proposta.getNumeroProposta());
+    List<InfoPagamento> infoPagamentoList = propostaService.exibirOpcoesValidadas(proposta.getNumeroProposta());
 
     Assertions.assertNotNull(infoPagamentoList);
-
   }
 
 }
