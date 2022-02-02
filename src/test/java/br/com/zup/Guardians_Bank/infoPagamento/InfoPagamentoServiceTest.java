@@ -6,10 +6,15 @@ import br.com.zup.Guardians_Bank.enums.StatusProposta;
 import br.com.zup.Guardians_Bank.proposta.Proposta;
 import br.com.zup.Guardians_Bank.proposta.PropostaRepository;
 import br.com.zup.Guardians_Bank.proposta.PropostaService;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+
+import java.util.Optional;
 
 @SpringBootTest
 public class InfoPagamentoServiceTest {
@@ -48,6 +53,16 @@ public class InfoPagamentoServiceTest {
         cliente.setNome("Dorayen");
         cliente.setSalario(3000);
 
+    }
+    public InfoPagamento buscarInfoPagamento(String idPagamento) {
+        Optional<InfoPagamento> infoPagamentoOptional = infoPagamentoRepository.findById(idPagamento);
+        return infoPagamentoOptional.get();
+    }
+    @Test
+    public void testarBuscarInfoPagamento(){
+        Mockito.when(infoPagamentoRepository.findById(infoPagamento.getIdPagamento())).thenReturn(Optional.of(infoPagamento));
+        infoPagamentoService.buscarInfoPagamento(infoPagamento.getIdPagamento());
+        Assertions.assertNotNull(infoPagamento);
     }
 
 }
