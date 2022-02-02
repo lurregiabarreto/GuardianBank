@@ -54,10 +54,6 @@ public class InfoPagamentoServiceTest {
         cliente.setSalario(3000);
 
     }
-    public InfoPagamento buscarInfoPagamento(String idPagamento) {
-        Optional<InfoPagamento> infoPagamentoOptional = infoPagamentoRepository.findById(idPagamento);
-        return infoPagamentoOptional.get();
-    }
     @Test
     public void testarBuscarInfoPagamento(){
         Mockito.when(infoPagamentoRepository.findById(infoPagamento.getIdPagamento())).thenReturn(Optional.of(infoPagamento));
