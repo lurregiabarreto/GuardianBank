@@ -83,7 +83,7 @@ public class PropostaServiceTest {
     });
   }
 
-  @Test //????
+  @Test
   public void testarValidarStatusPropostaCaminhoPositivo() {
     Mockito.when(infoPagamentoService.salvarInfoPagamento(Mockito.any(InfoPagamento.class), Mockito.anyString(),
         Mockito.anyInt())).thenReturn(infoPagamento);
@@ -143,27 +143,20 @@ public class PropostaServiceTest {
     });
   }
 
-  @Test //???
-  public void testarBuscarInfoPorNumProposta() {
+  @Test
+  public void testarAtribuirPropostaNoInfoPagamento() {
     Mockito.when(propostaRepository.findById(proposta.getNumeroProposta())).thenReturn(Optional.of(proposta));
 
     testarValidarPropostaExistenteCaminhoPositivo();
     testarValidarStatusPropostaCaminhoPositivo();
     testarValidarDataCaminhoPositivo();
 
-    InfoPagamento infoPagamento1 = propostaService.buscarInfoPorNumProposta(proposta.getNumeroProposta());
+    InfoPagamento infoPagamento1 = propostaService.atribuirPropostaNoInfoPagamento(proposta.getNumeroProposta());
 
     Assertions.assertNotNull(infoPagamento1.getProposta());
 
   }
 
-  @Test// ???
-  public void testarExibirOpcoesValidadas() {
-    testarBuscarInfoPorNumProposta();
 
-    List<InfoPagamento> infoPagamentoList = propostaService.exibirOpcoesValidadas(proposta.getNumeroProposta());
-
-    Assertions.assertNotNull(infoPagamentoList);
-  }
 
 }
