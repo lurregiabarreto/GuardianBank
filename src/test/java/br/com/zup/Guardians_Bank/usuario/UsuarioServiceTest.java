@@ -1,6 +1,7 @@
 package br.com.zup.Guardians_Bank.usuario;
 
 import br.com.zup.Guardians_Bank.exceptions.UsuarioJaCadastradoException;
+import br.com.zup.Guardians_Bank.exceptions.UsuarioNaoEcontradoException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -70,10 +71,20 @@ public class UsuarioServiceTest {
   }
 
   @Test
-  public void testarBuscarUsarioPorIdCaminhoPositivo() {
+  public void testarBuscarUsuarioPorIdCaminhoPositivo() {
     Mockito.when(usuarioRepository.findById(Mockito.anyString())).thenReturn(Optional.of(usuario));
 
     Usuario usuarioBanco = usuarioService.buscarUsuarioPorId(usuario.getId());
+
+    Mockito.verify(usuarioRepository, Mockito.times(1)).findById(usuario.getId());
+  }
+
+  @Test
+  public void testarBuscarUsuarioPorIdCaminhoNegativo() {
+    Mockito.when(usuarioRepository.findById(Mockito.anyString())).thenReturn(Optional.empty());
+
+    UsuarioNaoEcontradoException excecao = Assertions.assertThrows(UsuarioNaoEcontradoException.class,
+        () -> usuarioService.buscarUsuarioPorId(usuario.getId()));
 
     Mockito.verify(usuarioRepository, Mockito.times(1)).findById(usuario.getId());
   }
