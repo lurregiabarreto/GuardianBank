@@ -3,10 +3,8 @@ package br.com.zup.Guardians_Bank.usuario.dto;
 import lombok.Data;
 
 @Data
-public class LoginDTO {
+public class UsuarioSaidaDTO {
 
-    private String email;
-    private String senha;
+  private String email;
 
 }
-
