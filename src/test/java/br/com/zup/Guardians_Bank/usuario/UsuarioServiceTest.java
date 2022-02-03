@@ -89,4 +89,15 @@ public class UsuarioServiceTest {
     Mockito.verify(usuarioRepository, Mockito.times(1)).findById(usuario.getId());
   }
 
+  @Test
+  public void testarAtualizarUsuarioCaminhoPositivo() {
+    Mockito.when(usuarioRepository.save(Mockito.any())).thenReturn(usuario);
+    Mockito.when(usuarioRepository.findById(Mockito.anyString())).thenReturn(Optional.of(usuario));
+
+    usuarioService.atualizarUsuario(usuario, usuario.getId());
+
+    Mockito.verify(usuarioRepository, Mockito.times(1)).save(Mockito.any());
+    Mockito.verify(usuarioRepository, Mockito.times(1)).findById(usuario.getId());
+  }
+
 }
