@@ -64,4 +64,9 @@ public class UsuarioService {
     return usuarioBanco;
   }
 
+  public void deletarusuario(String id) {
+    Usuario usuarioBancoDeletado = buscarUsuarioPorId(id);
+    usuarioRepository.deleteById(id);
+  }
+
 }
