@@ -31,6 +31,8 @@ public class UsuarioControllerTest {
   private UsuarioLoginService usuarioLoginService;
   @MockBean
   private JWTComponent jwtComponent;
+  @MockBean
+  private UsuarioLogado usuarioLogado;
 
   @Autowired
   private MockMvc mockMvc;
@@ -151,10 +153,11 @@ public class UsuarioControllerTest {
         UsuarioSaidaDTO.class);
   }
 
-  /*@Test
+  @Test
   @WithMockUser("user@user.com")
   public void testarAtualizarUsuario() throws Exception {
     Mockito.when(usuarioService.atualizarUsuario(Mockito.any(Usuario.class), Mockito.anyString())).thenReturn(usuario);
+
     String json = objectMapper.writeValueAsString(cadastroUsuarioDTO);
 
     ResultActions resultado = mockMvc.perform(MockMvcRequestBuilders.put("/usuario/1")
@@ -162,9 +165,9 @@ public class UsuarioControllerTest {
         .andExpect(MockMvcResultMatchers.status().is(200));
 
     String jsonResposta = resultado.andReturn().getResponse().getContentAsString();
-    UsuarioSaidaDTO usuarioResposta = objectMapper.readValue(jsonResposta, UsuarioSaidaDTO.class, UsuarioLogado.class);
+    UsuarioSaidaDTO usuarioResposta = objectMapper.readValue(jsonResposta, UsuarioSaidaDTO.class);
 
-  }*/
+  }
 
   @Test
   @WithMockUser("user@user.com")
