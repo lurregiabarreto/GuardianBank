@@ -2,6 +2,7 @@ package br.com.zup.Guardians_Bank.usuario;
 
 import br.com.zup.Guardians_Bank.components.Conversor;
 import br.com.zup.Guardians_Bank.config.JWT.JWTComponent;
+import br.com.zup.Guardians_Bank.config.Security.UsuarioLogado;
 import br.com.zup.Guardians_Bank.config.Security.UsuarioLoginService;
 import br.com.zup.Guardians_Bank.exceptions.UsuarioJaCadastradoException;
 import br.com.zup.Guardians_Bank.exceptions.UsuarioNaoEcontradoException;
@@ -149,5 +150,34 @@ public class UsuarioControllerTest {
     UsuarioSaidaDTO usuario = objectMapper.readValue(jsonResposta,
         UsuarioSaidaDTO.class);
   }
+
+  /*@Test
+  @WithMockUser("user@user.com")
+  public void testarAtualizarUsuario() throws Exception {
+    Mockito.when(usuarioService.atualizarUsuario(Mockito.any(Usuario.class), Mockito.anyString())).thenReturn(usuario);
+    String json = objectMapper.writeValueAsString(cadastroUsuarioDTO);
+
+    ResultActions resultado = mockMvc.perform(MockMvcRequestBuilders.put("/usuario/1")
+            .content(json).contentType(MediaType.APPLICATION_JSON))
+        .andExpect(MockMvcResultMatchers.status().is(200));
+
+    String jsonResposta = resultado.andReturn().getResponse().getContentAsString();
+    UsuarioSaidaDTO usuarioResposta = objectMapper.readValue(jsonResposta, UsuarioSaidaDTO.class, UsuarioLogado.class);
+
+  }*/
+
+  @Test
+  @WithMockUser("user@user.com")
+  public void testarDeletarUsuario() throws Exception {
+    Mockito.doNothing().when(usuarioService).deletarusuario(Mockito.anyString());
+
+    ResultActions resultado = mockMvc.perform(MockMvcRequestBuilders.delete("/usuario/1")
+            .contentType(MediaType.APPLICATION_JSON))
+        .andExpect(MockMvcResultMatchers.status().is(204));
+
+    Mockito.verify(usuarioService, Mockito.times(1)).deletarusuario(Mockito.anyString());
+
+  }
+
 
 }
