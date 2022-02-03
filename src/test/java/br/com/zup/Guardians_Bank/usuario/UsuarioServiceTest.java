@@ -100,4 +100,17 @@ public class UsuarioServiceTest {
     Mockito.verify(usuarioRepository, Mockito.times(1)).findById(usuario.getId());
   }
 
+  @Test
+  public void testarAtualizarUsuarioCaminhoNegativo() {
+    Mockito.when(usuarioRepository.save(Mockito.any())).thenReturn(usuario);
+    Mockito.when(usuarioRepository.findById(Mockito.anyString())).thenReturn(Optional.empty());
+
+    UsuarioNaoEcontradoException exception = Assertions.assertThrows(UsuarioNaoEcontradoException.class, () -> {
+      usuarioService.atualizarUsuario(usuario, usuario.getId());
+
+      Mockito.verify(usuarioRepository, Mockito.times(1)).save(Mockito.any());
+      Mockito.verify(usuarioRepository, Mockito.times(1)).findById(usuario.getId());
+    });
+  }
+
 }
