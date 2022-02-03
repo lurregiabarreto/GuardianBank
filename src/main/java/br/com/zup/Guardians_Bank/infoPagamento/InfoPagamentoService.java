@@ -73,9 +73,9 @@ public class InfoPagamentoService {
     public void calcularImpostoSobreParcela(InfoPagamento infoPagamento) {
         double imposto = 1.05;
         double valorParcelaComImposto = infoPagamento.getValorParcela() * imposto;
+        BigDecimal bDImposto = new BigDecimal(infoPagamento.getValorParcela() * 0.05).setScale(2, RoundingMode.HALF_DOWN);
         BigDecimal bigDecimal2 = new BigDecimal(valorParcelaComImposto).setScale(2, RoundingMode.HALF_DOWN);
         infoPagamento.setValorParcela(bigDecimal2.doubleValue());
-        BigDecimal bDImposto = new BigDecimal(infoPagamento.getValorParcela() * 0.05).setScale(2, RoundingMode.HALF_DOWN);
         infoPagamento.setImposto(bDImposto.doubleValue());
 
     }
