@@ -123,4 +123,17 @@ public class UsuarioServiceTest {
     Mockito.verify(usuarioRepository, Mockito.times(1)).deleteById(Mockito.anyString());
   }
 
+  @Test
+  public void testarDeletarUsuarioCaminhoNegativo() {
+    Mockito.when(usuarioRepository.findById(Mockito.anyString())).thenReturn(Optional.empty());
+    Mockito.doNothing().when(usuarioRepository).deleteById(Mockito.anyString());
+
+    UsuarioNaoEcontradoException exception = Assertions.assertThrows(UsuarioNaoEcontradoException.class, () -> {
+      usuarioService.atualizarUsuario(usuario, usuario.getId());
+
+      Mockito.verify(usuarioRepository, Mockito.times(1)).findById(usuario.getId());
+      Mockito.verify(usuarioRepository, Mockito.times(1)).deleteById(usuario.getId());
+    });
+  }
+
 }
