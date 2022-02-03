@@ -21,6 +21,16 @@ public class UsuarioService {
     return usuarioRepository.save(usuario);
   }
 
+  public boolean encontrarUsuarioPorEmail(String email) {
+    Optional<Usuario> usuarioOptional = usuarioRepository.findByEmail(email);
+    if (!usuarioOptional.isEmpty()) {
+      return true;
+    } else {
+      return false;
+    }
+
+  }
+
   public void atualizarUsuario(Usuario usuario, String id) {
     Optional<Usuario> usuarioOptional = usuarioRepository.findById(id);
 

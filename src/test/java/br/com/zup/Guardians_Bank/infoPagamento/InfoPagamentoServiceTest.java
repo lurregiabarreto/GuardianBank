@@ -56,7 +56,8 @@ public class InfoPagamentoServiceTest {
     }
     @Test
     public void testarBuscarInfoPagamento(){
-        Mockito.when(infoPagamentoRepository.findById(infoPagamento.getIdPagamento())).thenReturn(Optional.of(infoPagamento));
+        Mockito.when(infoPagamentoRepository.findById(infoPagamento.getIdPagamento())).
+            thenReturn(Optional.of(infoPagamento));
         infoPagamentoService.buscarInfoPagamento(infoPagamento.getIdPagamento());
         Assertions.assertNotNull(infoPagamento);
     }
