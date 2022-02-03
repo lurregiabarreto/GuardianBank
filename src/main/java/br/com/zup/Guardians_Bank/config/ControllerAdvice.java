@@ -88,6 +88,13 @@ public class ControllerAdvice {
 
   }
 
+  @ExceptionHandler(UsuarioJaCadastradoException.class)
+  @ResponseStatus(HttpStatus.UNPROCESSABLE_ENTITY) //ok
+  public MensagemDeErro propostaJaCadastrada(UsuarioJaCadastradoException excecao) {
+    return new MensagemDeErro(excecao.getLocalizedMessage());
+
+  }
+
   @ExceptionHandler(ArrayIndexOutOfBoundsException.class)
   @ResponseStatus(HttpStatus.UNPROCESSABLE_ENTITY) //ok
   public ResponseEntity enumInvalidoException(ArrayIndexOutOfBoundsException exception) {

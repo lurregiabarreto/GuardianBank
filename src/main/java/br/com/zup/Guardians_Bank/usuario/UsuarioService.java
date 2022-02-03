@@ -1,5 +1,6 @@
 package br.com.zup.Guardians_Bank.usuario;
 
+import br.com.zup.Guardians_Bank.exceptions.UsuarioJaCadastradoException;
 import br.com.zup.Guardians_Bank.exceptions.UsuarioNaoEcontradoException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -17,11 +18,18 @@ public class UsuarioService {
   private BCryptPasswordEncoder encoder;
 
   public Usuario salvarUsuario(Usuario usuario) {
-    String senhaEscondida = encoder.encode(usuario.getSenha());
+    if (encontrarUsuarioPorEmail(usuario.getEmail())) {
+      throw new UsuarioJaCadastradoException("Usuário já cadastrado");
+    } else {
+      String senhaEscondida = encoder.encode(usuario.getSenha());
 
-    usuario.setSenha(senhaEscondida);
-    return usuarioRepository.save(usuario);
+      usuario.setSenha(senhaEscondida);
+      usuarioRepository.save(usuario);
+      return usuario;
+    }
+
   }
+
 
   public boolean encontrarUsuarioPorEmail(String email) {
     Optional<Usuario> usuarioOptional = usuarioRepository.findByEmail(email);
