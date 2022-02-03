@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -29,6 +30,11 @@ public class UsuarioService {
       return false;
     }
 
+  }
+
+  public List<Usuario> buscarTodosOsUsuarios() {
+    Iterable<Usuario> usuarios = usuarioRepository.findAll();
+    return (List<Usuario>) usuarios;
   }
 
   public void atualizarUsuario(Usuario usuario, String id) {
