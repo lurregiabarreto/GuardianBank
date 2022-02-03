@@ -3,6 +3,7 @@ package br.com.zup.Guardians_Bank.usuario;
 import br.com.zup.Guardians_Bank.components.Conversor;
 import br.com.zup.Guardians_Bank.config.JWT.JWTComponent;
 import br.com.zup.Guardians_Bank.config.Security.UsuarioLoginService;
+import br.com.zup.Guardians_Bank.infoPagamento.InfoPagamento;
 import br.com.zup.Guardians_Bank.proposta.PropostaController;
 import br.com.zup.Guardians_Bank.usuario.dto.CadastroUsuarioDTO;
 import br.com.zup.Guardians_Bank.usuario.dto.UsuarioSaidaDTO;
@@ -70,5 +71,16 @@ public class UsuarioControllerTest {
     UsuarioSaidaDTO usuarioResposta = objectMapper.readValue(jsonResposta, UsuarioSaidaDTO.class);
   }
 
+  @Test
+  @WithMockUser("user@user.com")
+  public void testarCadastrarComValidacaoEmailBlank() throws Exception {
+    cadastroUsuarioDTO.setEmail("    ");
+    Mockito.when((usuarioService.salvarUsuario(Mockito.any(Usuario.class)))).thenReturn(usuario);
+    String json = objectMapper.writeValueAsString(cadastroUsuarioDTO);
+
+    ResultActions resultado = mockMvc.perform(MockMvcRequestBuilders.post("/usuario")
+            .content(json).contentType(MediaType.APPLICATION_JSON))
+        .andExpect(MockMvcResultMatchers.status().is(422));
+  }
 
 }
