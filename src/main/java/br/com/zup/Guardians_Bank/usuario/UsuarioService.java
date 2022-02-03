@@ -22,7 +22,6 @@ public class UsuarioService {
       throw new UsuarioJaCadastradoException("Usuário já cadastrado");
     } else {
       String senhaEscondida = encoder.encode(usuario.getSenha());
-
       usuario.setSenha(senhaEscondida);
       usuarioRepository.save(usuario);
       return usuario;
