@@ -61,4 +61,12 @@ public class UsuarioServiceTest {
 
   }
 
+  @Test
+  public void testarEncontrarUsuarioPorEmailCaminhoNegativo() {
+    Mockito.when(usuarioRepository.findByEmail(Mockito.anyString())).thenReturn(Optional.empty());
+
+    Boolean respostaEsperada = usuarioService.encontrarUsuarioPorEmail(Mockito.anyString());
+    Assertions.assertFalse(respostaEsperada);
+  }
+
 }
