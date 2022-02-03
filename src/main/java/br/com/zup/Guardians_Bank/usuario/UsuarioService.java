@@ -30,7 +30,6 @@ public class UsuarioService {
 
   }
 
-
   public boolean encontrarUsuarioPorEmail(String email) {
     Optional<Usuario> usuarioOptional = usuarioRepository.findByEmail(email);
     if (!usuarioOptional.isEmpty()) {
@@ -56,21 +55,13 @@ public class UsuarioService {
 
   }
 
-  public void atualizarUsuario(Usuario usuario, String id) {
-    Optional<Usuario> usuarioOptional = usuarioRepository.findById(id);
+  public Usuario atualizarUsuario(Usuario usuario, String id) {
+    Usuario usuarioBanco = buscarUsuarioPorId(id);
+    usuarioBanco.setEmail(usuario.getEmail());
+    usuario.setSenha(usuario.getSenha());
 
-    if (usuarioOptional.isEmpty()) {
-      throw new RuntimeException("Usuario não existe");
-    }
-
-    Usuario usuarioBanco = usuarioOptional.get();
-    if (!usuarioBanco.getEmail().equals(usuario.getEmail())) {
-      usuarioBanco.setEmail(usuario.getEmail());
-    }
-
-    String senhaEscondida = encoder.encode(usuario.getSenha());
-    usuarioBanco.setSenha(senhaEscondida);
     usuarioRepository.save(usuarioBanco);
+    return usuarioBanco;
   }
 
 }
