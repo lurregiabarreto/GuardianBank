@@ -8,6 +8,7 @@ import br.com.zup.Guardians_Bank.exceptions.UsuarioJaCadastradoException;
 import br.com.zup.Guardians_Bank.exceptions.UsuarioNaoEcontradoException;
 import br.com.zup.Guardians_Bank.usuario.dto.CadastroUsuarioDTO;
 import br.com.zup.Guardians_Bank.usuario.dto.UsuarioSaidaDTO;
+import br.com.zup.Guardians_Bank.usuarioLogado.UsuarioLogadoService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -31,6 +32,8 @@ public class UsuarioControllerTest {
   private UsuarioLoginService usuarioLoginService;
   @MockBean
   private JWTComponent jwtComponent;
+  @MockBean
+  private UsuarioLogadoService usuarioLogadoService;
 
   @Autowired
   private MockMvc mockMvc;
@@ -151,10 +154,12 @@ public class UsuarioControllerTest {
         UsuarioSaidaDTO.class);
   }
 
-  /*@Test
+  @Test
   @WithMockUser("user@user.com")
   public void testarAtualizarUsuario() throws Exception {
     Mockito.when(usuarioService.atualizarUsuario(Mockito.any(Usuario.class), Mockito.anyString())).thenReturn(usuario);
+    Mockito.when(usuarioLogadoService.pegarId()).thenReturn("4");
+
     String json = objectMapper.writeValueAsString(cadastroUsuarioDTO);
 
     ResultActions resultado = mockMvc.perform(MockMvcRequestBuilders.put("/usuario/1")
@@ -162,9 +167,9 @@ public class UsuarioControllerTest {
         .andExpect(MockMvcResultMatchers.status().is(200));
 
     String jsonResposta = resultado.andReturn().getResponse().getContentAsString();
-    UsuarioSaidaDTO usuarioResposta = objectMapper.readValue(jsonResposta, UsuarioSaidaDTO.class, UsuarioLogado.class);
+    UsuarioSaidaDTO usuarioResposta = objectMapper.readValue(jsonResposta, UsuarioSaidaDTO.class);
 
-  }*/
+  }
 
   @Test
   @WithMockUser("user@user.com")

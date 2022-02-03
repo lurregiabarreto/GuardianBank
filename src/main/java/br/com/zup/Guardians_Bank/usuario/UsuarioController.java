@@ -3,6 +3,7 @@ package br.com.zup.Guardians_Bank.usuario;
 import br.com.zup.Guardians_Bank.config.Security.UsuarioLogado;
 import br.com.zup.Guardians_Bank.usuario.dto.CadastroUsuarioDTO;
 import br.com.zup.Guardians_Bank.usuario.dto.UsuarioSaidaDTO;
+import br.com.zup.Guardians_Bank.usuarioLogado.UsuarioLogadoService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -19,6 +20,8 @@ public class UsuarioController {
   private UsuarioService usuarioService;
   @Autowired
   private ModelMapper modelMapper;
+  @Autowired
+  private UsuarioLogadoService usuarioLogadoService;
 
 
   @PostMapping
@@ -40,10 +43,10 @@ public class UsuarioController {
   public UsuarioSaidaDTO atualizarUsuario(@RequestBody CadastroUsuarioDTO cadastroUsuarioDTO,
                                           Authentication authentication) {
 
-    UsuarioLogado usuarioLogado = (UsuarioLogado) authentication.getPrincipal();
     Usuario usuario = modelMapper.map(cadastroUsuarioDTO, Usuario.class);
 
-    return modelMapper.map(usuarioService.atualizarUsuario(usuario, usuarioLogado.getId()), UsuarioSaidaDTO.class);
+    return modelMapper.map(usuarioService.atualizarUsuario(usuario, usuarioLogadoService.pegarId()),
+        UsuarioSaidaDTO.class);
   }
 
   @DeleteMapping({"/{id}"})
