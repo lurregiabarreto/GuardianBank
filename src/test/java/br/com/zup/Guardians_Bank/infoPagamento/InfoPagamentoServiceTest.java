@@ -128,7 +128,19 @@ public class InfoPagamentoServiceTest {
         infoPagamentoService.opcoesParcelamento(infoPagamento);
         List<InfoPagamento> resultado = infoPagamentoService.opcoesParcelamento(infoPagamento);
         Assertions.assertNotNull(resultado);
-
     }
+
+    @Test
+    public void testarOpcoesParcelamentoCaminhoNegativo() {
+
+        List<InfoPagamento>resultadoruim = new ArrayList<>();
+        proposta.setCliente(clientePobre);
+        infoPagamento.setProposta(proposta);
+        infoPagamentoService.opcoesParcelamento(infoPagamento);
+        List<InfoPagamento> resultado = infoPagamentoService.opcoesParcelamento(infoPagamento);
+        Assertions.assertEquals(0, resultado.size());
+        Assertions.assertEquals(resultadoruim, resultado);
+    }
+
 
 }
