@@ -136,4 +136,18 @@ public class UsuarioControllerTest {
         .andExpect(MockMvcResultMatchers.status().is(404));
   }
 
+  @Test
+  @WithMockUser("user@user.com")
+  public void testarExibirUsuarioPorID() throws Exception {
+    Mockito.when(usuarioService.buscarUsuarioPorId(Mockito.anyString())).thenReturn(usuario);
+
+    ResultActions resultado = mockMvc.perform(MockMvcRequestBuilders.get("/usuario/1")
+            .contentType(MediaType.APPLICATION_JSON))
+        .andExpect(MockMvcResultMatchers.status().is(200));
+
+    String jsonResposta = resultado.andReturn().getResponse().getContentAsString();
+    UsuarioSaidaDTO usuario = objectMapper.readValue(jsonResposta,
+        UsuarioSaidaDTO.class);
+  }
+
 }
