@@ -14,6 +14,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.Optional;
 
 @SpringBootTest
@@ -67,6 +69,18 @@ public class InfoPagamentoServiceTest {
         infoPagamentoService.calcularValorDaParcela(infoPagamento);
         Assertions.assertEquals(340.0311292475448,infoPagamento.getValorParcela());
         Assertions.assertNotNull(infoPagamento.getValorParcela());
+
+    }
+
+    @Test
+    public void testarCalcularImpostoSobreParcela(){
+        infoPagamento.setProposta(proposta);
+        infoPagamento.setValorParcela(340.0311292475448);
+        infoPagamentoService.calcularImpostoSobreParcela(infoPagamento);
+        Assertions.assertEquals(357.03,infoPagamento.getValorParcela());
+        Assertions.assertEquals(17.00, infoPagamento.getImposto());
+        Assertions.assertNotNull(infoPagamento.getValorParcela());
+        Assertions.assertNotNull(infoPagamento.getImposto());
 
     }
 
