@@ -17,6 +17,8 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @SpringBootTest
@@ -34,6 +36,7 @@ public class InfoPagamentoServiceTest {
     private Proposta proposta;
     private InfoPagamento infoPagamento;
     private Cliente cliente;
+    private Cliente clientePobre;
 
     @BeforeEach
     public void setup() {
@@ -54,6 +57,12 @@ public class InfoPagamentoServiceTest {
         cliente.setCpf("75622060079");
         cliente.setNome("Dorayen");
         cliente.setSalario(3000);
+
+        clientePobre = new Cliente();
+        clientePobre.setCodcli("2");
+        clientePobre.setCpf("75622060079");
+        clientePobre.setNome("Carola");
+        clientePobre.setSalario(50);
 
     }
 
@@ -111,5 +120,27 @@ public class InfoPagamentoServiceTest {
         Boolean positivo = infoPagamentoService.buscarInfoPorNumeroProposta(proposta.getNumeroProposta());
         Assertions.assertFalse(positivo);
     }
+
+    @Test
+    public void testarOpcoesParcelamentoCaminhoPositivo() {
+        proposta.setCliente(cliente);
+        infoPagamento.setProposta(proposta);
+        infoPagamentoService.opcoesParcelamento(infoPagamento);
+        List<InfoPagamento> resultado = infoPagamentoService.opcoesParcelamento(infoPagamento);
+        Assertions.assertNotNull(resultado);
+    }
+
+    @Test
+    public void testarOpcoesParcelamentoCaminhoNegativo() {
+
+        List<InfoPagamento>resultadoruim = new ArrayList<>();
+        proposta.setCliente(clientePobre);
+        infoPagamento.setProposta(proposta);
+        infoPagamentoService.opcoesParcelamento(infoPagamento);
+        List<InfoPagamento> resultado = infoPagamentoService.opcoesParcelamento(infoPagamento);
+        Assertions.assertEquals(0, resultado.size());
+        Assertions.assertEquals(resultadoruim, resultado);
+    }
+
 
 }
