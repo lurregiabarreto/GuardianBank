@@ -52,20 +52,13 @@ public class PropostaService {
     return proposta;
   }
 
-  public InfoPagamento buscarInfoPorNumProposta(String id) {
+  public InfoPagamento atribuirPropostaNoInfoPagamento(String id) {
     InfoPagamento infoPagamento = new InfoPagamento();
     Proposta proposta = validarPropostaExistente(id);
     validarStatusProposta(proposta);
     validarDataContratacao(proposta);
     infoPagamento.setProposta(proposta);
     return infoPagamento;
-  }
-
-  public List<InfoPagamento> exibirOpcoesValidadas(String id) {
-    InfoPagamento infoPagamento = buscarInfoPorNumProposta(id);
-    List<InfoPagamento> infoPagamentoList = new ArrayList<>();
-    infoPagamentoList.addAll(infoPagamentoService.opcoesParcelamento(infoPagamento));
-    return infoPagamentoList;
   }
 
 }
