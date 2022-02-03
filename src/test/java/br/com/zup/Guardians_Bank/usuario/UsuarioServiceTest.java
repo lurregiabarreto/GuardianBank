@@ -4,7 +4,6 @@ import br.com.zup.Guardians_Bank.exceptions.UsuarioJaCadastradoException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -51,6 +50,15 @@ public class UsuarioServiceTest {
         () -> usuarioService.salvarUsuario(usuario));
 
     Mockito.verify(usuarioRepository, Mockito.times(1)).findByEmail(usuario.getEmail());
+  }
+
+  @Test
+  public void testarEncontrarUsuarioPorEmailCaminhoPositivo() {
+    Mockito.when(usuarioRepository.findByEmail(Mockito.anyString())).thenReturn(Optional.of(usuario));
+
+    Boolean respostaEsperada = usuarioService.encontrarUsuarioPorEmail(Mockito.anyString());
+    Assertions.assertTrue(respostaEsperada);
+
   }
 
 }
