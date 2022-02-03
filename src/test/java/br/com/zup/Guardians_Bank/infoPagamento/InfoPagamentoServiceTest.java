@@ -55,33 +55,43 @@ public class InfoPagamentoServiceTest {
         cliente.setSalario(3000);
 
     }
+
     @Test
-    public void testarBuscarInfoPagamento(){
+    public void testarBuscarInfoPagamento() {
         Mockito.when(infoPagamentoRepository.findById(infoPagamento.getIdPagamento())).
-            thenReturn(Optional.of(infoPagamento));
+                thenReturn(Optional.of(infoPagamento));
         infoPagamentoService.buscarInfoPagamento(infoPagamento.getIdPagamento());
         Assertions.assertNotNull(infoPagamento);
     }
 
     @Test
-    public void testarCalcularValorDaParcela(){
+    public void testarCalcularValorDaParcela() {
         infoPagamento.setProposta(proposta);
         infoPagamentoService.calcularValorDaParcela(infoPagamento);
-        Assertions.assertEquals(340.0311292475448,infoPagamento.getValorParcela());
+        Assertions.assertEquals(340.0311292475448, infoPagamento.getValorParcela());
         Assertions.assertNotNull(infoPagamento.getValorParcela());
 
     }
 
     @Test
-    public void testarCalcularImpostoSobreParcela(){
+    public void testarCalcularImpostoSobreParcela() {
         infoPagamento.setProposta(proposta);
         infoPagamento.setValorParcela(340.0311292475448);
         infoPagamentoService.calcularImpostoSobreParcela(infoPagamento);
-        Assertions.assertEquals(357.03,infoPagamento.getValorParcela());
+        Assertions.assertEquals(357.03, infoPagamento.getValorParcela());
         Assertions.assertEquals(17.00, infoPagamento.getImposto());
         Assertions.assertNotNull(infoPagamento.getValorParcela());
         Assertions.assertNotNull(infoPagamento.getImposto());
 
+    }
+
+    @Test
+    public void testarCalcularLimiteValoParcelas() {
+        proposta.setCliente(cliente);
+        infoPagamento.setProposta(proposta);
+        infoPagamento.setValorParcela(357.03);
+        double resultado = infoPagamentoService.calcularLimiteValorParcelas(infoPagamento);
+        Assertions.assertEquals(1200, resultado);
     }
 
 }

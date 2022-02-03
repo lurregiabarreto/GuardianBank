@@ -80,7 +80,7 @@ public class InfoPagamentoService {
 
     }
 
-    public double validarLimiteValorParcelas(InfoPagamento infoPagamento) {
+    public double calcularLimiteValorParcelas(InfoPagamento infoPagamento) {
         double salario = infoPagamento.getProposta().getCliente().getSalario();
         double limite = salario * 0.4;
 
@@ -101,7 +101,7 @@ public class InfoPagamentoService {
             infoPagamentoatual.setQtdadeDeParcelas(infoPagoOriginal.getQtdadeDeParcelas());
             infoPagamentoatual.setValorParcela(infoPagoOriginal.getValorParcela());
 
-            if (validarLimiteValorParcelas(infoPagoOriginal) > infoPagamentoatual.getValorParcela()) {
+            if (calcularLimiteValorParcelas(infoPagoOriginal) > infoPagamentoatual.getValorParcela()) {
                 opcoesParcela.add(infoPagamentoatual);
             }
             parcela = parcela + 4;
