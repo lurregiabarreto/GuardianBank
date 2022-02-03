@@ -3,6 +3,7 @@ package br.com.zup.Guardians_Bank.infoPagamento;
 import br.com.zup.Guardians_Bank.cliente.Cliente;
 import br.com.zup.Guardians_Bank.enums.ProdutoFinanceiro;
 import br.com.zup.Guardians_Bank.enums.StatusProposta;
+import br.com.zup.Guardians_Bank.exceptions.PropostaJaCadastradaException;
 import br.com.zup.Guardians_Bank.proposta.Proposta;
 import br.com.zup.Guardians_Bank.proposta.PropostaRepository;
 import br.com.zup.Guardians_Bank.proposta.PropostaService;
@@ -92,6 +93,15 @@ public class InfoPagamentoServiceTest {
         infoPagamento.setValorParcela(357.03);
         double resultado = infoPagamentoService.calcularLimiteValorParcelas(infoPagamento);
         Assertions.assertEquals(1200, resultado);
+    }
+
+    @Test
+    public void testarBuscarInfoPorNumeroPropostaCaminhoNegativo() {
+        Mockito.when(infoPagamentoRepository.existsByPropostaNumeroProposta(Mockito.anyString()))
+                .thenReturn(true);
+        Assertions.assertThrows(PropostaJaCadastradaException.class,
+                () -> infoPagamentoService.buscarInfoPorNumeroProposta(proposta.getNumeroProposta()));
+
     }
 
 }
