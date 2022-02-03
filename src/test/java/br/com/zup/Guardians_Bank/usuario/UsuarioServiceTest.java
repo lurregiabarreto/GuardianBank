@@ -1,5 +1,6 @@
 package br.com.zup.Guardians_Bank.usuario;
 
+import br.com.zup.Guardians_Bank.exceptions.UsuarioJaCadastradoException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -32,13 +33,24 @@ public class UsuarioServiceTest {
   }
 
   @Test
-  public void salvarUsuarioCaminhoPositivo() {
+  public void testarSalvarUsuarioCaminhoPositivo() {
     Mockito.when(usuarioRepository.findByEmail(usuario.getEmail())).thenReturn(Optional.empty());
     Mockito.when(usuarioRepository.save(usuario)).thenReturn(usuario);
 
     Usuario usuarioRetorno = usuarioService.salvarUsuario(usuario);
 
     Mockito.verify(usuarioRepository, Mockito.times(1)).save(usuario);
+    Mockito.verify(usuarioRepository, Mockito.times(1)).findByEmail(usuario.getEmail());
+  }
+
+  @Test
+  public void testarSalvarUsuarioCaminhoNegativo() {
+    Mockito.when(usuarioRepository.findByEmail(usuario.getEmail())).thenReturn(Optional.of(usuario));
+
+    UsuarioJaCadastradoException excecao = Assertions.assertThrows(UsuarioJaCadastradoException.class,
+        () -> usuarioService.salvarUsuario(usuario));
+
+    Mockito.verify(usuarioRepository, Mockito.times(1)).findByEmail(usuario.getEmail());
   }
 
 }
