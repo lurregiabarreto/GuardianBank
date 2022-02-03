@@ -104,4 +104,12 @@ public class InfoPagamentoServiceTest {
 
     }
 
+    @Test
+    public void testarBuscarInfoPorNumeroPropostaCaminhoPositivo() {
+        Mockito.when(infoPagamentoRepository.existsByPropostaNumeroProposta(Mockito.anyString()))
+                .thenReturn(false);
+        Boolean positivo = infoPagamentoService.buscarInfoPorNumeroProposta(proposta.getNumeroProposta());
+        Assertions.assertFalse(positivo);
+    }
+
 }
