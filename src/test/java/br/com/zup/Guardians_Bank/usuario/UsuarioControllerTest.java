@@ -4,6 +4,7 @@ import br.com.zup.Guardians_Bank.components.Conversor;
 import br.com.zup.Guardians_Bank.config.JWT.JWTComponent;
 import br.com.zup.Guardians_Bank.config.Security.UsuarioLoginService;
 import br.com.zup.Guardians_Bank.exceptions.UsuarioJaCadastradoException;
+import br.com.zup.Guardians_Bank.exceptions.UsuarioNaoEcontradoException;
 import br.com.zup.Guardians_Bank.usuario.dto.CadastroUsuarioDTO;
 import br.com.zup.Guardians_Bank.usuario.dto.UsuarioSaidaDTO;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -108,6 +109,7 @@ public class UsuarioControllerTest {
   }
 
   @Test
+  @WithMockUser("user@user.com")
   public void testarUsuarioJaCadastradoException() throws Exception {
     Mockito.doThrow(UsuarioJaCadastradoException.class).when(usuarioService)
         .salvarUsuario(Mockito.any(Usuario.class));
@@ -118,6 +120,20 @@ public class UsuarioControllerTest {
             .post("/usuario").content(json)
             .contentType(MediaType.APPLICATION_JSON))
         .andExpect(MockMvcResultMatchers.status().is(422));
+  }
+
+  @Test
+  @WithMockUser("user@user.com")
+  public void testarUsuarioNaoEncontrado() throws Exception {
+    Mockito.doThrow(UsuarioNaoEcontradoException.class).when(usuarioService)
+        .salvarUsuario(Mockito.any(Usuario.class));
+
+    String json = objectMapper.writeValueAsString(cadastroUsuarioDTO);
+
+    ResultActions resultado = mockMvc.perform(MockMvcRequestBuilders
+            .post("/usuario").content(json)
+            .contentType(MediaType.APPLICATION_JSON))
+        .andExpect(MockMvcResultMatchers.status().is(404));
   }
 
 }
