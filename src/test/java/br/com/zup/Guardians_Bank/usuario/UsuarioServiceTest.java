@@ -69,4 +69,13 @@ public class UsuarioServiceTest {
     Assertions.assertFalse(respostaEsperada);
   }
 
+  @Test
+  public void testarBuscarUsarioPorIdCaminhoPositivo() {
+    Mockito.when(usuarioRepository.findById(Mockito.anyString())).thenReturn(Optional.of(usuario));
+
+    Usuario usuarioBanco = usuarioService.buscarUsuarioPorId(usuario.getId());
+
+    Mockito.verify(usuarioRepository, Mockito.times(1)).findById(usuario.getId());
+  }
+
 }

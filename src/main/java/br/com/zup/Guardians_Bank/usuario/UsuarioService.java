@@ -39,11 +39,6 @@ public class UsuarioService {
 
   }
 
-  public List<Usuario> buscarTodosOsUsuarios() {
-    Iterable<Usuario> usuarios = usuarioRepository.findAll();
-    return (List<Usuario>) usuarios;
-  }
-
   public Usuario buscarUsuarioPorId(String id) {
     Optional<Usuario> usuarioOptional = usuarioRepository.findById(id);
     if (!usuarioOptional.isEmpty()) {
