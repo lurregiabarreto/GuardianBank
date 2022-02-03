@@ -8,6 +8,7 @@ import br.com.zup.Guardians_Bank.exceptions.UsuarioJaCadastradoException;
 import br.com.zup.Guardians_Bank.exceptions.UsuarioNaoEcontradoException;
 import br.com.zup.Guardians_Bank.usuario.dto.CadastroUsuarioDTO;
 import br.com.zup.Guardians_Bank.usuario.dto.UsuarioSaidaDTO;
+import br.com.zup.Guardians_Bank.usuarioLogado.UsuarioLogadoService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -32,7 +33,7 @@ public class UsuarioControllerTest {
   @MockBean
   private JWTComponent jwtComponent;
   @MockBean
-  private UsuarioLogado usuarioLogado;
+  private UsuarioLogadoService usuarioLogadoService;
 
   @Autowired
   private MockMvc mockMvc;
@@ -157,6 +158,7 @@ public class UsuarioControllerTest {
   @WithMockUser("user@user.com")
   public void testarAtualizarUsuario() throws Exception {
     Mockito.when(usuarioService.atualizarUsuario(Mockito.any(Usuario.class), Mockito.anyString())).thenReturn(usuario);
+    Mockito.when(usuarioLogadoService.pegarId()).thenReturn("4");
 
     String json = objectMapper.writeValueAsString(cadastroUsuarioDTO);
 
