@@ -1,5 +1,6 @@
 package br.com.zup.Guardians_Bank.usuario;
 
+import br.com.zup.Guardians_Bank.exceptions.UsuarioNaoEcontradoException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -35,6 +36,16 @@ public class UsuarioService {
   public List<Usuario> buscarTodosOsUsuarios() {
     Iterable<Usuario> usuarios = usuarioRepository.findAll();
     return (List<Usuario>) usuarios;
+  }
+
+  public Usuario buscarUsuarioPorId(String id) {
+    Optional<Usuario> usuarioOptional = usuarioRepository.findById(id);
+    if (!usuarioOptional.isEmpty()) {
+      return usuarioOptional.get();
+    } else {
+      throw new UsuarioNaoEcontradoException("Usuário não encontrado");
+    }
+
   }
 
   public void atualizarUsuario(Usuario usuario, String id) {

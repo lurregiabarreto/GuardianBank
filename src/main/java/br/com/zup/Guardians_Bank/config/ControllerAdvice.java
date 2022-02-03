@@ -81,6 +81,13 @@ public class ControllerAdvice {
 
   }
 
+  @ExceptionHandler(UsuarioNaoEcontradoException.class)
+  @ResponseStatus(HttpStatus.NOT_FOUND) //ok
+  public MensagemDeErro propostaJaCadastrada(UsuarioNaoEcontradoException excecao) {
+    return new MensagemDeErro(excecao.getLocalizedMessage());
+
+  }
+
   @ExceptionHandler(ArrayIndexOutOfBoundsException.class)
   @ResponseStatus(HttpStatus.UNPROCESSABLE_ENTITY) //ok
   public ResponseEntity enumInvalidoException(ArrayIndexOutOfBoundsException exception) {
