@@ -44,8 +44,7 @@ public class InfoPagamentoServiceTest {
         infoPagamento = new InfoPagamento();
         infoPagamento.setIdPagamento("1");
         infoPagamento.setImposto(0.05);
-        infoPagamento.setValorParcela(600);
-        infoPagamento.setQtdadeDeParcelas(6);
+        infoPagamento.setQtdadeDeParcelas(4);
 
         cliente = new Cliente();
         cliente.setCodcli("1");
@@ -60,6 +59,15 @@ public class InfoPagamentoServiceTest {
             thenReturn(Optional.of(infoPagamento));
         infoPagamentoService.buscarInfoPagamento(infoPagamento.getIdPagamento());
         Assertions.assertNotNull(infoPagamento);
+    }
+
+    @Test
+    public void testarCalcularValorDaParcela(){
+        infoPagamento.setProposta(proposta);
+        infoPagamentoService.calcularValorDaParcela(infoPagamento);
+        Assertions.assertEquals(340.0311292475448,infoPagamento.getValorParcela());
+        Assertions.assertNotNull(infoPagamento.getValorParcela());
+
     }
 
 }
