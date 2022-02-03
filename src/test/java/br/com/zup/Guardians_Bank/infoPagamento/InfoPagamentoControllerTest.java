@@ -45,10 +45,7 @@ public class InfoPagamentoControllerTest {
   private ObjectMapper objectMapper;
   private InfoPagamento infoPagamento;
   private EntradaInfoDTO entradaInfoDTO;
-  private SaidaInfoDTO saidaInfoDTO;
   private AtualizarStatusDTO atualizarStatusDTO;
-  private RespostaAtualizacaoStatusDTO respostaAtualizacaoStatusDTO;
-  private ResumoInfoDTO resumoInfoDTO;
   private Proposta proposta;
 
 
@@ -68,10 +65,9 @@ public class InfoPagamentoControllerTest {
     entradaInfoDTO.setNumeroProposta("1");
     entradaInfoDTO.setQtdadeParcelas(8);
 
-    saidaInfoDTO = new SaidaInfoDTO();
+
     atualizarStatusDTO = new AtualizarStatusDTO();
-    respostaAtualizacaoStatusDTO = new RespostaAtualizacaoStatusDTO();
-    resumoInfoDTO = new ResumoInfoDTO();
+
 
   }
 
