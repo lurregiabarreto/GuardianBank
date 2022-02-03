@@ -37,13 +37,13 @@ public class PropostaController {
     @ApiOperation(value = "Método responsável por exibir as opções de parcelamento")
     public List<RetornoInfoDTO> exibirOpcoesPagamento(@PathVariable String id) {
         List<RetornoInfoDTO> retornoInfoDTOList = new ArrayList<>();
-        for (InfoPagamento infoPagamento: propostaService.exibirOpcoesValidadas(id)) {
+        InfoPagamento info = propostaService.atribuirPropostaNoInfoPagamento(id);
+        for (InfoPagamento infoPagamento: infoPagamentoService.opcoesParcelamento(info)) {
             RetornoInfoDTO retornoInfoDTO = modelMapper.map(infoPagamento, RetornoInfoDTO.class);
             retornoInfoDTOList.add(retornoInfoDTO);
         }
         return retornoInfoDTOList;
     }
-
 
 }
 
