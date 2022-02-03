@@ -113,4 +113,14 @@ public class UsuarioServiceTest {
     });
   }
 
+  @Test
+  public void testarDeletarUsuarioCaminhoPositivo() {
+    Mockito.when(usuarioRepository.findById(Mockito.anyString())).thenReturn(Optional.of(usuario));
+    Mockito.doNothing().when(usuarioRepository).deleteById(Mockito.anyString());
+
+    usuarioService.deletarusuario(usuario.getId());
+
+    Mockito.verify(usuarioRepository, Mockito.times(1)).deleteById(Mockito.anyString());
+  }
+
 }
