@@ -18,6 +18,7 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
+
 @Configuration
 @EnableWebSecurity
 public class ConfiguracaoDeSeguranca extends WebSecurityConfigurerAdapter {
@@ -38,8 +39,13 @@ public class ConfiguracaoDeSeguranca extends WebSecurityConfigurerAdapter {
 
     http.authorizeRequests()
         .antMatchers(HttpMethod.POST, ENDPOINT_POST_PUBLICO).permitAll()
+        .antMatchers("/v2/api-docs", "/swagger-resources/configuration/ui", "/swagger-resources",
+            "/swagger-resources/configuration/security", "/swagger-ui/**", "/webjars/**").permitAll()
+        .and()
+        .authorizeRequests()
         .anyRequest().authenticated();
     http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+
 
     http.addFilter(new FiltroDeAutenticacaoJWT(jwtComponent, authenticationManager()));
     http.addFilter(new FiltroDeAutorizacaoJWT(authenticationManager(), jwtComponent, detailsService));
