@@ -17,6 +17,9 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -128,12 +131,13 @@ public class InfoPagamentoServiceTest {
         infoPagamentoService.opcoesParcelamento(infoPagamento);
         List<InfoPagamento> resultado = infoPagamentoService.opcoesParcelamento(infoPagamento);
         Assertions.assertNotNull(resultado);
+        System.out.println(resultado);
     }
 
     @Test
     public void testarOpcoesParcelamentoCaminhoNegativo() {
 
-        List<InfoPagamento>resultadoruim = new ArrayList<>();
+        List<InfoPagamento> resultadoruim = new ArrayList<>();
         proposta.setCliente(clientePobre);
         infoPagamento.setProposta(proposta);
         infoPagamentoService.opcoesParcelamento(infoPagamento);
@@ -142,5 +146,16 @@ public class InfoPagamentoServiceTest {
         Assertions.assertEquals(resultadoruim, resultado);
     }
 
+    @Test
+    public void testarSalvarOpcaoPagamento() {
+        InfoPagamento resultado = new InfoPagamento();
+        resultado.setProposta(proposta);
+        resultado.setQtdadeDeParcelas(infoPagamento.getQtdadeDeParcelas());
+        infoPagamentoService.salvarOpcaoPagamento(resultado, infoPagamento.getQtdadeDeParcelas());
+        Assertions.assertEquals(357.03, resultado.getValorParcela());
+        Assertions.assertEquals("2022/02/04", resultado.getDataLiberacao().format(DateTimeFormatter.ofPattern("yyyy/MM/dd")));
+        Assertions.assertEquals("2022/03/06", resultado.getDataPagamento().format(DateTimeFormatter.ofPattern("yyyy/MM/dd")));
+        Assertions.assertNotNull(resultado);
+    }
 
 }
