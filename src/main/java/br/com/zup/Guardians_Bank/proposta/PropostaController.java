@@ -40,8 +40,13 @@ public class PropostaController {
         InfoPagamento info = propostaService.atribuirPropostaNoInfoPagamento(id);
         for (InfoPagamento infoPagamento: infoPagamentoService.opcoesParcelamento(info)) {
             RetornoInfoDTO retornoInfoDTO = modelMapper.map(infoPagamento, RetornoInfoDTO.class);
+            retornoInfoDTO.setParcelaEspecial("INATIVO");
+            if (retornoInfoDTO.getQtdadeParcelas() == 4) {
+                retornoInfoDTO.setParcelaEspecial("ATIVO");
+            }
             retornoInfoDTOList.add(retornoInfoDTO);
         }
+
         return retornoInfoDTOList;
     }
 
