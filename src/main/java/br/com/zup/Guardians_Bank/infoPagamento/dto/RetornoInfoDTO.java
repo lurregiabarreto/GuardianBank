@@ -7,5 +7,6 @@ public class RetornoInfoDTO {
 
   private int qtdadeParcelas;
   private double valorParcela;
+  private String parcelaEspecial;
 
 }
