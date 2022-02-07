@@ -54,6 +54,7 @@ public class InfoPagamentoServiceTest {
         infoPagamento.setIdPagamento("1");
         infoPagamento.setImposto(0.05);
         infoPagamento.setQtdadeDeParcelas(4);
+        infoPagamento.setDataLiberacao(LocalDateTime.now());
 
         cliente = new Cliente();
         cliente.setCodcli("1");
@@ -153,9 +154,13 @@ public class InfoPagamentoServiceTest {
         resultado.setQtdadeDeParcelas(infoPagamento.getQtdadeDeParcelas());
         infoPagamentoService.salvarOpcaoPagamento(resultado, infoPagamento.getQtdadeDeParcelas());
         Assertions.assertEquals(357.03, resultado.getValorParcela());
-        Assertions.assertEquals("2022/02/04", resultado.getDataLiberacao().format(DateTimeFormatter.ofPattern("yyyy/MM/dd")));
-        Assertions.assertEquals("2022/03/06", resultado.getDataPagamento().format(DateTimeFormatter.ofPattern("yyyy/MM/dd")));
+        Assertions.assertEquals(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy/MM/dd")),
+                resultado.getDataLiberacao().format(DateTimeFormatter.ofPattern("yyyy/MM/dd")));
+        Assertions.assertEquals(LocalDateTime.now().plusDays(30).format(DateTimeFormatter.ofPattern("yyyy/MM/dd")),
+                resultado.getDataPagamento().format(DateTimeFormatter.ofPattern("yyyy/MM/dd")));
         Assertions.assertNotNull(resultado);
+
+
     }
 
 }
