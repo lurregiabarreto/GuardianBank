@@ -35,10 +35,11 @@ public class PropostaController {
 
     @GetMapping("/{id}")
     @ApiOperation(value = "Método responsável por exibir as opções de parcelamento")
-    public List<RetornoInfoDTO> exibirOpcoesPagamento(@PathVariable String id) {
+    public OpcoesPagamentoDTO exibirOpcoesPagamento(@PathVariable String id) {
         List<RetornoInfoDTO> retornoInfoDTOList = new ArrayList<>();
+        OpcoesPagamentoDTO opcoesPagamentoDTO = new OpcoesPagamentoDTO();
         InfoPagamento info = propostaService.atribuirPropostaNoInfoPagamento(id);
-        for (InfoPagamento infoPagamento: infoPagamentoService.opcoesParcelamento(info)) {
+        for (InfoPagamento infoPagamento : infoPagamentoService.opcoesParcelamento(info)) {
             RetornoInfoDTO retornoInfoDTO = modelMapper.map(infoPagamento, RetornoInfoDTO.class);
             retornoInfoDTO.setParcelaEspecial("INATIVO");
             if (retornoInfoDTO.getQtdadeParcelas() == 4) {
@@ -46,8 +47,10 @@ public class PropostaController {
             }
             retornoInfoDTOList.add(retornoInfoDTO);
         }
-
-        return retornoInfoDTOList;
+        opcoesPagamentoDTO.setCodcli(info.getProposta().getCliente().getCodcli());
+        opcoesPagamentoDTO.setNumeroDaProposta(info.getProposta().getNumeroProposta());
+        opcoesPagamentoDTO.setOpcoes(retornoInfoDTOList);
+        return opcoesPagamentoDTO;
     }
 
 }

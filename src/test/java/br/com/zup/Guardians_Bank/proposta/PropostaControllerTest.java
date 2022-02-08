@@ -87,6 +87,7 @@ public class PropostaControllerTest {
 
         String jsonResposta = resultado.andReturn().getResponse().getContentAsString();
         List<RetornoInfoDTO> respostaAtualizada = objectMapper.readValue(jsonResposta, ArrayList.class);
+        OpcoesPagamentoDTO opcoesPagamentoDTO = objectMapper.readValue(jsonResposta,OpcoesPagamentoDTO.class);
     }
 
     @Test
