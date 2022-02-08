@@ -5,6 +5,7 @@ import br.com.zup.Guardians_Bank.enums.ProdutoFinanceiro;
 import br.com.zup.Guardians_Bank.enums.StatusProposta;
 import br.com.zup.Guardians_Bank.exceptions.PropostaJaCadastradaException;
 import br.com.zup.Guardians_Bank.exceptions.PropostaNaoEncontradaException;
+import br.com.zup.Guardians_Bank.exceptions.PropostaNaoLiberadaException;
 import br.com.zup.Guardians_Bank.proposta.Proposta;
 import br.com.zup.Guardians_Bank.proposta.PropostaRepository;
 import br.com.zup.Guardians_Bank.proposta.PropostaService;
@@ -198,6 +199,21 @@ public class InfoPagamentoServiceTest {
     InfoPagamento infoPagamento1 = infoPagamentoService.atualizarInfo(infoPagamento.getIdPagamento());
 
     Mockito.verify(infoPagamentoRepository, Mockito.times(1)).save(infoPagamento);
+    Mockito.verify(infoPagamentoRepository, Mockito.times(1))
+        .findById(infoPagamento.getIdPagamento());
+  }
+
+  @Test
+  public void atualizarInfoCaminhoNegativo() {
+    Mockito.when(infoPagamentoRepository.save(Mockito.any(InfoPagamento.class))).thenReturn(infoPagamento);
+    Mockito.when(infoPagamentoRepository.findById(Mockito.anyString())).thenReturn(Optional.of(infoPagamento));
+
+    infoPagamento.getProposta().setStatusProposta(StatusProposta.EM_ANALISE);
+
+    RuntimeException exception = Assertions.assertThrows(PropostaNaoLiberadaException.class,
+        () -> infoPagamentoService.atualizarInfo(proposta.getNumeroProposta()));
+
+    Mockito.verify(infoPagamentoRepository, Mockito.times(0)).save(infoPagamento);
     Mockito.verify(infoPagamentoRepository, Mockito.times(1))
         .findById(infoPagamento.getIdPagamento());
   }
