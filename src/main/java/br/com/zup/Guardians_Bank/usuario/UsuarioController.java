@@ -1,6 +1,5 @@
 package br.com.zup.Guardians_Bank.usuario;
 
-import br.com.zup.Guardians_Bank.config.Security.UsuarioLogado;
 import br.com.zup.Guardians_Bank.usuario.dto.CadastroUsuarioDTO;
 import br.com.zup.Guardians_Bank.usuario.dto.UsuarioSaidaDTO;
 import br.com.zup.Guardians_Bank.usuarioLogado.UsuarioLogadoService;

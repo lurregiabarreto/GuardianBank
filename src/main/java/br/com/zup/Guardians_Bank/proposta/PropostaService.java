@@ -64,7 +64,7 @@ public class PropostaService {
   //fazer teste
   public List<InfoPagamento> exibirListaPagamento(InfoPagamento infoPagamento) {
     List<InfoPagamento> listaOpcoes = new ArrayList<>();
-    listaOpcoes = infoPagamentoService.opcoesParcelamento(infoPagamento);
+    listaOpcoes = infoPagamentoService.listarOpcoesParcelamento(infoPagamento);
     return listaOpcoes;
   }
 

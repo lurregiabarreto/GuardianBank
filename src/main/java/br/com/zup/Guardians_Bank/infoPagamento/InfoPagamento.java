@@ -1,15 +1,11 @@
 package br.com.zup.Guardians_Bank.infoPagamento;
 
-import br.com.zup.Guardians_Bank.cliente.Cliente;
-import br.com.zup.Guardians_Bank.enums.ProdutoFinanceiro;
 import br.com.zup.Guardians_Bank.enums.TipoDeParcela;
 import br.com.zup.Guardians_Bank.proposta.Proposta;
 import lombok.Data;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
-import javax.validation.constraints.DecimalMin;
-import javax.validation.constraints.Digits;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
@@ -36,4 +32,5 @@ public class InfoPagamento {
   private LocalDateTime dataLiberacao;
   @Column(nullable = false)
   private TipoDeParcela tipoDeParcela;
+
 }

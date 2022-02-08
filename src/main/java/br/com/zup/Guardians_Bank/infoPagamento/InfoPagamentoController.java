@@ -1,9 +1,6 @@
 package br.com.zup.Guardians_Bank.infoPagamento;
 
-import br.com.zup.Guardians_Bank.enums.StatusProposta;
-import br.com.zup.Guardians_Bank.exceptions.PropostaNaoLiberadaException;
 import br.com.zup.Guardians_Bank.infoPagamento.dto.*;
-import br.com.zup.Guardians_Bank.proposta.Proposta;
 import br.com.zup.Guardians_Bank.proposta.PropostaService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -14,7 +11,6 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.ArrayList;
-import java.util.IllegalFormatCodePointException;
 import java.util.List;
 
 @RestController
@@ -45,7 +41,8 @@ public class InfoPagamentoController {
   public RespostaAtualizacaoStatusDTO atualizarStatus(@PathVariable String id,
                                                       @RequestBody AtualizarStatusDTO atualizarStatusDTO) {
     InfoPagamento infoPagamento = modelMapper.map(atualizarStatusDTO, InfoPagamento.class);
-    return modelMapper.map(infoPagamentoService.atualizarInfo(id), RespostaAtualizacaoStatusDTO.class);
+    return modelMapper.map(infoPagamentoService.atualizarInfoPagamento(id, infoPagamento),
+        RespostaAtualizacaoStatusDTO.class);
   }
 
   @GetMapping
@@ -58,6 +55,5 @@ public class InfoPagamentoController {
     }
     return listaDeInfos;
   }
-
 
 }

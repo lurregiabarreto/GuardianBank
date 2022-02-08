@@ -9,8 +9,6 @@ import br.com.zup.Guardians_Bank.exceptions.PropostaNaoEncontradaException;
 import br.com.zup.Guardians_Bank.exceptions.PropostaRecusadaException;
 import br.com.zup.Guardians_Bank.infoPagamento.InfoPagamento;
 import br.com.zup.Guardians_Bank.infoPagamento.InfoPagamentoService;
-import br.com.zup.Guardians_Bank.proposta.dtos.OpcoesPagamentoDTO;
-import br.com.zup.Guardians_Bank.usuario.Usuario;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -21,7 +19,6 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
@@ -159,12 +156,12 @@ public class PropostaServiceTest {
 
   @Test
   public void testarExibirListaDePagamento() {
-    Mockito.when(infoPagamentoService.opcoesParcelamento(infoPagamento)).thenReturn(Arrays.asList(infoPagamento));
+    Mockito.when(infoPagamentoService.listarOpcoesParcelamento(infoPagamento)).thenReturn(Arrays.asList(infoPagamento));
 
     List<InfoPagamento> infosList = propostaService.exibirListaPagamento(infoPagamento);
     Assertions.assertNotNull(infosList);
 
-    Mockito.verify(infoPagamentoService, Mockito.times(1)).opcoesParcelamento(infoPagamento);
+    Mockito.verify(infoPagamentoService, Mockito.times(1)).listarOpcoesParcelamento(infoPagamento);
   }
 
 }

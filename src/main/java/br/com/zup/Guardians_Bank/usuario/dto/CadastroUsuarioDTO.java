@@ -15,4 +15,3 @@ public class CadastroUsuarioDTO {
   private String senha;
 
 }
-
