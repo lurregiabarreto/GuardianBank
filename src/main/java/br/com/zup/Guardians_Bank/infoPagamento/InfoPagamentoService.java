@@ -119,6 +119,7 @@ public class InfoPagamentoService {
         infoPagamentoSalvo.setQtdadeDeParcelas(qtdadeParcelas);
         calcularValorDaParcela(infoPagamentoSalvo);
         calcularImpostoSobreParcela(infoPagamentoSalvo);
+        infoPagamentoSalvo.getProposta().setStatusProposta(StatusProposta.LIBERADO);
         infoPagamentoSalvo.setDataLiberacao(LocalDateTime.now());
         LocalDate dataPago = infoPagoOriginal.getTipoDeParcela().getDataPagamento();
         infoPagamentoSalvo.setDataPagamento(dataPago);
