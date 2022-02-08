@@ -119,6 +119,7 @@ public class InfoPagamentoService {
         infoPagamentoSalvo.setQtdadeDeParcelas(qtdadeParcelas);
         calcularValorDaParcela(infoPagamentoSalvo);
         calcularImpostoSobreParcela(infoPagamentoSalvo);
+        infoPagamentoSalvo.getProposta().setStatusProposta(StatusProposta.LIBERADO);
         infoPagamentoSalvo.setDataLiberacao(LocalDateTime.now());
         LocalDate dataPago = infoPagoOriginal.getTipoDeParcela().getDataPagamento();
         infoPagamentoSalvo.setDataPagamento(dataPago);
@@ -128,7 +129,7 @@ public class InfoPagamentoService {
 
     public InfoPagamento atualizarInfo(String id) {
         InfoPagamento infoPagamento = buscarInfoPagamento(id);
-        if (infoPagamento.getProposta().getStatusProposta() != StatusProposta.LIBERADO) {
+        if (infoPagamento.getProposta().getStatusProposta() != StatusProposta.APROVADO) {
             throw new PropostaNaoLiberadaException("Proposta não liberada");
         }
 
