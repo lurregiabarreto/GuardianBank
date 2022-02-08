@@ -2,6 +2,7 @@ package br.com.zup.Guardians_Bank.infoPagamento;
 
 import br.com.zup.Guardians_Bank.enums.ProdutoFinanceiro;
 import br.com.zup.Guardians_Bank.enums.StatusProposta;
+import br.com.zup.Guardians_Bank.enums.TipoDeParcela;
 import br.com.zup.Guardians_Bank.exceptions.LimiteExcedidoException;
 import br.com.zup.Guardians_Bank.exceptions.PropostaJaCadastradaException;
 import br.com.zup.Guardians_Bank.exceptions.PropostaNaoLiberadaException;
@@ -101,7 +102,9 @@ public class InfoPagamentoService {
             infoPagamentoatual.setQtdadeDeParcelas(infoPagoOriginal.getQtdadeDeParcelas());
             infoPagamentoatual.setValorParcela(infoPagoOriginal.getValorParcela());
 
+
             if (calcularLimiteValorParcelas(infoPagoOriginal) > infoPagamentoatual.getValorParcela()) {
+                infoPagamentoatual.setDataPagamento(LocalDate.now().plusDays(30));
                 opcoesParcela.add(infoPagamentoatual);
             }
             parcela = parcela + 4;
@@ -117,9 +120,8 @@ public class InfoPagamentoService {
         calcularValorDaParcela(infoPagamentoSalvo);
         calcularImpostoSobreParcela(infoPagamentoSalvo);
         infoPagamentoSalvo.setDataLiberacao(LocalDateTime.now());
-        LocalDate dataAtual = LocalDate.now();
-        LocalDate dataPagamentoProx = dataAtual.plusDays(30);
-        infoPagamentoSalvo.setDataPagamento(dataPagamentoProx);
+        LocalDate dataPago = infoPagoOriginal.getTipoDeParcela().getDataPagamento();
+        infoPagamentoSalvo.setDataPagamento(dataPago);
         return infoPagamentoSalvo;
 
     }

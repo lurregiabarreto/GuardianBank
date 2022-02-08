@@ -1,5 +1,6 @@
 package br.com.zup.Guardians_Bank.infoPagamento.dto;
 
+import br.com.zup.Guardians_Bank.enums.TipoDeParcela;
 import lombok.Data;
 
 import javax.validation.constraints.NotBlank;
@@ -14,5 +15,7 @@ public class EntradaInfoDTO {
   @NotNull(message = "{validacao.not-null}")
   @Positive(message = "{validacao.positive}")
   private Integer qtdadeParcelas;
+  @NotNull(message = "{validacao.not-null}")
+  private TipoDeParcela tipoDeParcela;
 
 }

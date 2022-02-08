@@ -3,6 +3,7 @@ package br.com.zup.Guardians_Bank.infoPagamento;
 import br.com.zup.Guardians_Bank.components.Conversor;
 import br.com.zup.Guardians_Bank.config.JWT.JWTComponent;
 import br.com.zup.Guardians_Bank.config.Security.UsuarioLoginService;
+import br.com.zup.Guardians_Bank.enums.TipoDeParcela;
 import br.com.zup.Guardians_Bank.exceptions.LimiteExcedidoException;
 import br.com.zup.Guardians_Bank.exceptions.PropostaJaCadastradaException;
 import br.com.zup.Guardians_Bank.exceptions.PropostaNaoLiberadaException;
@@ -60,6 +61,7 @@ public class InfoPagamentoControllerTest {
         infoPagamento.setValorParcela(1200.00);
         infoPagamento.setQtdadeDeParcelas(4);
         infoPagamento.setImposto(0.25);
+        infoPagamento.setTipoDeParcela(TipoDeParcela.REGULAR);
 
         entradaInfoDTO = new EntradaInfoDTO();
         entradaInfoDTO.setNumeroProposta("1");
