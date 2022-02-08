@@ -2,7 +2,6 @@ package br.com.zup.Guardians_Bank.usuario;
 
 import br.com.zup.Guardians_Bank.components.Conversor;
 import br.com.zup.Guardians_Bank.config.JWT.JWTComponent;
-import br.com.zup.Guardians_Bank.config.Security.UsuarioLogado;
 import br.com.zup.Guardians_Bank.config.Security.UsuarioLoginService;
 import br.com.zup.Guardians_Bank.exceptions.UsuarioJaCadastradoException;
 import br.com.zup.Guardians_Bank.exceptions.UsuarioNaoEcontradoException;
