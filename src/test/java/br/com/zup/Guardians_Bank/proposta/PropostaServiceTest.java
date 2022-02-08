@@ -22,6 +22,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -154,6 +155,16 @@ public class PropostaServiceTest {
     InfoPagamento infoPagamento1 = propostaService.atribuirPropostaNoInfoPagamento(proposta.getNumeroProposta());
 
     Assertions.assertNotNull(infoPagamento1.getProposta());
+  }
+
+  @Test
+  public void testarExibirListaDePagamento() {
+    Mockito.when(infoPagamentoService.opcoesParcelamento(infoPagamento)).thenReturn(Arrays.asList(infoPagamento));
+
+    List<InfoPagamento> infosList = propostaService.exibirListaPagamento(infoPagamento);
+    Assertions.assertNotNull(infosList);
+
+    Mockito.verify(infoPagamentoService, Mockito.times(1)).opcoesParcelamento(infoPagamento);
   }
 
 }

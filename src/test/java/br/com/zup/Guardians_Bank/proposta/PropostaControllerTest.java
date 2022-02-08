@@ -26,10 +26,7 @@ import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
-
 
 @WebMvcTest({PropostaController.class, Conversor.class, UsuarioLoginService.class, JWTComponent.class})
 public class PropostaControllerTest {
