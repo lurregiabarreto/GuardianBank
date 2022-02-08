@@ -4,6 +4,7 @@ import br.com.zup.Guardians_Bank.cliente.Cliente;
 import br.com.zup.Guardians_Bank.enums.ProdutoFinanceiro;
 import br.com.zup.Guardians_Bank.enums.StatusProposta;
 import br.com.zup.Guardians_Bank.exceptions.PropostaJaCadastradaException;
+import br.com.zup.Guardians_Bank.exceptions.PropostaNaoEncontradaException;
 import br.com.zup.Guardians_Bank.proposta.Proposta;
 import br.com.zup.Guardians_Bank.proposta.PropostaRepository;
 import br.com.zup.Guardians_Bank.proposta.PropostaService;
@@ -175,14 +176,30 @@ public class InfoPagamentoServiceTest {
     infoPagamento.setProposta(proposta);
     testarSalvarOpcaoPagamento();
 
-   InfoPagamento infoPagamento1 = infoPagamentoService.salvarInfoPagamento(infoPagamento, infoPagamento.getProposta().getNumeroProposta(),
-       infoPagamento.getQtdadeDeParcelas());
+    InfoPagamento infoPagamento1 = infoPagamentoService.salvarInfoPagamento(infoPagamento, infoPagamento.getProposta().getNumeroProposta(),
+        infoPagamento.getQtdadeDeParcelas());
 
-   Assertions.assertNotNull(infoPagamento1);
-   Assertions.assertEquals(InfoPagamento.class, infoPagamento1.getClass());
+    Assertions.assertNotNull(infoPagamento1);
+    Assertions.assertEquals(InfoPagamento.class, infoPagamento1.getClass());
 
     Mockito.verify(infoPagamentoRepository, Mockito.times(1)).save(infoPagamento);
 
+  }
+
+  @Test
+  public void atualizarInfoCaminhoPositivo() {
+    Mockito.when(infoPagamentoRepository.save(Mockito.any(InfoPagamento.class))).thenReturn(infoPagamento);
+    Mockito.when(infoPagamentoRepository.findById(Mockito.anyString())).thenReturn(Optional.of(infoPagamento));
+
+
+    infoPagamento.getProposta().setStatusProposta(StatusProposta.LIBERADO);
+    infoPagamento.setDataLiberacao(LocalDateTime.now());
+
+    InfoPagamento infoPagamento1 = infoPagamentoService.atualizarInfo(infoPagamento.getIdPagamento());
+
+    Mockito.verify(infoPagamentoRepository, Mockito.times(1)).save(infoPagamento);
+    Mockito.verify(infoPagamentoRepository, Mockito.times(1))
+        .findById(infoPagamento.getIdPagamento());
   }
 
 }
