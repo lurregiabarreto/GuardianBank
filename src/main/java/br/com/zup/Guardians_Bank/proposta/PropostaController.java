@@ -25,33 +25,32 @@ import java.util.List;
 @CrossOrigin(origins = "*")
 public class PropostaController {
 
-    @Autowired
-    private PropostaService propostaService;
-    @Autowired
-    private InfoPagamentoService infoPagamentoService;
-    @Autowired
-    private ModelMapper modelMapper;
+  @Autowired
+  private PropostaService propostaService;
+  @Autowired
+  private InfoPagamentoService infoPagamentoService;
+  @Autowired
+  private ModelMapper modelMapper;
 
 
-    @GetMapping("/{id}")
-    @ApiOperation(value = "Método responsável por exibir as opções de parcelamento")
-    public OpcoesPagamentoDTO exibirOpcoesPagamento(@PathVariable String id) {
-        List<RetornoInfoDTO> retornoInfoDTOList = new ArrayList<>();
-        OpcoesPagamentoDTO opcoesPagamentoDTO = new OpcoesPagamentoDTO();
-        InfoPagamento info = propostaService.atribuirPropostaNoInfoPagamento(id);
-        for (InfoPagamento infoPagamento : propostaService.exibirListaPagamento(info)) {
-            RetornoInfoDTO retornoInfoDTO = modelMapper.map(infoPagamento, RetornoInfoDTO.class);
-            retornoInfoDTO.setParcelaEspecial("INATIVO");
-            if (retornoInfoDTO.getQtdadeParcelas() == 4) {
-                retornoInfoDTO.setParcelaEspecial("ATIVO");
-            }
-            retornoInfoDTOList.add(retornoInfoDTO);
-        }
-        opcoesPagamentoDTO.setCodcli(info.getProposta().getCliente().getCodcli());
-        opcoesPagamentoDTO.setNumeroDaProposta(info.getProposta().getNumeroProposta());
-        opcoesPagamentoDTO.setOpcoes(retornoInfoDTOList);
-        return opcoesPagamentoDTO;
+  @GetMapping("/{id}")
+  @ApiOperation(value = "Método responsável por exibir as opções de parcelamento")
+  public OpcoesPagamentoDTO exibirOpcoesPagamento(@PathVariable String id) {
+    List<RetornoInfoDTO> retornoInfoDTOList = new ArrayList<>();
+    OpcoesPagamentoDTO opcoesPagamentoDTO = new OpcoesPagamentoDTO();
+    InfoPagamento info = propostaService.atribuirPropostaNoInfoPagamento(id);
+    for (InfoPagamento infoPagamento : propostaService.exibirListaPagamento(info)) {
+      RetornoInfoDTO retornoInfoDTO = modelMapper.map(infoPagamento, RetornoInfoDTO.class);
+      retornoInfoDTO.setParcelaEspecial("INATIVO");
+      if (retornoInfoDTO.getQtdadeParcelas() == 4) {
+        retornoInfoDTO.setParcelaEspecial("ATIVO");
+      }
+      retornoInfoDTOList.add(retornoInfoDTO);
     }
+    opcoesPagamentoDTO.setCodcli(info.getProposta().getCliente().getCodcli());
+    opcoesPagamentoDTO.setNumeroDaProposta(info.getProposta().getNumeroProposta());
+    opcoesPagamentoDTO.setOpcoes(retornoInfoDTOList);
+    return opcoesPagamentoDTO;
+  }
 
 }
-

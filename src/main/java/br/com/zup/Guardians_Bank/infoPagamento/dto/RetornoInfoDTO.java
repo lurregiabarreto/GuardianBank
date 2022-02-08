@@ -12,5 +12,4 @@ public class RetornoInfoDTO {
   private LocalDate dataPagamento;
   private String parcelaEspecial;
 
-
 }

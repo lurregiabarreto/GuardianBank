@@ -19,4 +19,5 @@ public enum TipoDeParcela {
     public void setDataPagamento(LocalDate dataPagamento) {
         this.dataPagamento = dataPagamento;
     }
+
 }
