@@ -229,4 +229,16 @@ public class InfoPagamentoServiceTest {
     Mockito.verify(infoPagamentoRepository, Mockito.times(1)).findAll();
   }
 
+  @Test
+  public void testarExibirInfosDePagamentoComFiltro() {
+    Mockito.when(infoPagamentoRepository.findAllByQtdadeDeParcelas(infoPagamento.getQtdadeDeParcelas()))
+        .thenReturn(Arrays.asList(infoPagamento));
+
+    List<InfoPagamento> infosList = infoPagamentoService.aplicarFiltros(infoPagamento.getQtdadeDeParcelas());
+    Assertions.assertNotNull(infosList);
+
+    Mockito.verify(infoPagamentoRepository, Mockito.times(1))
+        .findAllByQtdadeDeParcelas(infoPagamento.getQtdadeDeParcelas());
+  }
+
 }
