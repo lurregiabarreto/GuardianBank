@@ -5,22 +5,18 @@ import br.com.zup.Guardians_Bank.enums.ProdutoFinanceiro;
 import br.com.zup.Guardians_Bank.enums.StatusProposta;
 import br.com.zup.Guardians_Bank.enums.TipoDeParcela;
 import br.com.zup.Guardians_Bank.exceptions.PropostaJaCadastradaException;
-import br.com.zup.Guardians_Bank.exceptions.PropostaNaoEncontradaException;
 import br.com.zup.Guardians_Bank.exceptions.PropostaNaoLiberadaException;
 import br.com.zup.Guardians_Bank.proposta.Proposta;
 import br.com.zup.Guardians_Bank.proposta.PropostaRepository;
 import br.com.zup.Guardians_Bank.proposta.PropostaService;
-import io.swagger.models.auth.In;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -61,6 +57,7 @@ public class InfoPagamentoServiceTest {
         infoPagamento.setQtdadeDeParcelas(4);
         infoPagamento.setDataLiberacao(LocalDateTime.now());
         infoPagamento.setProposta(proposta);
+        infoPagamento.setTipoDeParcela(TipoDeParcela.REGULAR);
 
         cliente = new Cliente();
         cliente.setCodcli("1");

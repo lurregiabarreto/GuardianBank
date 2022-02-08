@@ -61,4 +61,10 @@ public class PropostaService {
     return infoPagamento;
   }
 
+  public List<InfoPagamento> exibirListaPagamento(InfoPagamento infoPagamento) {
+    List<InfoPagamento> listaOpcoes = new ArrayList<>();
+    listaOpcoes = infoPagamentoService.opcoesParcelamento(infoPagamento);
+    return listaOpcoes;
+  }
+
 }

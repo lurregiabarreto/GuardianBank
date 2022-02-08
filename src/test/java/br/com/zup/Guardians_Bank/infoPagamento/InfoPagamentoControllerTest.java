@@ -66,6 +66,7 @@ public class InfoPagamentoControllerTest {
         entradaInfoDTO = new EntradaInfoDTO();
         entradaInfoDTO.setNumeroProposta("1");
         entradaInfoDTO.setQtdadeParcelas(8);
+        entradaInfoDTO.setTipoDeParcela(TipoDeParcela.REGULAR);
 
 
         atualizarStatusDTO = new AtualizarStatusDTO();

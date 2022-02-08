@@ -39,7 +39,7 @@ public class PropostaController {
         List<RetornoInfoDTO> retornoInfoDTOList = new ArrayList<>();
         OpcoesPagamentoDTO opcoesPagamentoDTO = new OpcoesPagamentoDTO();
         InfoPagamento info = propostaService.atribuirPropostaNoInfoPagamento(id);
-        for (InfoPagamento infoPagamento : infoPagamentoService.opcoesParcelamento(info)) {
+        for (InfoPagamento infoPagamento : propostaService.exibirListaPagamento(info)) {
             RetornoInfoDTO retornoInfoDTO = modelMapper.map(infoPagamento, RetornoInfoDTO.class);
             retornoInfoDTO.setParcelaEspecial("INATIVO");
             if (retornoInfoDTO.getQtdadeParcelas() == 4) {
