@@ -181,7 +181,8 @@ public class InfoPagamentoServiceTest {
         infoPagamento.setProposta(proposta);
         testarSalvarOpcaoPagamento();
 
-        InfoPagamento infoPagamento1 = infoPagamentoService.salvarInfoPagamento(infoPagamento, infoPagamento.getProposta().getNumeroProposta(),
+        InfoPagamento infoPagamento1 = infoPagamentoService.salvarInfoPagamento(infoPagamento, infoPagamento
+                        .getProposta().getNumeroProposta(),
                 infoPagamento.getQtdadeDeParcelas());
 
         Assertions.assertNotNull(infoPagamento1);
