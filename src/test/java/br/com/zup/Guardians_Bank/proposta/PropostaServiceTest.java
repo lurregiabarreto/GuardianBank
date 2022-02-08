@@ -154,9 +154,6 @@ public class PropostaServiceTest {
     InfoPagamento infoPagamento1 = propostaService.atribuirPropostaNoInfoPagamento(proposta.getNumeroProposta());
 
     Assertions.assertNotNull(infoPagamento1.getProposta());
-
   }
-
-
 
 }

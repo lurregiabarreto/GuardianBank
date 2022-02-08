@@ -4,6 +4,8 @@ import br.com.zup.Guardians_Bank.config.Security.UsuarioLogado;
 import br.com.zup.Guardians_Bank.usuario.dto.CadastroUsuarioDTO;
 import br.com.zup.Guardians_Bank.usuario.dto.UsuarioSaidaDTO;
 import br.com.zup.Guardians_Bank.usuarioLogado.UsuarioLogadoService;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -14,6 +16,8 @@ import javax.validation.Valid;
 
 @RestController
 @RequestMapping("/usuario")
+@Api(value = "API para compra de crédito")
+@CrossOrigin(origins = "*")
 public class UsuarioController {
 
   @Autowired
@@ -25,6 +29,7 @@ public class UsuarioController {
 
 
   @PostMapping
+  @ApiOperation(value = "Método responsável por cadastrar um usuário")
   @ResponseStatus(HttpStatus.CREATED)
   public UsuarioSaidaDTO cadastrarUsuario(@RequestBody @Valid CadastroUsuarioDTO cadastroUsuarioDTO) {
     Usuario usuario = modelMapper.map(cadastroUsuarioDTO, Usuario.class);
@@ -33,6 +38,7 @@ public class UsuarioController {
   }
 
   @GetMapping("/{id}")
+  @ApiOperation(value = "Método responsável por exibir usuários pelo seu ID")
   public UsuarioSaidaDTO exibirUsuario(@PathVariable String id) {
     Usuario usuario = usuarioService.buscarUsuarioPorId(id);
     return modelMapper.map(usuario, UsuarioSaidaDTO.class);
@@ -40,6 +46,7 @@ public class UsuarioController {
   }
 
   @PutMapping("/{id}")
+  @ApiOperation(value = "Método responsável por atualizar as informações do usuário pelo seu ID")
   public UsuarioSaidaDTO atualizarUsuario(@RequestBody CadastroUsuarioDTO cadastroUsuarioDTO,
                                           Authentication authentication) {
 
@@ -50,6 +57,7 @@ public class UsuarioController {
   }
 
   @DeleteMapping({"/{id}"})
+  @ApiOperation(value = "Método responsável por deletar um usuário pelo seu ID")
   @ResponseStatus(HttpStatus.NO_CONTENT)
   public void deletarUsuario(@PathVariable String id) {
     usuarioService.deletarusuario(id);

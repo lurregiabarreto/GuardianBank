@@ -21,7 +21,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/propostas")
-@Api(value = "Comunicacao Externa para a Compra de Credito")
+@Api(value = "API para compra de crédito")
 @CrossOrigin(origins = "*")
 public class PropostaController {
 

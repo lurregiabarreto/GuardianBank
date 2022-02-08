@@ -126,7 +126,7 @@ public class InfoPagamentoService {
 
     public InfoPagamento atualizarInfo(String id) {
         InfoPagamento infoPagamento = buscarInfoPagamento(id);
-        if (infoPagamento.getProposta().getStatusProposta() != StatusProposta.APROVADO) {
+        if (infoPagamento.getProposta().getStatusProposta() != StatusProposta.LIBERADO) {
             throw new PropostaNaoLiberadaException("Proposta não liberada");
         }
 

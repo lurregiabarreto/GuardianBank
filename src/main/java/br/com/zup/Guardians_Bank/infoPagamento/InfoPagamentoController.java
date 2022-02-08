@@ -19,7 +19,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/infos")
-@Api(value = "Compra de Credito")
+@Api(value = "API para compra de crédito")
 @CrossOrigin(origins = "*")
 public class InfoPagamentoController {
 
