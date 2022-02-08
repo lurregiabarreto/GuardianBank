@@ -171,7 +171,8 @@ public class InfoPagamentoControllerTest {
   @Test
   @WithMockUser("user@user.com")
   public void testarAtualizarStatusProposta() throws Exception {
-    Mockito.when(infoPagamentoService.atualizarInfo(Mockito.anyString())).thenReturn(infoPagamento);
+    Mockito.when(infoPagamentoService.atualizarInfoPagamento(Mockito.anyString(), Mockito.any(InfoPagamento.class)))
+        .thenReturn(infoPagamento);
     String json = objectMapper.writeValueAsString(atualizarStatusDTO);
 
     ResultActions resultado = mockMvc.perform(MockMvcRequestBuilders.put("/infos/1")
@@ -186,7 +187,7 @@ public class InfoPagamentoControllerTest {
   @Test
   @WithMockUser("user@user.com")
   public void testarExibirInfoPagamentos() throws Exception {
-    Mockito.when(infoPagamentoService.exibirInfos()).thenReturn(Arrays.asList(infoPagamento));
+    Mockito.when(infoPagamentoService.exibirInfosPagamento()).thenReturn(Arrays.asList(infoPagamento));
 
     ResultActions resultado = mockMvc.perform(MockMvcRequestBuilders.get("/infos")
             .contentType(MediaType.APPLICATION_JSON))
@@ -202,7 +203,7 @@ public class InfoPagamentoControllerTest {
   @Test
   @WithMockUser("user@user.com")
   public void testarExibirInfosPagamentoComParam() throws Exception {
-    Mockito.when(infoPagamentoService.exibirInfos()).thenReturn(Arrays.asList(infoPagamento));
+    Mockito.when(infoPagamentoService.exibirInfosPagamento()).thenReturn(Arrays.asList(infoPagamento));
 
     ResultActions resultado = mockMvc.perform(MockMvcRequestBuilders.get("/infos?qtdadeDeParcelas=4")
             .contentType(MediaType.APPLICATION_JSON))
@@ -246,8 +247,8 @@ public class InfoPagamentoControllerTest {
   @Test
   @WithMockUser("user@user.com")
   public void testarPropostaNaoLiberadaException() throws Exception {
-    Mockito.doThrow(PropostaNaoLiberadaException.class).when(infoPagamentoService).atualizarInfo(
-        Mockito.anyString());
+    Mockito.doThrow(PropostaNaoLiberadaException.class).when(infoPagamentoService).atualizarInfoPagamento(
+        Mockito.anyString(), Mockito.any(InfoPagamento.class));
 
     String json = objectMapper.writeValueAsString(atualizarStatusDTO);
 

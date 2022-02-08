@@ -31,7 +31,7 @@ public class InfoPagamentoService {
 
   public InfoPagamento salvarInfoPagamento(InfoPagamento infoPagamento, String numeroProposta, int qtdadeDeParcelas) {
     Proposta proposta = propostaService.validarPropostaExistente(numeroProposta);
-    buscarInfoPorNumeroProposta(proposta.getNumeroProposta());
+    validarPropostaJaCadastrada(proposta.getNumeroProposta());
     propostaService.validarStatusProposta(proposta);
     propostaService.validarDataContratacao(proposta);
     infoPagamento.setProposta(proposta);
@@ -39,12 +39,12 @@ public class InfoPagamentoService {
     return infoPagamentoRepository.save(infoPagamento);
   }
 
-  public InfoPagamento buscarInfoPagamento(String idPagamento) {
+  public InfoPagamento buscarInfoPagamentoPorId(String idPagamento) {
     Optional<InfoPagamento> infoPagamentoOptional = infoPagamentoRepository.findById(idPagamento);
     return infoPagamentoOptional.get();
   }
 
-  public boolean buscarInfoPorNumeroProposta(String numeroProposta) {
+  public boolean validarPropostaJaCadastrada(String numeroProposta) {
     if (infoPagamentoRepository.existsByPropostaNumeroProposta(numeroProposta)) {
       throw new PropostaJaCadastradaException("Proposta já cadastrada");
     }
@@ -85,7 +85,7 @@ public class InfoPagamentoService {
     return limite;
   }
 
-  public List<InfoPagamento> opcoesParcelamento(InfoPagamento infoPagoOriginal) {
+  public List<InfoPagamento> listarOpcoesParcelamento(InfoPagamento infoPagoOriginal) {
     List<InfoPagamento> opcoesParcela = new ArrayList<InfoPagamento>();
     int parcela = 4;
 
@@ -124,19 +124,20 @@ public class InfoPagamentoService {
 
   }
 
-  public InfoPagamento atualizarInfo(String id) {
-    InfoPagamento infoPagamento = buscarInfoPagamento(id);
-    if (infoPagamento.getProposta().getStatusProposta() != StatusProposta.APROVADO) {
+  public InfoPagamento atualizarInfoPagamento(String id, InfoPagamento novaInfoPagamento) {
+    InfoPagamento infoPagamento = buscarInfoPagamentoPorId(id);
+    if (infoPagamento.getProposta().getStatusProposta() != StatusProposta.LIBERADO) {
       throw new PropostaNaoLiberadaException("Proposta não liberada");
     }
 
+    infoPagamento.setQtdadeDeParcelas(novaInfoPagamento.getQtdadeDeParcelas());
     infoPagamento.getProposta().setStatusProposta(StatusProposta.LIBERADO);
     infoPagamento.setDataLiberacao(LocalDateTime.now());
     infoPagamentoRepository.save(infoPagamento);
     return infoPagamento;
   }
 
-  public List<InfoPagamento> exibirInfos() {
+  public List<InfoPagamento> exibirInfosPagamento() {
     List<InfoPagamento> infos = (List<InfoPagamento>) infoPagamentoRepository.findAll();
     return infos;
   }
@@ -145,7 +146,7 @@ public class InfoPagamentoService {
     if (qtdadeDeParcelas != null) {
       return infoPagamentoRepository.findAllByQtdadeDeParcelas(qtdadeDeParcelas);
     }
-    return exibirInfos();
+    return exibirInfosPagamento();
   }
 
 }

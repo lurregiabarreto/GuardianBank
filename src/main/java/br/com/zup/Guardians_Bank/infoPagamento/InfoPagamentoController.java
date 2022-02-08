@@ -41,7 +41,8 @@ public class InfoPagamentoController {
   public RespostaAtualizacaoStatusDTO atualizarStatus(@PathVariable String id,
                                                       @RequestBody AtualizarStatusDTO atualizarStatusDTO) {
     InfoPagamento infoPagamento = modelMapper.map(atualizarStatusDTO, InfoPagamento.class);
-    return modelMapper.map(infoPagamentoService.atualizarInfo(id), RespostaAtualizacaoStatusDTO.class);
+    return modelMapper.map(infoPagamentoService.atualizarInfoPagamento(id, infoPagamento),
+        RespostaAtualizacaoStatusDTO.class);
   }
 
   @GetMapping

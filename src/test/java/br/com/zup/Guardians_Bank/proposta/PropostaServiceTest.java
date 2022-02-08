@@ -156,12 +156,12 @@ public class PropostaServiceTest {
 
   @Test
   public void testarExibirListaDePagamento() {
-    Mockito.when(infoPagamentoService.opcoesParcelamento(infoPagamento)).thenReturn(Arrays.asList(infoPagamento));
+    Mockito.when(infoPagamentoService.listarOpcoesParcelamento(infoPagamento)).thenReturn(Arrays.asList(infoPagamento));
 
     List<InfoPagamento> infosList = propostaService.exibirListaPagamento(infoPagamento);
     Assertions.assertNotNull(infosList);
 
-    Mockito.verify(infoPagamentoService, Mockito.times(1)).opcoesParcelamento(infoPagamento);
+    Mockito.verify(infoPagamentoService, Mockito.times(1)).listarOpcoesParcelamento(infoPagamento);
   }
 
 }

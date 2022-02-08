@@ -77,7 +77,7 @@ public class InfoPagamentoServiceTest {
   public void testarBuscarInfoPagamento() {
     Mockito.when(infoPagamentoRepository.findById(infoPagamento.getIdPagamento())).
         thenReturn(Optional.of(infoPagamento));
-    infoPagamentoService.buscarInfoPagamento(infoPagamento.getIdPagamento());
+    infoPagamentoService.buscarInfoPagamentoPorId(infoPagamento.getIdPagamento());
     Assertions.assertNotNull(infoPagamento);
   }
 
@@ -112,40 +112,40 @@ public class InfoPagamentoServiceTest {
   }
 
   @Test
-  public void testarBuscarInfoPorNumeroPropostaCaminhoNegativo() {
+  public void testarValidarPropostaJaCadastradaCaminhoNegativo() {
     Mockito.when(infoPagamentoRepository.existsByPropostaNumeroProposta(Mockito.anyString()))
         .thenReturn(true);
     Assertions.assertThrows(PropostaJaCadastradaException.class,
-        () -> infoPagamentoService.buscarInfoPorNumeroProposta(proposta.getNumeroProposta()));
+        () -> infoPagamentoService.validarPropostaJaCadastrada(proposta.getNumeroProposta()));
 
   }
 
   @Test
-  public void testarBuscarInfoPorNumeroPropostaCaminhoPositivo() {
+  public void testarValidarPropostaJaCadastradaCaminhoPositivo() {
     Mockito.when(infoPagamentoRepository.existsByPropostaNumeroProposta(Mockito.anyString()))
         .thenReturn(false);
-    Boolean positivo = infoPagamentoService.buscarInfoPorNumeroProposta(proposta.getNumeroProposta());
+    Boolean positivo = infoPagamentoService.validarPropostaJaCadastrada(proposta.getNumeroProposta());
     Assertions.assertFalse(positivo);
   }
 
   @Test
-  public void testarOpcoesParcelamentoCaminhoPositivo() {
+  public void testarListarOpcoesParcelamentoCaminhoPositivo() {
     proposta.setCliente(cliente);
     infoPagamento.setProposta(proposta);
-    infoPagamentoService.opcoesParcelamento(infoPagamento);
-    List<InfoPagamento> resultado = infoPagamentoService.opcoesParcelamento(infoPagamento);
+    infoPagamentoService.listarOpcoesParcelamento(infoPagamento);
+    List<InfoPagamento> resultado = infoPagamentoService.listarOpcoesParcelamento(infoPagamento);
     Assertions.assertNotNull(resultado);
     System.out.println(resultado);
   }
 
   @Test
-  public void testarOpcoesParcelamentoCaminhoNegativo() {
+  public void testarListarOpcoesParcelamentoCaminhoNegativo() {
 
     List<InfoPagamento> resultadoruim = new ArrayList<>();
     proposta.setCliente(clientePobre);
     infoPagamento.setProposta(proposta);
-    infoPagamentoService.opcoesParcelamento(infoPagamento);
-    List<InfoPagamento> resultado = infoPagamentoService.opcoesParcelamento(infoPagamento);
+    infoPagamentoService.listarOpcoesParcelamento(infoPagamento);
+    List<InfoPagamento> resultado = infoPagamentoService.listarOpcoesParcelamento(infoPagamento);
     Assertions.assertEquals(0, resultado.size());
     Assertions.assertEquals(resultadoruim, resultado);
   }
@@ -167,11 +167,11 @@ public class InfoPagamentoServiceTest {
   }
 
   @Test
-  public void salvarInfoPagamentoCaminhoPositivo() {
+  public void testarSalvarInfoPagamentoCaminhoPositivo() {
     Mockito.when(infoPagamentoRepository.save(Mockito.any(InfoPagamento.class))).thenReturn(infoPagamento);
     Mockito.when(infoPagamentoRepository.existsByPropostaNumeroProposta(Mockito.anyString())).thenReturn(false);
     Mockito.when(propostaService.validarPropostaExistente(proposta.getNumeroProposta())).thenReturn(proposta);
-    testarBuscarInfoPorNumeroPropostaCaminhoPositivo();
+    testarValidarPropostaJaCadastradaCaminhoPositivo();
     Mockito.when(propostaService.validarStatusProposta(proposta)).thenReturn(proposta);
     Mockito.when(propostaService.validarDataContratacao(proposta)).thenReturn(proposta);
 
@@ -190,15 +190,16 @@ public class InfoPagamentoServiceTest {
   }
 
   @Test
-  public void atualizarInfoCaminhoPositivo() {
+  public void testarAtualizarInfoCaminhoPositivo() {
     Mockito.when(infoPagamentoRepository.save(Mockito.any(InfoPagamento.class))).thenReturn(infoPagamento);
     Mockito.when(infoPagamentoRepository.findById(Mockito.anyString())).thenReturn(Optional.of(infoPagamento));
 
 
-    infoPagamento.getProposta().setStatusProposta(StatusProposta.APROVADO);
+    infoPagamento.getProposta().setStatusProposta(StatusProposta.LIBERADO);
     infoPagamento.setDataLiberacao(LocalDateTime.now());
 
-    InfoPagamento infoPagamento1 = infoPagamentoService.atualizarInfo(infoPagamento.getIdPagamento());
+    InfoPagamento infoPagamento1 = infoPagamentoService.atualizarInfoPagamento(infoPagamento.getIdPagamento()
+        ,infoPagamento);
 
     Mockito.verify(infoPagamentoRepository, Mockito.times(1)).save(infoPagamento);
     Mockito.verify(infoPagamentoRepository, Mockito.times(1))
@@ -206,14 +207,14 @@ public class InfoPagamentoServiceTest {
   }
 
   @Test
-  public void atualizarInfoCaminhoNegativo() {
+  public void testarAtualizarInfoCaminhoNegativo() {
     Mockito.when(infoPagamentoRepository.save(Mockito.any(InfoPagamento.class))).thenReturn(infoPagamento);
     Mockito.when(infoPagamentoRepository.findById(Mockito.anyString())).thenReturn(Optional.of(infoPagamento));
 
     infoPagamento.getProposta().setStatusProposta(StatusProposta.EM_ANALISE);
 
     RuntimeException exception = Assertions.assertThrows(PropostaNaoLiberadaException.class,
-        () -> infoPagamentoService.atualizarInfo(proposta.getNumeroProposta()));
+        () -> infoPagamentoService.atualizarInfoPagamento(proposta.getNumeroProposta(), infoPagamento));
 
     Mockito.verify(infoPagamentoRepository, Mockito.times(0)).save(infoPagamento);
     Mockito.verify(infoPagamentoRepository, Mockito.times(1))
@@ -224,7 +225,7 @@ public class InfoPagamentoServiceTest {
   public void testarExibirInfosDePagamento() {
     Mockito.when(infoPagamentoRepository.findAll()).thenReturn(Arrays.asList(infoPagamento));
 
-    List<InfoPagamento> infosList = infoPagamentoService.exibirInfos();
+    List<InfoPagamento> infosList = infoPagamentoService.exibirInfosPagamento();
     Assertions.assertNotNull(infosList);
 
     Mockito.verify(infoPagamentoRepository, Mockito.times(1)).findAll();
