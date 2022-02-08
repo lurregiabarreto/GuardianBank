@@ -23,6 +23,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -216,6 +217,16 @@ public class InfoPagamentoServiceTest {
     Mockito.verify(infoPagamentoRepository, Mockito.times(0)).save(infoPagamento);
     Mockito.verify(infoPagamentoRepository, Mockito.times(1))
         .findById(infoPagamento.getIdPagamento());
+  }
+
+  @Test
+  public void testarExibirInfosDePagamento(){
+    Mockito.when(infoPagamentoRepository.findAll()).thenReturn(Arrays.asList(infoPagamento));
+
+    List<InfoPagamento> infosList = infoPagamentoService.exibirInfos();
+    Assertions.assertNotNull(infosList);
+
+    Mockito.verify(infoPagamentoRepository, Mockito.times(1)).findAll();
   }
 
 }
