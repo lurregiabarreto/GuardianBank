@@ -2,6 +2,7 @@ package br.com.zup.Guardians_Bank.infoPagamento;
 
 import br.com.zup.Guardians_Bank.enums.ProdutoFinanceiro;
 import br.com.zup.Guardians_Bank.enums.StatusProposta;
+import br.com.zup.Guardians_Bank.enums.TipoDeParcela;
 import br.com.zup.Guardians_Bank.exceptions.PropostaJaCadastradaException;
 import br.com.zup.Guardians_Bank.exceptions.PropostaNaoLiberadaException;
 import br.com.zup.Guardians_Bank.proposta.Proposta;
@@ -120,6 +121,7 @@ public class InfoPagamentoService {
     infoPagamentoSalvo.setDataLiberacao(LocalDateTime.now());
     LocalDate dataPago = infoPagoOriginal.getTipoDeParcela().getDataPagamento();
     infoPagamentoSalvo.setDataPagamento(dataPago);
+    validarParcelaEspecial(infoPagamentoSalvo);
     return infoPagamentoSalvo;
 
   }
@@ -150,6 +152,12 @@ public class InfoPagamentoService {
       return infoPagamentoRepository.findAllByQtdadeDeParcelas(qtdadeDeParcelas);
     }
     return exibirInfosPagamento();
+  }
+  public void validarParcelaEspecial(InfoPagamento infoPagamento){
+    if (infoPagamento.getQtdadeDeParcelas() == 8 || infoPagamento.getQtdadeDeParcelas() == 12){
+      infoPagamento.setTipoDeParcela(TipoDeParcela.REGULAR);
+      infoPagamento.setDataPagamento(infoPagamento.getTipoDeParcela().getDataPagamento());
+    }
   }
 
 }

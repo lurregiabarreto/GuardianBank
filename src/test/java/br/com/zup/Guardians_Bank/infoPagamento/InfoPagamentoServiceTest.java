@@ -17,6 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -242,5 +243,14 @@ public class InfoPagamentoServiceTest {
     Mockito.verify(infoPagamentoRepository, Mockito.times(1))
         .findAllByQtdadeDeParcelas(infoPagamento.getQtdadeDeParcelas());
   }
+  @Test
+  public void testarValidarParcelaEspecial(){
+    infoPagamento.setTipoDeParcela(TipoDeParcela.ESPECIAL);
+    infoPagamento.setQtdadeDeParcelas(8);
+    infoPagamentoService.validarParcelaEspecial(infoPagamento);
+    Assertions.assertEquals(TipoDeParcela.REGULAR, infoPagamento.getTipoDeParcela());
+    Assertions.assertEquals(LocalDate.now().plusDays(30),infoPagamento.getDataPagamento());
+  }
+
 
 }
