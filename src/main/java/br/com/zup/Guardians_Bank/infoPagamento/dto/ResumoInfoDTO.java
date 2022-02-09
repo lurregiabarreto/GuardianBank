@@ -9,13 +9,13 @@ import java.time.LocalDateTime;
 
 @Data
 public class ResumoInfoDTO {
-
-  private String idPagamento;
-  private double valorParcela;
-  private Integer qtdadeDeParcelas;
-  private LocalDate dataPagamento;
-  @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-  private LocalDateTime dataLiberacao;
-  private TipoDeParcela tipoDeParcela;
+    private String numeroProposta;
+    private String idPagamento;
+    private double valorParcela;
+    private Integer qtdadeDeParcelas;
+    private LocalDate dataPagamento;
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    private LocalDateTime dataLiberacao;
+    private TipoDeParcela tipoDeParcela;
 
 }
