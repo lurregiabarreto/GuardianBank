@@ -17,94 +17,101 @@ import java.util.List;
 @RestControllerAdvice
 public class ControllerAdvice {
 
-  @ExceptionHandler(MethodArgumentNotValidException.class)
-  @ResponseStatus(HttpStatus.UNPROCESSABLE_ENTITY)
-  public List<MensagemDeErro> tratarErrosDeValidacao(MethodArgumentNotValidException excecao) {
-    List<MensagemDeErro> errosValidacao = new ArrayList<>();
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    @ResponseStatus(HttpStatus.UNPROCESSABLE_ENTITY)
+    public List<MensagemDeErro> tratarErrosDeValidacao(MethodArgumentNotValidException excecao) {
+        List<MensagemDeErro> errosValidacao = new ArrayList<>();
 
-    for (FieldError referencia : excecao.getFieldErrors()) {
-      MensagemDeErro mensagemDeErro = new MensagemDeErro(referencia.getDefaultMessage());
-      errosValidacao.add(mensagemDeErro);
+        for (FieldError referencia : excecao.getFieldErrors()) {
+            MensagemDeErro mensagemDeErro = new MensagemDeErro(referencia.getDefaultMessage());
+            errosValidacao.add(mensagemDeErro);
+        }
+
+        return errosValidacao;
     }
 
-    return errosValidacao;
-  }
-
-  @ExceptionHandler(EmAnaliseException.class)
-  @ResponseStatus(HttpStatus.UNPROCESSABLE_ENTITY)
-  public MensagemDeErro emAnaliseException(EmAnaliseException excecao) {
-    return new MensagemDeErro(excecao.getLocalizedMessage());
-  }
-
-  @ExceptionHandler(PropostaRecusadaException.class)
-  @ResponseStatus(HttpStatus.UNPROCESSABLE_ENTITY)
-  public MensagemDeErro propostaRecusadaException(PropostaRecusadaException excecao) {
-    return new MensagemDeErro(excecao.getLocalizedMessage());
-  }
-
-  @ExceptionHandler(DataInvalidaException.class)
-  @ResponseStatus(HttpStatus.UNPROCESSABLE_ENTITY)
-  public MensagemDeErro manipularDataPosteriorException(DataInvalidaException exception) {
-    return new MensagemDeErro(exception.getMessage());
-  }
-
-  @ExceptionHandler(HttpMessageNotReadableException.class)
-  @ResponseStatus(HttpStatus.UNPROCESSABLE_ENTITY)
-  public MensagemDeErro enumInvalidoException(HttpMessageNotReadableException excecao) {
-    return new MensagemDeErro(excecao.getLocalizedMessage());
-  }
-
-  @ExceptionHandler(LimiteExcedidoException.class)
-  @ResponseStatus(HttpStatus.UNPROCESSABLE_ENTITY)
-  public MensagemDeErro limiteExcedidoException(LimiteExcedidoException excecao) {
-    return new MensagemDeErro(excecao.getLocalizedMessage());
-  }
-
-  @ExceptionHandler(PropostaNaoLiberadaException.class)
-  @ResponseStatus(HttpStatus.UNPROCESSABLE_ENTITY)
-  public MensagemDeErro propostaNaoLiberadaException(PropostaNaoLiberadaException excecao) {
-    return new MensagemDeErro(excecao.getLocalizedMessage());
-  }
-
-  @ExceptionHandler(PropostaNaoEncontradaException.class)
-  @ResponseStatus(HttpStatus.NOT_FOUND)
-  public MensagemDeErro propostaNaoEncontrada(PropostaNaoEncontradaException excecao) {
-    return new MensagemDeErro(excecao.getLocalizedMessage());
-
-  }
-
-  @ExceptionHandler(PropostaJaCadastradaException.class)
-  @ResponseStatus(HttpStatus.UNPROCESSABLE_ENTITY) //ok
-  public MensagemDeErro propostaJaCadastrada(PropostaJaCadastradaException excecao) {
-    return new MensagemDeErro(excecao.getLocalizedMessage());
-
-  }
-
-  @ExceptionHandler(UsuarioNaoEcontradoException.class)
-  @ResponseStatus(HttpStatus.NOT_FOUND) //ok
-  public MensagemDeErro propostaJaCadastrada(UsuarioNaoEcontradoException excecao) {
-    return new MensagemDeErro(excecao.getLocalizedMessage());
-
-  }
-
-  @ExceptionHandler(UsuarioJaCadastradoException.class)
-  @ResponseStatus(HttpStatus.UNPROCESSABLE_ENTITY) //ok
-  public MensagemDeErro propostaJaCadastrada(UsuarioJaCadastradoException excecao) {
-    return new MensagemDeErro(excecao.getLocalizedMessage());
-
-  }
-
-  @ExceptionHandler(ArrayIndexOutOfBoundsException.class)
-  @ResponseStatus(HttpStatus.UNPROCESSABLE_ENTITY) //ok
-  public ResponseEntity enumInvalidoException(ArrayIndexOutOfBoundsException exception) {
-    if (exception.getLocalizedMessage().contains("br.com.zup.Guardians_Bank.enums.ProductoFinanceiro")) {
-      return ResponseEntity.status(422).build();
+    @ExceptionHandler(EmAnaliseException.class)
+    @ResponseStatus(HttpStatus.UNPROCESSABLE_ENTITY)
+    public MensagemDeErro emAnaliseException(EmAnaliseException excecao) {
+        return new MensagemDeErro(excecao.getLocalizedMessage());
     }
-    if (exception.getLocalizedMessage().contains("br.com.zup.Guardians_Bank.enums.StatusProposta")) {
-      return ResponseEntity.status(422).build();
-    }
-    return ResponseEntity.status(400).build();
 
-  }
+    @ExceptionHandler(PropostaRecusadaException.class)
+    @ResponseStatus(HttpStatus.UNPROCESSABLE_ENTITY)
+    public MensagemDeErro propostaRecusadaException(PropostaRecusadaException excecao) {
+        return new MensagemDeErro(excecao.getLocalizedMessage());
+    }
+
+    @ExceptionHandler(DataInvalidaException.class)
+    @ResponseStatus(HttpStatus.UNPROCESSABLE_ENTITY)
+    public MensagemDeErro manipularDataPosteriorException(DataInvalidaException exception) {
+        return new MensagemDeErro(exception.getMessage());
+    }
+
+    @ExceptionHandler(HttpMessageNotReadableException.class)
+    @ResponseStatus(HttpStatus.UNPROCESSABLE_ENTITY)
+    public MensagemDeErro enumInvalidoException(HttpMessageNotReadableException excecao) {
+        return new MensagemDeErro(excecao.getLocalizedMessage());
+    }
+
+    @ExceptionHandler(LimiteExcedidoException.class)
+    @ResponseStatus(HttpStatus.UNPROCESSABLE_ENTITY)
+    public MensagemDeErro limiteExcedidoException(LimiteExcedidoException excecao) {
+        return new MensagemDeErro(excecao.getLocalizedMessage());
+    }
+
+    @ExceptionHandler(PropostaNaoLiberadaException.class)
+    @ResponseStatus(HttpStatus.UNPROCESSABLE_ENTITY)
+    public MensagemDeErro propostaNaoLiberadaException(PropostaNaoLiberadaException excecao) {
+        return new MensagemDeErro(excecao.getLocalizedMessage());
+    }
+
+    @ExceptionHandler(PropostaNaoEncontradaException.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public MensagemDeErro propostaNaoEncontrada(PropostaNaoEncontradaException excecao) {
+        return new MensagemDeErro(excecao.getLocalizedMessage());
+
+    }
+
+    @ExceptionHandler(PropostaJaCadastradaException.class)
+    @ResponseStatus(HttpStatus.UNPROCESSABLE_ENTITY) //ok
+    public MensagemDeErro propostaJaCadastrada(PropostaJaCadastradaException excecao) {
+        return new MensagemDeErro(excecao.getLocalizedMessage());
+
+    }
+
+    @ExceptionHandler(UsuarioNaoEcontradoException.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND) //ok
+    public MensagemDeErro propostaJaCadastrada(UsuarioNaoEcontradoException excecao) {
+        return new MensagemDeErro(excecao.getLocalizedMessage());
+
+    }
+
+    @ExceptionHandler(UsuarioJaCadastradoException.class)
+    @ResponseStatus(HttpStatus.UNPROCESSABLE_ENTITY) //ok
+    public MensagemDeErro propostaJaCadastrada(UsuarioJaCadastradoException excecao) {
+        return new MensagemDeErro(excecao.getLocalizedMessage());
+
+    }
+
+    @ExceptionHandler(ArrayIndexOutOfBoundsException.class)
+    @ResponseStatus(HttpStatus.UNPROCESSABLE_ENTITY) //ok
+    public ResponseEntity enumInvalidoException(ArrayIndexOutOfBoundsException exception) {
+        if (exception.getLocalizedMessage().contains("br.com.zup.Guardians_Bank.enums.ProductoFinanceiro")) {
+            return ResponseEntity.status(422).build();
+        }
+        if (exception.getLocalizedMessage().contains("br.com.zup.Guardians_Bank.enums.StatusProposta")) {
+            return ResponseEntity.status(422).build();
+        }
+        return ResponseEntity.status(400).build();
+
+    }
+
+    @ExceptionHandler(ParcelaEspecialNaoPermitidaException.class)
+    @ResponseStatus(HttpStatus.UNPROCESSABLE_ENTITY) //ok
+    public MensagemDeErro ParcelaEspecialNaoPermitida(ParcelaEspecialNaoPermitidaException excecao) {
+        return new MensagemDeErro(excecao.getLocalizedMessage());
+
+    }
 
 }

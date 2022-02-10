@@ -4,6 +4,7 @@ import br.com.zup.Guardians_Bank.cliente.Cliente;
 import br.com.zup.Guardians_Bank.enums.ProdutoFinanceiro;
 import br.com.zup.Guardians_Bank.enums.StatusProposta;
 import br.com.zup.Guardians_Bank.enums.TipoDeParcela;
+import br.com.zup.Guardians_Bank.exceptions.ParcelaEspecialNaoPermitidaException;
 import br.com.zup.Guardians_Bank.exceptions.PropostaJaCadastradaException;
 import br.com.zup.Guardians_Bank.exceptions.PropostaNaoLiberadaException;
 import br.com.zup.Guardians_Bank.proposta.Proposta;
@@ -252,5 +253,13 @@ public class InfoPagamentoServiceTest {
     Assertions.assertEquals(LocalDate.now().plusDays(30),infoPagamento.getDataPagamento());
   }
 
+  @Test
+  public void testarValidarParcelaNaoEspecialException(){
+    infoPagamento.setTipoDeParcela(TipoDeParcela.ESPECIAL);
+    infoPagamento.setQtdadeDeParcelas(8);
+    RuntimeException exception = Assertions.assertThrows(ParcelaEspecialNaoPermitidaException.class,
+            () -> infoPagamentoService.validarParcelaNaoEspecial(infoPagamento));
+
+  }
 
 }
