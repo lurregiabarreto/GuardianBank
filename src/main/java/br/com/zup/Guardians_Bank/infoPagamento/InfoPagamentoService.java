@@ -157,7 +157,7 @@ public class InfoPagamentoService {
 
   public void validarParcelaNaoEspecial(InfoPagamento info){
     if((info.getTipoDeParcela()==TipoDeParcela.ESPECIAL)&(info.getQtdadeDeParcelas() == 8 || info.getQtdadeDeParcelas() == 12)) {
-        throw new ParcelaEspecialNaoPermitidaException("Esta Parcela não pode ser especial");
+        throw new ParcelaEspecialNaoPermitidaException("Parcela especial não aplicável");
     }
   }
 

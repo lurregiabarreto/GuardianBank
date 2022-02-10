@@ -244,14 +244,6 @@ public class InfoPagamentoServiceTest {
     Mockito.verify(infoPagamentoRepository, Mockito.times(1))
         .findAllByQtdadeDeParcelas(infoPagamento.getQtdadeDeParcelas());
   }
-  @Test
-  public void testarValidarParcelaEspecial(){
-    infoPagamento.setTipoDeParcela(TipoDeParcela.ESPECIAL);
-    infoPagamento.setQtdadeDeParcelas(8);
-    infoPagamentoService.validarParcelaEspecial(infoPagamento);
-    Assertions.assertEquals(TipoDeParcela.REGULAR, infoPagamento.getTipoDeParcela());
-    Assertions.assertEquals(LocalDate.now().plusDays(30),infoPagamento.getDataPagamento());
-  }
 
   @Test
   public void testarValidarParcelaNaoEspecialException(){
