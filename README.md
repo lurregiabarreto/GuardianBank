@@ -63,5 +63,5 @@ Funcionalidades documentadas via Swagger e Postman Collection.
 
 - Swagger:  localhost:8080/swagger-ui.html
 
-- Postman collection: [Guardian Bank.postman_collection] https://www.getpostman.com/collections/db8d0913d182e7d82bde
+- Postman collection: [Guardian Bank.postman_collection](https://www.getpostman.com/collections/db8d0913d182e7d82bde)
 
